@@ -1,7 +1,13 @@
-import '../styles/globals.css'
+import { wrapper } from "../redux/nextStore";
+import DtoLayout from "../components/layout/DtoLayout";
 
-function MyApp({ Component, pageProps }) {
-  return <Component {...pageProps} />
+const MyApp = ({ Component, pageProps }) =>{
+  return (
+    <DtoLayout>
+      <Component {...pageProps} />
+    </DtoLayout>
+  );
 }
 
-export default MyApp
+
+export default wrapper.withRedux(MyApp);
