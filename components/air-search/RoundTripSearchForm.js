@@ -30,9 +30,15 @@ const RoundTripSearchForm = (params) => {
                         {props.values.passDetails &&
                           props.values.passDetails.map((item, indx) => (
                             <Row className="air-search" key={`trip-${indx}`}>
-                              <Col md={6} className="no-margin-padding each-content">
+                              <Col
+                                md={6}
+                                className="no-margin-padding each-content"
+                              >
                                 <Row className="no-margin-padding in-area">
-                                  <Col md={6} className="no-margin-padding each-content">
+                                  <Col
+                                    md={6}
+                                    className="no-margin-padding each-content"
+                                  >
                                     <AutoSuggestionInptTextField
                                       change={(airPort) => {
                                         props.setFieldValue(
@@ -69,7 +75,7 @@ const RoundTripSearchForm = (params) => {
                                         );
                                       }}
                                       name={`passDetails[${indx}].to`}
-                                      label="From"
+                                      label="To"
                                       id={`passDetails-${indx}-to`}
 
                                       // preSetItem={params.preSetRoundTripForm} not set yet
@@ -77,7 +83,10 @@ const RoundTripSearchForm = (params) => {
                                   </Col>
                                 </Row>
                               </Col>
-                              <Col md={3} className="no-margin-padding each-content">
+                              <Col
+                                md={3}
+                                className="no-margin-padding each-content"
+                              >
                                 <DatePickerRange
                                   preSetDepDate={
                                     props.values.passDetails[indx].depTime
@@ -128,10 +137,17 @@ const RoundTripSearchForm = (params) => {
                 </Col>
               </Row>
               <Row>
-                <Col md={{ span: 2, offset: 5 }}>
-                  <Button type="submit" className="btn btn-block btn-primary">
-                    Search
-                  </Button>
+                <Col md={{ span: 4, offset: 4 }}>
+                  <Row>
+                    <Col md={{ span: 8, offset: 2 }}>
+                      <Button
+                        type="submit"
+                        className="btn btn-primary home-action-btn"
+                      >
+                        Search
+                      </Button>
+                    </Col>
+                  </Row>
                 </Col>
               </Row>
             </React.Fragment>

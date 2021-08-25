@@ -1,4 +1,5 @@
 import { combineReducers } from "redux";
+import airBookingReducer from "./airBookingReducer";
 import airPriceReducer from "./airPriceReducer";
 import airQueryReducer from "./airQueryReducer";
 import airSearchReducer from "./airSearchReducer";
@@ -13,4 +14,5 @@ export default combineReducers({
   airPrice: airPriceReducer,
   airPriceDetails:pricingDetailsReducer,
   airFilters:filterReducer,
+  airBooking:airBookingReducer
 });

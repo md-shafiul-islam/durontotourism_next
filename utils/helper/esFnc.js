@@ -97,6 +97,7 @@ export const helperPreSetTravelr = (passenger, phone, email, status) => {
   //   email: null,
   //   travelerType: "",
   //   gender:"",
+  //   key:null,
   // }
 
   const traveler = {
@@ -106,6 +107,7 @@ export const helperPreSetTravelr = (passenger, phone, email, status) => {
     },
     travelerType: "",
     gender: "",
+    key:null,
   };
 
   let gender = "";
@@ -121,7 +123,8 @@ export const helperPreSetTravelr = (passenger, phone, email, status) => {
     traveler.bookingTravelerName.first = passenger.firstName;
     traveler.bookingTravelerName.last = passenger.lastName;
     traveler.gender = gender;
-    traveler.passAge = passenger.passAge;
+    traveler.passAge = passenger.passAge ? passenger.passAge : null;
+    traveler.key = passenger.key ? passenger.key : null;
 
     if (passenger.type) {
       if (passenger.type === "INF") {
@@ -134,10 +137,11 @@ export const helperPreSetTravelr = (passenger, phone, email, status) => {
 
         //Date Formatt yyyy-MM-dd
         let month = passenger.month + 1;
+        let day = Number(passenger.day) < 10 ? `0${passenger.day}` : passenger.day;
         month = month < 10 ? `0${month}` : month;
-        let dateString = `${passenger.year}-${month}-${passenger.day}`;
-        traveler.dateOfB = `${passenger.year}-${month}-${passenger.day}T00:00:00.000`;
-        traveler.dob = `${passenger.year}-${month}-${passenger.day}T00:00:00.000`;
+        let dateString = `${passenger.year}-${month}-${day}`;
+        traveler.dateOfB = `${passenger.year}-${month}-${day}T01:00:00.000`;
+        traveler.dob = `${passenger.year}-${month}-${day}T01:00:00.000`;
       }
     }
   }
@@ -601,6 +605,7 @@ export const esGetRoundTripBookingQuery = (bookSolutions)=>{
     }
     
     console.log("Return Booking Solution, ", retSolutions);
+    
 
     return retSolutions;
   }

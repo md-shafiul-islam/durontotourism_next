@@ -1,15 +1,123 @@
 body {
-  font-family: Lato-Regular, Arial, Helvetica, sans-serif;
+  font-family: "Lato-Regular", Arial, Helvetica, sans-serif;
   background: #f1f1f1 !important;
   overflow-x: hidden;
 }
 
-.top-nav-container{
+.empty-cont {
+  width: 100%;
+  min-height: 250px;
+  display: flex;
+}
+
+.top-main-nav-bar {
+  padding: 20px 0px;
+  display: none;
+}
+
+.top-main-nav-bar.active-top-nav{
+  display: flex;
+}
+
+.top-main-nav-bar .main-container .route .nav-item {
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+.top-main-nav-bar .main-container .route .nav-item a{
+  text-decoration: none;
+  color: #070707;
+}
+
+.top-main-nav-bar .main-container .route .nav-item a .menu-icon{
+  font-size: 1.4em;
+}
+
+.top-main-nav-bar .main-container .es-info-area .nav-item{
+  margin-left: 10px;
+  margin-right: 10px;
+  font-size: larger;
+  font-weight: bold;
+}
+
+.main-container .top-brand-area {
+  height: 60px;
+  width: 250px;
+  display: flex;
+  margin-top: -15px;
+  flex-direction: row;
+  align-content: center;
+}
+
+.hero-bg {
+  background: #f2f2f2;
+  background-repeat: no-repeat;
+  background-image: linear-gradient(to bottom, #051322, #15457c);
+  background-size: 100% 550px;
+  min-height: 100vh;
+}
+
+.home-top-menu {
+  color: #fff;
+}
+
+.brand-area {
+  height: 75px;
+  width: 75px;
+  text-align: center;
+  border-radius: 50%;
+}
+
+.home-top-menu .top-nav-right {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  border-bottom: 1px solid #001225;
+  padding: 5px 10px;
+  font-family: "Times New Roman", Times, serif;
+}
+
+.home-top-menu .top-nav-right .nav-item {
+  width: 10vw;
+  border-right: 2px dotted grey;
+  height: 100%;
+}
+
+.home-top-menu .top-nav-right .collasible-nav-dropdown {
+  color: #fff !important;
+}
+
+.home-top-menu .top-nav-right .currency-type-lang {
+  width: 20vw;
+}
+
+.main-container {
+  padding-left: 65px !important;
+  padding-right: 65px !important;
+}
+.top-nav-container {
   margin-left: 0px;
   margin-right: 0px;
   padding-left: 0px;
   padding-right: 0px;
 }
+
+/** Home Action Start*/
+
+.home-action-btn {
+  width: 100%;
+  height: 56px;
+  border-radius: 50px;
+  margin-bottom: -80px;
+  background-image: linear-gradient(96deg, #53b2fe, #065af3);
+  box-shadow: 0 1px 7px 0 rgb(0 0 0 / 20%);
+  text-transform: uppercase;
+  font-size: larger;
+  text-shadow: 2px 2px 2px #070707;
+}
+
+/** Home Action End*/
+
 .content-warper {
   margin: 0 auto;
   padding: 0;
@@ -32,6 +140,65 @@ body {
   height: auto;
   overflow-y: visible;
 }
+
+/** Menu bar tab Start */
+.tab-menu-bar {
+  height: 85px;
+  padding: 0px 150px;
+  z-index: 100;
+}
+
+.tab-menu-bar .nav.nav-pills {
+  height: 100%;
+  align-items: center;
+  background-color: #fff !important;
+  border-radius: 10px;
+  box-shadow: 0 1px 7px 0 rgb(0 0 0 / 40%);
+}
+
+.tab-menu-bar .nav.nav-pills .nav-item {
+  margin: 0px 10px;
+  height: 100%;
+}
+
+.nav-icon-area.nav-link {
+  width: 100px !important;
+  height: 100%;
+  color: #0e0d0d;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 14px;
+}
+
+.nav-icon-area.nav-link.active {
+  box-shadow: 0 1px 7px 0 rgb(0 0 0 / 40%);
+}
+
+.main-tab-content {
+  width: 100%;
+  min-width: 450px;
+  background-color: #fff;
+  box-shadow: 0 1px 7px 0 rgb(0 0 0 / 40%);
+  padding: 55px 15px 10px 15px;
+  margin-top: -42px;
+  border-radius: 10px;
+}
+
+.panel-container {
+  background-color: #fff;
+  margin: 65px 5px;
+  padding: 10px 5px;
+  box-shadow: 0 0 1px rgb(0 0 0 / 13%), 0 1px 3px rgb(0 0 0 / 20%);
+}
+
+.main-tab-content .mt-20 .pt-20 {
+  margin-top: 20px !important;
+  padding-top: 20px !important;
+}
+
+/** Menu bar tab Start */
 
 .autoContainerClass {
   width: auto;
@@ -205,6 +372,7 @@ body {
 
 .traveler {
   position: absolute;
+  width: 20vw;
 }
 
 .mp-0 {
@@ -212,7 +380,7 @@ body {
   padding: 0px !important;
 }
 
-.mtb20-p0{
+.mtb20-p0 {
   margin-top: 20px !important;
   margin-bottom: 20px !important;
   margin-left: 0px !important;
@@ -221,7 +389,7 @@ body {
 }
 
 .traveler .traveler-card {
-  width: 187%;
+  width: 40vw;
   margin: 0px;
   padding: 10px 5px;
   position: relative !important;
@@ -1132,7 +1300,7 @@ body {
 }
 
 .booking-card .card-body {
-  padding: 5px;  
+  padding: 5px;
 }
 
 .booking-card.card-body > .row {
@@ -2034,6 +2202,16 @@ body {
   font-size: 0.75em;
 }
 
+.pricing-details-page {
+  display: flex;
+  flex-direction: column;
+}
+.pricing-details-page .icon-area {
+}
+
+.pricing-details-page .air-provider {
+}
+
 .rnd-price-fare-inf {
   padding: 2px;
 }
@@ -2143,13 +2321,14 @@ body {
   margin-top: -10px;
 }
 
-.m-item {
-  width: 100px !important;
-  color: #4e4d4d;
+.menu-icon,
+.menu-text {
+  display: flex;
+  align-items: center;
 }
 
 .menu-icon {
-  font-size: 2em;
+  font-size: 2.4em;
 }
 
 .menu-text {
@@ -2177,13 +2356,13 @@ body {
   left: 0;
   right: 0;
   z-index: -100;
-  height: 300px;
+  height: 250px;
   box-shadow: 0 0 1px rgb(0 0 0 / 13%), 0 1px 3px rgb(0 0 0 / 20%);
 }
 
 .main-search-container {
   background-color: #fff;
-  min-height: 300px;
+  min-height: 250px;
 }
 
 .curreny-code {
@@ -2421,14 +2600,17 @@ body {
 
 .air-inf {
   width: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 .air-inf .icon-area {
-  width: 40%;
+  padding-left: 20px;
 }
 
 .air-inf .air-name {
-  width: 60%;
+  text-align: left;
+  padding-left: 15px;
 }
 
 .empty-line-50 {
@@ -3114,6 +3296,7 @@ body {
   height: 95px;
   position: relative;
   padding: 5px 10px;
+  _font-family: "Times New Roman", Times, serif;
 }
 
 .auto-sugesstion-area {
@@ -3258,8 +3441,8 @@ body {
 /* Filter Style Start */
 
 .catelog-filter .stops-area,
-.catelog-filter .catlog-departure-area ,
-.catelog-filter .catelog-arrival-area  {
+.catelog-filter .catlog-departure-area,
+.catelog-filter .catelog-arrival-area {
   padding: 5px 10px;
 }
 
@@ -3275,24 +3458,23 @@ body {
   cursor: pointer;
 }
 
-.catelog-filter .filter-icon-area{
+.catelog-filter .filter-icon-area {
   width: 100%;
-  display: block; 
+  display: block;
   box-sizing: border-box;
   padding: 5px 4px;
   cursor: pointer;
 }
 
-.catelog-filter .filter-icon-area.active{
+.catelog-filter .filter-icon-area.active {
   background-color: #068eff;
-  color: #FFF;
+  color: #fff;
 }
 
-.catelog-filter .icon-content{
+.catelog-filter .icon-content {
   margin: 0px !important;
   padding: 5px;
 }
-
 
 .catelog-filter .filter-icon-area .icon,
 .catelog-filter .filter-icon-area .text,
@@ -3301,25 +3483,25 @@ body {
   display: block;
   text-align: center;
 }
-.catelog-filter .filter-icon-area .icon {  
+.catelog-filter .filter-icon-area .icon {
   font-size: 1em;
   font-weight: 700;
 }
 
-.catelog-filter .filter-icon-area .price{
-  font-size: .60em;
+.catelog-filter .filter-icon-area .price {
+  font-size: 0.6em;
   font-weight: 600;
 }
 
-.catelog-filter .filter-icon-area .text{
-  font-size: .55em;
+.catelog-filter .filter-icon-area .text {
+  font-size: 0.55em;
   font-weight: 500;
 }
 
 .catelog-filter .catelog-title {
-  font-size: 1.20em;
+  font-size: 1.2em;
   font-weight: 700;
-  margin:0rem -.5rem;
+  margin: 0rem -0.5rem;
   padding-left: 1rem;
   padding-top: 5px;
   padding-bottom: 10px;

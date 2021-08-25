@@ -13,6 +13,12 @@ class MyDocument extends Document {
           />
 
           <link
+            href="/assets/custom-font-icon/custom-icon.css"
+            rel="stylesheet"
+          />
+
+
+          <link
             rel="stylesheet"
             href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css"
           />
@@ -29,6 +35,7 @@ class MyDocument extends Document {
             crossOrigin="anonymous"
           />
 
+          
           {/**
             <link
             rel="stylesheet"

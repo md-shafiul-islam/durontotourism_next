@@ -1,10 +1,15 @@
 import { Field, FieldArray, Form, Formik } from "formik";
 import React, { Component } from "react";
+import { PropTypes } from "prop-types";
 import Select from "react-select";
 import { Button, Card, Col, Row } from "react-bootstrap";
 import * as Yup from "yup";
 import { helperIsEmpty } from "../../utils/helper/helperAction";
 import { getNmsOptions, helperPreSetTravelr } from "../../utils/helper/esFnc";
+import { initRoundTripBookingData } from "../../utils/booking/initBooking";
+import { v4 } from "uuid";
+import { connect } from "react-redux";
+import { getRoundTripBookingAction } from "../../redux/actions/bookingAction";
 
 class BookingTravellerDetailsCard extends Component {
   state = {
@@ -21,6 +26,54 @@ class BookingTravellerDetailsCard extends Component {
 
     let pasCounts = this.initPrePerdForm();
     this.initValidationSchema(pasCounts);
+  }
+
+  buttonClicAction = ()=>{
+    const values = {
+      adults: [
+        {
+          firstName: "Md. Shafiul",
+          lastName: "Islam",
+          gender: "Male",
+          type: "ADT",
+          key: "af691dda-3afb-42a9-a708-d2592998054b",
+        },
+        {
+          firstName: "Arfin",
+          lastName: "Islam",
+          gender: "Female",
+          type: "ADT",
+          key: "a815b73f-9048-4039-b371-b2c68a29f502",
+        },
+      ],
+      childs: [
+        {
+          firstName: "Musfiky",
+          lastName: "Islam",
+          gender: "Female",
+          type: "CNN",
+          passAge: "7",
+          key: "15c615f0-b4d7-40ee-a456-dea08ece50ab",
+        },
+      ],
+      infants: [
+        {
+          firstName: "Ayat",
+          lastName: "Islam",
+          gender: "Female",
+          type: "INF",
+          day: 9,
+          month: 8,
+          year: 2019,
+          key: "4d1b75fa-8795-4007-b962-4c5af01b2661",
+        },
+      ],
+      country_code: "+880",
+      phone_no: "1725686029",
+      email: "shafiul2014bd@gmail.com",
+    };
+    let bookingRequestQuery = initRoundTripBookingData(values);
+    this.props.getRoundTripBookingAction(bookingRequestQuery);
   }
 
   initValidationSchema = (pasCounts) => {
@@ -235,43 +288,18 @@ class BookingTravellerDetailsCard extends Component {
   };
 
   submitAction = (values) => {
-    console.log("Booking Action, ", JSON.stringify(values, null, 2));
+    console.log("Booking Action Travelers, ", values);
+    console.log("Booking Action, String, ", JSON.stringify(values, null, 2));
 
     // console.log("Get Age, ", getAge(30,7,2019));
 
-    const passengers = [];
 
-    if (values) {
-      values.adults &&
-        values.adults.map((adt, idx) => {
-          passengers.push(
-            helperPreSetTravelr(
-              adt,
-              { countryCode: values.country_code, number: values.phone_no },
-              values.email,
-              idx === 0 ? true : false
-            )
-          );
-        });
+    let bookingRequestQuery = initRoundTripBookingData(values);
+    this.props.getRoundTripBookingAction(bookingRequestQuery);
 
-      values.childs &&
-        values.childs.map((chd, idx) => {
-          passengers.push(
-            helperPreSetTravelr(chd, undefined, undefined, false)
-          );
-        });
+    // this.props.getTravelersAction(passengers);
 
-      values.infants &&
-        values.infants.map((inf, idx) => {
-          passengers.push(
-            helperPreSetTravelr(inf, undefined, undefined, false)
-          );
-        });
-    }
-
-    console.log("Passengers, ", JSON.stringify(passengers, null, 2));
-
-    this.props.getTravelersAction(passengers);
+    
   };
 
   render() {
@@ -283,7 +311,7 @@ class BookingTravellerDetailsCard extends Component {
       <React.Fragment>
         <Formik
           initialValues={{
-            adults: [{ firstName: "", lastName: "", gender: "", type: "ADT" }],
+            adults: [{ firstName: "", lastName: "", gender: "", type: "ADT", key:v4() }],
             childs: [],
             infants: [],
             country_code: "",
@@ -416,7 +444,7 @@ class BookingTravellerDetailsCard extends Component {
                                             </span>
                                           </Col>
                                         </Row>
-                                        <div className="form-row traveler-in-area">
+                                        <div className="row traveler-in-area">
                                           <Col md={4}>
                                             <Field
                                               className={`form-control ${
@@ -521,6 +549,7 @@ class BookingTravellerDetailsCard extends Component {
                                       lastName: "",
                                       gender: "",
                                       type: "ADT",
+                                      key:v4()
                                     });
                                   }
                                 }}
@@ -649,7 +678,7 @@ class BookingTravellerDetailsCard extends Component {
                                             </span>
                                           </Col>
                                         </Row>
-                                        <div className="form-row traveler-in-area">
+                                        <div className="row traveler-in-area">
                                           <Col md={4}>
                                             <Field
                                               className={`form-control ${
@@ -765,6 +794,7 @@ class BookingTravellerDetailsCard extends Component {
                                       gender: "",
                                       type: "CNN",
                                       passAge: "",
+                                      key:v4()
                                     });
                                   }
                                 }}
@@ -893,7 +923,7 @@ class BookingTravellerDetailsCard extends Component {
                                             </span>
                                           </Col>
                                         </Row>
-                                        <div className="form-row traveler-in-area">
+                                        <div className="row traveler-in-area">
                                           <Col md={4}>
                                             <Field
                                               className={`form-control ${
@@ -1065,6 +1095,7 @@ class BookingTravellerDetailsCard extends Component {
                                       day: 1,
                                       month: 1,
                                       year: new Date().getFullYear() - 2,
+                                      key:v4()
                                     });
                                   }
                                 }}
@@ -1090,7 +1121,7 @@ class BookingTravellerDetailsCard extends Component {
               <Card>
                 <Card.Body>
                   <p>Your ticket and flights information will be sent here</p>
-                  <div className="form-row traveler-in-area">
+                  <div className="row traveler-in-area">
                     <Col md={4}>
                       <label htmlFor="country_code">Country Code</label>
                       <Select
@@ -1229,9 +1260,21 @@ class BookingTravellerDetailsCard extends Component {
             </Form>
           )}
         </Formik>
+        <Col>
+                  <Button onClick={this.buttonClicAction} >Test Func !!</Button>
+        </Col>
       </React.Fragment>
     );
   }
 }
 
-export default BookingTravellerDetailsCard;
+BookingTravellerDetailsCard.prototypes = {
+  getRoundTripBookingAction: PropTypes.func.isRequired
+};
+
+const mapStateToProps = (state) => ({
+  errors: state.errors,
+  bookingReqponse: state.airBooking.rndBookingResponse
+});
+
+export default connect(mapStateToProps, {getRoundTripBookingAction}) (BookingTravellerDetailsCard);

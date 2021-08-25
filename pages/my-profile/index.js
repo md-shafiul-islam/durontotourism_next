@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Breadcrumb, Col, Container, Row } from "react-bootstrap";
-import EmptyCont from "../commponents/helper/emptyCont";
+import EmptyCont from "../../utils/helper/emptyCont";
+
 import ProfileBasicInfo from "../commponents/user/profileBasicInfo";
 import ProfileLoginDetails from "../commponents/user/profileLoginDetails";
 import ProfileSaveTraveller from "../commponents/user/profileSaveTraveller";

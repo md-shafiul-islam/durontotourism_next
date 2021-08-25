@@ -11,30 +11,15 @@ import { helperIsEmpty } from "../../utils/helper/helperAction";
 
 const BookingFlightDetails = (props) =>{
     
-    console.log("BookingFlightDetail props, ", props)
-
-    const airPorts = useSelector(state => state.airSearch.airPortsList);
-    
-    const getCarrierByCode = (code)=>{
-        if(!helperIsEmpty(airPorts)){
-            
-            let airPort = airPorts[code];
-
-            if(!helperIsEmpty(airPort)){
-                return airPort.name;
-            }
-        }
-
-        return "Not Found ";
-    }
-
-    const getAirPortNaes = (carriers)=>{
-
-        if(!helperIsEmpty(carriers)){
+    console.log("BookingFlightDetail props, ", props);
+ 
+    const getAirLinceNames = (carriers)=>{
+      console.log("Get Air Linces ", carriers);
+        if(carriers){
             return (
                 <React.Fragment>
-                    {carriers.map((carrier, idx)=>{
-                        return <span key={`carrbyc-${idx}`}>{getCarrierByCode(carrier)}</span>
+                    {carriers&&carriers.map((carrier, idx)=>{
+                        return <span key={`carrbyc-${idx}`}>{carrier&&props.airLinces&&props.airLinces[carrier]&&props.airLinces[carrier].name}</span>
                     })}
                 </React.Fragment>
             )
@@ -48,11 +33,11 @@ const BookingFlightDetails = (props) =>{
         <Col md={3}>
             <div className="air-inf">
                 <div className="icon-area">
-                <IconView selectedAirs={props.segment.carriers} iconSizeClass="icon-view-area-medium" />
+                <IconView selectedAirs={props.segment.carriers}  airlinseList={props.airLinces}/>
                     
                 </div>
                 <div className="air-name">
-                    {getAirPortNaes(props.segment.carriers)}
+                    {getAirLinceNames(props.segment.carriers)}
                 </div>
             </div>
         </Col>

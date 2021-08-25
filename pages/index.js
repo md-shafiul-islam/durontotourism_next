@@ -12,6 +12,8 @@ import {
   airPortsArray,
 } from "../redux/actions/airSearchAction";
 import { localDataStore } from "../utils/helper/localDataStore";
+import MenuTab from "../components/tabs/MenuTab";
+import HomePageMenu from "../components/layout/menu/homePageMenu";
 
 class Home extends React.Component {
   componentDidMount() {
@@ -25,15 +27,24 @@ class Home extends React.Component {
     return (
       <React.Fragment>
         <Row>
-          <Col md={12}>
+          <Col md={12} >
             <React.Fragment>
-              <Container className="com-sticky">
+              <Container fluid className="main-container">
                 <Row>
-                  <Col md={12} className="main-search-container">
-                    <AirSearchForm />
+                  <Col md={12}>
+                    <HomePageMenu />
                   </Col>
                 </Row>
+                <Row>
+                  <MenuTab />
+                </Row>
 
+                <Row>
+                  <Col md={12}>
+                    <div className="empty-cont"></div>
+                  </Col>
+                </Row>
+                {/**
                 <Row className="mt-50">
                   <Col md={12} className="mp-0">
                     <OffersCard />
@@ -45,6 +56,7 @@ class Home extends React.Component {
                     <BlogHomePageCard />
                   </Col>
                 </Row>
+                   */}
               </Container>
             </React.Fragment>
           </Col>

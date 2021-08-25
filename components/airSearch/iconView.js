@@ -9,6 +9,7 @@ import React, {useEffect} from "react";
   */
 const IconView = (params) => {
   
+  console.log("IconView Params !! ", params);
 
   const getBgImageUrl = (cUrlCode) => {
     //get objectList item obj By pOb obj["APU"]);
@@ -17,7 +18,7 @@ const IconView = (params) => {
 
       let selectedAir = params.airlinseList[cUrlCode];
       
-      
+      console.log("Icon Url code ", cUrlCode)
       if(selectedAir !== undefined){
         airImageUrl = selectedAir.imageUrl;
     
@@ -33,13 +34,15 @@ const IconView = (params) => {
 
   return (
     <React.Fragment>
-      <div className={`${params.iconSizeClass}`}>
+      <div className={params.iconSizeClass ? params.iconSizeClass : params.selectedAirs&&params.selectedAirs.length > 1 ? `icon-view-area-small` : `icon-view-area-medium`}>
       {/*params.selectedAirs*/}
       { params.selectedAirs &&
         params.selectedAirs.map((code, cIdx) => {
+          console.log("Selected Air Icon View, ", code);
+
           return (
             
-            <div
+            <div key={`icon-carr-${cIdx}`}
               className={`icon-view ${params.selectedAirs.length} ${cIdx >= 1 ? " mgt-10 " : ""}`}
               style={{ backgroundImage: `url(${getBgImageUrl(code)})` }}
             ></div>

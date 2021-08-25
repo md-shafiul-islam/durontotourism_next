@@ -45,10 +45,9 @@ export const getPriceSearchAction = (query, type, chaneLoadingStatus)=> async(di
 
   // console.log("Result, ", result);
 
-  chaneLoadingStatus(result);
-
   try {
-
+    chaneLoadingStatus(result);
+    
     dispatch({
       type: action,
       payload: result.data,

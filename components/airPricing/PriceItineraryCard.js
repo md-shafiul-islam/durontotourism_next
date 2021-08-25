@@ -1,5 +1,6 @@
 import React,{useState} from "react";
 import { Col, Row } from "react-bootstrap";
+import { shallowEqual, useSelector } from "react-redux";
 import {
   helperGetTimeFormatMin,
   helperGetTravelTime,
@@ -7,10 +8,15 @@ import {
   helperGetPrice,
   helperGetFullDateFormat,
 } from "../../redux/actions/helperAction";
+import IconView from "../airSearch/iconView";
 
 const PriceItineraryCard = (prams) => {
 
   console.log("PriceItineraryCard, ", prams);
+
+  const airlinseList = useSelector((state) => {
+    return state.airSearch.airLinesList;
+  }, shallowEqual);
 
   const [displayMsg, setDisplayMsg] = useState({});
   const diplayInfoShow = () => {
@@ -65,7 +71,14 @@ const PriceItineraryCard = (prams) => {
   return (
     <React.Fragment>
       <Row>
-        <Col md={3}>{prams.segment.codeshareInfo.value}</Col>
+        <Col md={3} className="pricing-details-page">
+          <div className="icon-area">
+            <IconView airlinseList={airlinseList} selectedAirs={prams.segment.carrier ? [prams.segment.carrier] : [prams.segment.codeshareInfo.operatingCarrier]} />
+          </div>
+          <div className="air-provider">
+            {airlinseList ? airlinseList[prams.segment.carrier] ? airlinseList[prams.segment.carrier].name : prams.segment&&prams.segment.codeshareInfo&&prams.segment.codeshareInfo.value : prams.segment&&prams.segment.codeshareInfo&&prams.segment.codeshareInfo.value}
+          </div>
+        </Col>
         <Col md={6}>
           <Row className="fly-time-inf txt-al-c one-way">
             <Col md={4}>

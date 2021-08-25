@@ -1,57 +1,65 @@
-import { GET_FILTER_DEP_STOPS, GET_FILTER_DEP_TIME, GET_FILTER_RET_STOPS, GET_FILTER_RET_TIME, GET_ONWARD_FLIGHT_FILTER, GET_RETURN_FLIGHT_FILTER, GET_SEL_AIR_FLIGHT_FILTER } from "../types";
+import {
+  GET_FILTER_DEP_STOPS,
+  GET_FILTER_DEP_TIME,
+  GET_FILTER_RET_STOPS,
+  GET_FILTER_RET_TIME,
+  GET_ONWARD_FLIGHT_FILTER,
+  GET_RETURN_FLIGHT_FILTER,
+  GET_SEL_AIR_FLIGHT_FILTER,
+} from "../types";
 
 const initialState = {
   onwardFilterOptions: {},
   returnFilterOptions: {},
   oneWayFilterOptions: {},
   multyCityFilterOptions: {},
-  selectedAirCodes:[],
-  returnAirTimes:[],
-  departureAirTimes:[],
-  stopsDepFlights:[],
-  stopsRetFlights:[],
+  selectedAirCodes: [],
+  returnAirTimes: [],
+  departureAirTimes: [],
+  stopsDepFlights: [],
+  stopsRetFlights: [],
 };
 
 export default function (state = initialState, action) {
   switch (action.type) {
     case GET_ONWARD_FLIGHT_FILTER:
-      return { 
-        ...state, 
-        onwardFilterOptions: action.payload 
-        };
+      return {
+        ...state,
+        onwardFilterOptions: action.payload,
+      };
     case GET_RETURN_FLIGHT_FILTER:
-        return{
-            ...state,
-            returnFilterOptions:action.payload
-        }
+      return {
+        ...state,
+        returnFilterOptions: action.payload,
+      };
     case GET_SEL_AIR_FLIGHT_FILTER:
-      return{
+      return {
         ...state,
-        selectedAirCodes:action.payload
-      }
+        selectedAirCodes: action.payload,
+      };
     case GET_FILTER_DEP_TIME:
-      return{
+      return {
         ...state,
-        departureAirTimes:action.payload
-      }
+        departureAirTimes: action.payload,
+      };
     case GET_FILTER_RET_TIME:
-      return{
+      return {
         ...state,
-        returnAirTimes:action.payload
-      }  
+        returnAirTimes: action.payload,
+      };
 
     case GET_FILTER_DEP_STOPS:
-      return{
+      return {
         ...state,
-        stopsDepFlights:action.payload,
-      }  
+        stopsDepFlights: action.payload,
+      };
 
-      case GET_FILTER_RET_STOPS:
-        return{
-          ...state,
-          stopsRetFlights: action.payload,
-        }   
+    case GET_FILTER_RET_STOPS:
+      return {
+        ...state,
+        stopsRetFlights: action.payload,
+      };
     default:
-        return state;
+      return state;
   }
 }

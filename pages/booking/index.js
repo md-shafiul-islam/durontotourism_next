@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { Col, Container, Row } from "react-bootstrap";
 import { connect } from "react-redux";
-import { getRoundTripBookingAction } from "../../redux/actions/bookingAction";
 
 import { esGetRoundTripBookingQuery, preSetBookingOption } from "../../utils/helper/esFnc";
 import { helperGetActionDateTime } from "../../utils/helper/helperAction";
@@ -57,45 +56,6 @@ class BookingPage extends Component {
     }
   };
 
-  bookingAction = (passengers) => {
-    console.log("Booking Page Passengers, ", passengers);
-
-    const selectedTndTrip = localDataStore.getPriceRoundTripFlightsBook();
-
-    console.log("Booking Page selectedTndTrip, ", selectedTndTrip);
-    
-    const bookSolution = [];
-
-    let deptureOpt = preSetBookingOption(selectedTndTrip.detureItem);
-
-    let retOpt = preSetBookingOption(selectedTndTrip.returnItem);
-
-    if(deptureOpt){
-      bookSolution.push(deptureOpt);
-    }
-    console.log("Booking Page Depture Option, ", deptureOpt);
-    if(retOpt){
-      bookSolution.push(retOpt);
-
-    }
-    
-    let airSolutions = esGetRoundTripBookingQuery(bookSolution);
-    
-
-    const bookingQuery = {
-      traceId: localDataStore.getroundTripTraceID(),
-      actionDateTime: helperGetActionDateTime(),//"2021-02-26T23:30:00.000+06:00", // TODO:set Current Date L
-      bookingTravelerReq: passengers,
-      bookAirSolution: [airSolutions],
-    };
-
-    console.log("Booking Query Object", bookingQuery);
-
-    // console.log("Booking Query JSON String, ", JSON.stringify(bookingQuery));
-
-    this.props.getRoundTripBookingAction(JSON.stringify(bookingQuery));
-
-  };
   render() {
     let {
       deptuerPriceDetails,
@@ -129,7 +89,6 @@ class BookingPage extends Component {
               <Col md={12}>
                 <BookingTravellerDetailsCard
                   travelers={farePriceSummery && farePriceSummery.eachPrices}
-                  getTravelersAction={this.bookingAction}
                 />
               </Col>
             </Row>
@@ -143,8 +102,6 @@ class BookingPage extends Component {
   }
 }
 
-BookingPage.prototypes = {
-  getRoundTripBookingAction: PropTypes.func.isRequired,
-};
 
-export default connect(null, {getRoundTripBookingAction})(BookingPage);
+
+export default BookingPage;

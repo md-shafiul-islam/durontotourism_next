@@ -114,111 +114,113 @@ const TravellersAndClass = (props) => {
 
   return (
     <React.Fragment>
-      <Row className="mp-0">
-        <Col md={12} className="traveler mp-0" ref={refDate}>
-          <div
-            className="com-title"
-            onClick={(e) => {
-              setDisplay(!display);
-            }}
-          >
-            Travellers & CLASS{"  "}&nbsp;
-            <i
-              className="fas fa-angle-down icon-trans"
-              style={{
-                transform: `${display ? "rotateZ(-180deg)" : ""}`,
+      <React.Fragment>
+        <Row className="mp-0">
+          <Col md={12} className="traveler mp-0" ref={refDate}>
+            <div
+              className="com-title"
+              onClick={(e) => {
+                setDisplay(!display);
               }}
-            ></i>
-          </div>
-          <div className="tb-pad-0">
-            <Col md={12} className="traveler-card-body">
-              <p>
-                <span className="search-bstyle">{totalTraveler}</span>{" "}
-                <span className="search-nstyle"> Travellers</span>
-              </p>
-              <p className="travellerClass">
-                {cabinClass ? cabinClass.name : ""}
-              </p>
-            </Col>
-          </div>
+            >
+              Travellers & CLASS{"  "}&nbsp;
+              <i
+                className="fas fa-angle-down icon-trans"
+                style={{
+                  transform: `${display ? "rotateZ(-180deg)" : ""}`,
+                }}
+              ></i>
+            </div>
+            <div className="tb-pad-0">
+              <Col md={12} className="traveler-card-body">
+                <p>
+                  <span className="search-bstyle">{totalTraveler}</span>{" "}
+                  <span className="search-nstyle"> Travellers</span>
+                </p>
+                <p className="travellerClass">
+                  {cabinClass ? cabinClass.name : ""}
+                </p>
+              </Col>
+            </div>
 
-          {display && (
-            <Card className="traveler-card">
-              <Card.Body>
-                <Row>
-                  <Col md={12}>
-                    <Row>
-                      <Col md={9}>
-                        <ComRange
-                          items={passRang}
-                          populateItem={adults}
-                          keyFix="adt"
-                          ulClass="rang-list"
-                          itemClass="item"
-                          headerClass=""
-                          headerText="ADULTS (12y +)"
-                          getData={(item) => setAdultsData(item)}
-                        />
-                      </Col>
-                      <Col md={3}></Col>
-                    </Row>
+            {display && (
+              <Card className="traveler-card">
+                <Card.Body>
+                  <Row>
+                    <Col md={12}>
+                      <Row>
+                        <Col md={9}>
+                          <ComRange
+                            items={passRang}
+                            populateItem={adults}
+                            keyFix="adt"
+                            ulClass="rang-list"
+                            itemClass="item"
+                            headerClass=""
+                            headerText="ADULTS (12y +)"
+                            getData={(item) => setAdultsData(item)}
+                          />
+                        </Col>
+                        <Col md={3}></Col>
+                      </Row>
 
-                    <Row>
-                      <Col md={6}>
-                        <ComRange
-                          items={passChRang}
-                          populateItem={child}
-                          keyFix="chi"
-                          ulClass="rang-list"
-                          itemClass="item"
-                          headerText="CHILDREN (2y - 12y )"
-                          getData={(item) => setChildData(item)}
-                        />
-                      </Col>
-                      <Col md={6}>
-                        <ComRange
-                          items={passChRang}
-                          populateItem={infants}
-                          keyFix="inf"
-                          ulClass="rang-list"
-                          itemClass="item"
-                          headerText="INFANTS (below 2y)"
-                          getData={(item) => setInfantsData(item)}
-                        />
-                      </Col>
-                    </Row>
+                      <Row>
+                        <Col md={6}>
+                          <ComRange
+                            items={passChRang}
+                            populateItem={child}
+                            keyFix="chi"
+                            ulClass="rang-list"
+                            itemClass="item"
+                            headerText="CHILDREN (2y - 12y )"
+                            getData={(item) => setChildData(item)}
+                          />
+                        </Col>
+                        <Col md={6}>
+                          <ComRange
+                            items={passChRang}
+                            populateItem={infants}
+                            keyFix="inf"
+                            ulClass="rang-list"
+                            itemClass="item"
+                            headerText="INFANTS (below 2y)"
+                            getData={(item) => setInfantsData(item)}
+                          />
+                        </Col>
+                      </Row>
 
-                    <Row>
-                      <Col md={12}>
-                        <ComRange
-                          items={passClassRange}
-                          populateItem={cabinClass}
-                          keyFix="cabin"
-                          ulClass="rang-list"
-                          itemClass="item"
-                          headerText="CHOOSE TRAVEL CLASS"
-                          getData={(item) => setClassData(item)}
-                        />
-                      </Col>
-                    </Row>
-                  </Col>
-                </Row>
+                      <Row>
+                        <Col md={12}>
+                          <ComRange
+                            items={passClassRange}
+                            populateItem={cabinClass}
+                            keyFix="cabin"
+                            ulClass="rang-list"
+                            itemClass="item"
+                            headerText="CHOOSE TRAVEL CLASS"
+                            getData={(item) => setClassData(item)}
+                          />
+                        </Col>
+                      </Row>
+                    </Col>
+                  </Row>
 
-                <Row>
-                  <Col>
-                    <Button
-                      variant="primary"
-                      onClick={(e) => setDataToApply(e)}
-                    >
-                      Apply <i className="fas fa-check"></i>
-                    </Button>
-                  </Col>
-                </Row>
-              </Card.Body>
-            </Card>
-          )}
-        </Col>
-      </Row>
+                  <Row>
+                    <Col>
+                      <Button
+                        variant="primary"
+                        onClick={(e) => setDataToApply(e)}
+                      >
+                        Apply <i className="fas fa-check"></i>
+                      </Button>
+                    </Col>
+                  </Row>
+                </Card.Body>
+              </Card>
+            )}
+          </Col>
+        </Row>
+      </React.Fragment>
     </React.Fragment>
   );
 };

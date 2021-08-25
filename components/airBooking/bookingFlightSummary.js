@@ -3,6 +3,11 @@ import { Card, Col, Row } from "react-bootstrap";
 import { helperIsEmpty } from "../../utils/helper/helperAction";
 import BookingFlightDetails from "./bookingFlightDetails";
 import { helperGetFullDateFormat } from "../../redux/actions/helperAction";
+import { connect } from "react-redux";
+import { PropTypes } from "prop-types";
+import { GET_AIRPORTS } from "../../redux/types";
+
+
 
 class BookingFlightSummary extends Component {
   state = {
@@ -36,12 +41,40 @@ class BookingFlightSummary extends Component {
     if (code) {
       if (airPorts) {
         let airPort = airPorts[code];
-        return airPort.location;
+        return airPort&&airPort.location;
       }
     }
 
     return "Not Set";
   };
+
+  getAirLince = (segmentsInf)=>{
+
+    let airLinceList = {};
+    if(segmentsInf){
+
+      console.log("get Air Linces Segments Info, ", segmentsInf);
+      let {carriers} = segmentsInf;
+
+      console.log("Selectedd Air Linces, ", carriers, " Air Linces List ", this.props.airLines);
+
+      carriers&&carriers.map((carrier, idx)=>{
+        if(this.props){
+
+          if(this.props.airLines){
+            let airLine = {[carrier]: this.props.airLines[carrier]};
+            if(airLine){
+              airLinceList = {...airLinceList, ...airLine};
+            }
+          }
+        }
+      })
+    }
+
+    console.log("Selectedd Air Linces, Before return ", airLinceList);
+
+    return airLinceList;
+  }
 
   render() {
     let { deptuerPriceDetails, returnPriceDetails } = this.props;
@@ -102,6 +135,8 @@ class BookingFlightSummary extends Component {
                     deptuerPriceDetails.solutionInf &&
                     deptuerPriceDetails.solutionInf.cabinClass
                   }
+
+                  airLinces={this.getAirLince(deptuerPriceDetails && deptuerPriceDetails.segmentInf)}
                 />
               </Col>
 
@@ -116,6 +151,8 @@ class BookingFlightSummary extends Component {
                     returnPriceDetails.solutionInf &&
                     returnPriceDetails.solutionInf.cabinClass
                   }
+
+                  airLinces={this.getAirLince(returnPriceDetails && returnPriceDetails.segmentInf)}
                 />
               </Col>
             </Row>
@@ -126,4 +163,16 @@ class BookingFlightSummary extends Component {
   }
 }
 
-export default BookingFlightSummary;
+BookingFlightSummary.prototypes = {
+  airPorts: PropTypes.object.isRequired,
+};
+
+const mapStateToProps = (state)=>{
+
+  return {
+    airPorts: state.airSearch.airPortsList,
+    airLines: state.airSearch.airLinesList
+  }
+}
+
+export default connect(mapStateToProps, null)(BookingFlightSummary);

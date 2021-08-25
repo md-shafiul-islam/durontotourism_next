@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Card, Col, Row } from "react-bootstrap";
+import { shallowEqual, useSelector } from "react-redux";
 import { helperGetTotalFlyTimeReadable } from "../../../../utils/helper/helperAction";
+import IconView from "../../iconView";
 
 const BookingCardRoundTripOptions = (params) => {
   console.log("BookingCardRoundTripOptions params, ", params);
@@ -8,6 +10,13 @@ const BookingCardRoundTripOptions = (params) => {
   const [totalTravelTime, setTotalTravelTime] = useState("");
   const [selectedItem, setSelectedItem] = useState(false);
   let {loadingStatus} = params;
+
+  const airlinseList = useSelector((state) => {
+    console.log("Redux State UseSelector, ", state.airSearch.airLinesList);
+    return state.airSearch.airLinesList;
+  }, shallowEqual);
+  
+
   useEffect(() => {
     setTotalTravelTime();
     /*getTotalFlyTime(
@@ -218,7 +227,7 @@ const BookingCardRoundTripOptions = (params) => {
 
           <Row className="round-trip-content">
             <Col md={2} className="rt-icon">
-              Icon
+              <IconView selectedAirs={params.flight.option && params.flight.option.carriers} airlinseList={airlinseList} />
             </Col>
             <Col md={7} className="mp-0">
               <Row className="rnd-trevel-inf">
