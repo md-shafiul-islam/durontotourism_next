@@ -1,4 +1,3 @@
-import { param } from "jquery";
 import React from "react";
 import { Card, Col, ProgressBar, Row } from "react-bootstrap";
 

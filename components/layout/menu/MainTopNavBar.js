@@ -1,22 +1,27 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/dist/client/router";
 import Image from "next/image";
 import Link from "next/link";
-import { Container, Nav, Navbar } from "react-bootstrap";
+import { Container, Nav, Navbar, NavDropdown } from "react-bootstrap";
 import { initScrollPositionCount } from "../../../utils/ui/menuAction";
+import LoginDropdown from "../../login-signup/LoginDropdown";
 
 const MainTopNavBar = (params) => {
-
   const [display, setDisplay] = useState(false);
-  const [sticky, setSticky] = useState({ stickyNavStatus: false, topSectionStatus: true })
+  const [isLogin, setIsLogin] = useState(true);
+
+  const [sticky, setSticky] = useState({
+    stickyNavStatus: false,
+    topSectionStatus: true,
+  });
   const route = useRouter();
 
   console.log("Use Next Route, ", route);
 
   useEffect(() => {
-    if(route.asPath === "/"){
+    if (route.asPath === "/" || route.asPath === "/payment" || route.asPath === "/booking-summary") {
       setDisplay(false);
-    }else{
+    } else {
       setDisplay(true);
     }
 
@@ -24,7 +29,7 @@ const MainTopNavBar = (params) => {
     let stickyStatus = initScrollPositionCount(sticky, setSticky);
 
     console.log("Sticky Status, ", stickyStatus);
-  }, [])
+  }, []);
 
   return (
     <React.Fragment>
@@ -33,9 +38,10 @@ const MainTopNavBar = (params) => {
         expand="lg"
         bg="light"
         variant="light"
-        className={`top-main-nav-bar ${sticky&&sticky.stickyNavStatus ? 'active-top-nav' : ''}`}
+        className={`top-main-nav-bar ${
+          sticky && sticky.stickyNavStatus ? "active-top-nav" : ""
+        }`}
         sticky={true ? "top" : ""}
-        
       >
         <Container fluid className="main-container">
           <Navbar.Brand className="top-brand-area">
@@ -123,9 +129,8 @@ const MainTopNavBar = (params) => {
               </Nav.Item>
             </Nav>
             <Nav className="es-info-area">
-              <Nav.Item>
-                <span className="menu-text">login</span>
-              </Nav.Item>
+              {isLogin ? <LoginDropdown name="My profile" /> : <Nav.Item>Log In</Nav.Item>}
+
               <Nav.Item>
                 <span className="menu-text">Currency</span>
               </Nav.Item>

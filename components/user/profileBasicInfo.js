@@ -31,27 +31,27 @@ const ProfileBasicInfo = (props) => {
             </Row>
           </div>
           <div className="pfl-table-paren mt-5">
-            <table class="table table-hover">
+            <table className="table table-hover">
               <tbody>
                 <tr>
                   <th scope="row">Name</th>
-                  <td colspan="3">MD Shafiul Islam</td>
+                  <td colSpan="3">MD Shafiul Islam</td>
                 </tr>
                 <tr>
                   <th scope="row">Birthday</th>
-                  <td colspan="3">
+                  <td colSpan="3">
                     <button className="prf-add-btn" onClick={editProfileAction}>+Add</button>
                   </td>
                 </tr>
                 <tr>
                   <th scope="row">Gender</th>
-                  <td colspan="3">
+                  <td colSpan="3">
                     <button className="prf-add-btn" onClick={editProfileAction}>+Add</button>
                   </td>
                 </tr>
                 <tr>
                   <th scope="row">Maritals status</th>
-                  <td colspan="3">
+                  <td colSpan="3">
                     <button className="prf-add-btn" onClick={editProfileAction}>+Add</button>
                   </td>
                 </tr>

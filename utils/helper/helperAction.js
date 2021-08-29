@@ -309,12 +309,6 @@ export const helperIsEmpty = (obj)=>{
 
   console.log("Empty Checking ... ");
 
-  if(obj){
-    
-  }else{
-    return true;
-  }
-
   if(obj === null || obj === undefined || typeof obj === "undefined"){
     
     return true;
@@ -327,5 +321,12 @@ export const helperIsEmpty = (obj)=>{
   if(Object.keys(obj).length === 0 && obj.constructor === Object){
     return true;
   }
+
+  if(obj){
+    
+  }else{
+    return true;
+  }
+  
   return false;
 }

@@ -2,11 +2,11 @@ import React, { Component } from "react";
 import { Breadcrumb, Col, Container, Row } from "react-bootstrap";
 import EmptyCont from "../../utils/helper/emptyCont";
 
-import ProfileBasicInfo from "../commponents/user/profileBasicInfo";
-import ProfileLoginDetails from "../commponents/user/profileLoginDetails";
-import ProfileSaveTraveller from "../commponents/user/profileSaveTraveller";
-import ProfileSideBar from "../commponents/user/profileSideBar";
-import ProfileStatus from "../commponents/user/profileStatus";
+import ProfileBasicInfo from "../../components/user/profileBasicInfo";
+import ProfileLoginDetails from "../../components/user/profileLoginDetails";
+import ProfileSaveTraveller from "../../components/user/profileSaveTraveller";
+import ProfileSideBar from "../../components/user/profileSideBar";
+import ProfileStatus from "../../components/user/profileStatus";
 
 class ProfilePage extends Component {
 

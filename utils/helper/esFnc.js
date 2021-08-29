@@ -172,7 +172,7 @@ export const helperPreSetTravelr = (passenger, phone, email, status) => {
  *
  * @param {Number} count
  * @param {Number} base
- * @param {Number} status
+ * @param {Number} status if 0 default 1,2,3, ...n, if 1 then year curent yesr --, if 2 current year ++, 
  */
 export const getNmsOptions = (count, base, status) => {
   const options = [];
@@ -183,6 +183,18 @@ export const getNmsOptions = (count, base, status) => {
     for (let i = base; i < count; i++) {
       options.push({ label: curentYear, value: curentYear });
       curentYear--;
+    }
+
+    return options;
+  }
+
+  if(status === 2){
+    const date = new Date();
+
+    let curentYear = date.getFullYear();
+    for (let i = base; i < count; i++) {
+      options.push({ label: curentYear, value: curentYear });
+      curentYear++;
     }
 
     return options;

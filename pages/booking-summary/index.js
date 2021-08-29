@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import { Breadcrumb, Col, Nav, Row } from "react-bootstrap";
-import CancelledBookingList from "../commponents/user/cancelledBookingList";
-import CompletedBookingList from "../commponents/user/completedBookingList";
-import PendingBookingList from "../commponents/user/pendingBookingList";
+import CancelledBookingList from "../../components/user/cancelledBookingList";
+import CompletedBookingList from "../../components/user/completedBookingList";
+import PendingBookingList from "../../components/user/pendingBookingList";
 
 class BookingSummeryPage extends Component {
   componentDidMount() {
