@@ -1,15 +1,15 @@
 import React, { Component } from "react";
-import { Field, Form, Formik } from "formik";
 import { Button, Col, Nav, Row, Tab } from "react-bootstrap";
-import Select from "react-select";
-import { getNmsOptions } from "../../utils/helper/esFnc";
 import CashReachage from "./CashReachage";
 import ChequeReachage from "./ChequeReachage";
 import OnlineTransferReachage from "./OnlineTransferReachage";
 import * as Yup from "yup";
 import MobileBankReachage from "./MobileBankReachage";
 import { helperIsEmpty } from "../../utils/helper/helperAction";
-import EmptyCont from "../../utils/helper/emptyCont";
+import { addRechargeAction } from "../../redux/actions/rechargeAction";
+import { PropTypes } from "prop-types";
+import { connect } from "react-redux";
+import LoaderSpiner from "../../utils/helper/loaderSpiner";
 
 const rechargeTypes = [
   { label: "Cash", value: "cash" },
@@ -68,24 +68,21 @@ class RechargeWallet extends Component {
 
   validationScema = () => {
     return Yup.object().shape({
-      accountName: Yup.string().required(
-        "Required. Please, Select any bank name from option list."
-      ),
+      accountName: Yup.string().max(1),
       accountNumber: Yup.string().required(
         "Required. Please, Select any bank name from option list"
       ),
       bankName: Yup.string().required(
         "Required. Please, Select any bank name from option list"
       ),
-      branchName: Yup.string().required(
-        "Required. Please, Select any bank name from option list"
-      ),
-      amount: Yup.string().required("Required, Please input amount"),
-      slipeAttachment: Yup.string().required(
-        "Required. Please, Add an image size: 350KB"
-      ),
-      referenceNumber: Yup.string().required(
-        "Required. Please input reffernce note."
+      branchName: Yup.string().max(1),
+      amount: Yup.number()
+        .required("Required, Please input amount")
+        .typeError("Input Type must be number"),
+      slipeAttachment: Yup.mixed(),
+      referenceNumber: Yup.string().min(0),
+      transectionDate: Yup.date().required(
+        "Select Bank Or Mobile Transection Date"
       ),
     });
   };
@@ -117,7 +114,7 @@ class RechargeWallet extends Component {
 
   rechargeAction = (values) => {
     if (values) {
-      console.log("Recharge Amount, ", values && values.amount);
+      this.props.addRechargeAction(values);
     }
   };
 
@@ -130,8 +127,14 @@ class RechargeWallet extends Component {
 
   render() {
     let { rechargeType } = this.state;
+
     return (
       <React.Fragment>
+        {this.props.rechargeStatus ? (
+          <LoaderSpiner show={true} loadingText="Recharge adding..." />
+        ) : (
+          <LoaderSpiner show={false} />
+        )}
         <Row>
           <Col md={12} className="recharg-option-nav">
             <Tab.Container
@@ -166,34 +169,61 @@ class RechargeWallet extends Component {
                     <Tab.Pane eventKey="onlineTransfer">
                       <OnlineTransferReachage
                         rechargeType={rechargeType}
-                        submitAction={this.rechargeAction}
+                        submitAction={(values, accountId) => {
+                          this.rechargeAction({
+                            type: "online_bank",
+                            values,
+                            accountId,
+                          });
+                        }}
                         isError={this.isError}
                         validationScema={this.validationScema}
                         title="Recharge via Online Bank"
                       />
                     </Tab.Pane>
                     <Tab.Pane eventKey="mobileBank">
-                      <MobileBankReachage
+                      <OnlineTransferReachage
                         rechargeType={rechargeType}
-                        submitAction={this.rechargeAction}
+                        submitAction={(values, accountId) => {
+                          this.rechargeAction({
+                            type: "mobile_bank",
+                            values,
+                            accountId,
+                          });
+                        }}
                         isError={this.isError}
                         validationScema={this.validationScema}
+                        title="Recharge via Mobile Bank"
                       />
                     </Tab.Pane>
                     <Tab.Pane eventKey="cash">
-                      <CashReachage
+                      <OnlineTransferReachage
                         rechargeType={rechargeType}
-                        submitAction={this.rechargeAction}
-                        validationScema={this.validationScema}
+                        submitAction={(values, accountId) => {
+                          this.rechargeAction({
+                            type: "cash",
+                            values,
+                            accountId,
+                          });
+                        }}
                         isError={this.isError}
+                        validationScema={this.validationScema}
+                        title="Recharge via Bank deposit or cash"
                       />
                     </Tab.Pane>
                     <Tab.Pane eventKey="cheque">
-                      <ChequeReachage
+                      <OnlineTransferReachage
                         rechargeType={rechargeType}
-                        submitAction={this.rechargeAction}
+                        submitAction={(values, accountId) => {
+                          this.rechargeAction({
+                            type: "cheque",
+                            values,
+                            accountId,
+                          });
+                        }}
                         isError={this.isError}
                         validationScema={this.validationScema}
+                        title="Recharge via Bank cheque deposit"
                       />
                     </Tab.Pane>
                   </Tab.Content>
@@ -207,4 +237,16 @@ class RechargeWallet extends Component {
   }
 }
 
-export default RechargeWallet;
+RechargeWallet.prototypes = {
+  addRechargeAction: PropTypes.func.isRequired,
+  rechargeStatus: PropTypes.object.isRequired,
+  errors: PropTypes.object.isRequired,
+};
+
+const mapStateToProps = (state) => {
+  return {
+    rechargeStatus: state.recharge.rechargeStatus,
+  };
+};
+
+export default connect(mapStateToProps, { addRechargeAction })(RechargeWallet);

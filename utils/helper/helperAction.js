@@ -307,8 +307,6 @@ export const helperGetTotalFlyTimeReadable = (travelTime) => {
 
 export const helperIsEmpty = (obj)=>{
 
-  console.log("Empty Checking ... ");
-
   if(obj === null || obj === undefined || typeof obj === "undefined"){
     
     return true;

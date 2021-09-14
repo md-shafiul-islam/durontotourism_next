@@ -6,6 +6,7 @@ import airSearchReducer from "./airSearchReducer";
 import errorReducer from "./errorReducer";
 import filterReducer from "./filterReducer";
 import pricingDetailsReducer from "./pricingDetailsReducer";
+import rechargeReducer from "./rechargeReducer";
 
 export default combineReducers({
   airSearch: airSearchReducer,
@@ -14,5 +15,6 @@ export default combineReducers({
   airPrice: airPriceReducer,
   airPriceDetails:pricingDetailsReducer,
   airFilters:filterReducer,
-  airBooking:airBookingReducer
+  airBooking:airBookingReducer,
+  recharge:rechargeReducer
 });

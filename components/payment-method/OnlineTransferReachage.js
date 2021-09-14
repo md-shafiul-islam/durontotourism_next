@@ -1,10 +1,49 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Field, Form, Formik } from "formik";
 import Select from "react-select";
 import { Button, Col, Row } from "react-bootstrap";
-import { getNmsOptions } from "../../utils/helper/esFnc";
+import { PropTypes } from "prop-types";
+import {
+  getBankAccountsByName,
+  getBankAccountsNames,
+  getBankAccountsByAcNo,
+} from "../../redux/actions/rechargeAction";
+import { connect } from "react-redux";
+import Thumb from "../layout/Thumb";
 
-const OnlineTransferReachage = ({ title, isError, submitAction, validationScema }) => {
+const OnlineTransferReachage = (params) => {
+  let { title, isError, submitAction, validationScema, bankAccount } = params;
+  const [selectedAccount, setSelectedAccount] = useState({});
+  const [attachFile, setAttachFile] = useState(undefined);
+  console.log("OnlineTransferReachage params, ", params);
+
+  useEffect(() => {
+    params.getBankAccountsNames();
+  }, []);
+
+  useEffect(() => {
+    setSelectedAccount(bankAccount);
+  }, [params.bankAccount]);
+
+  const bankNameChangeAction = (bankName) => {
+    console.log("bankNameChangeAction, ", bankName);
+    params.getBankAccountsByName(bankName);
+  };
+
+  const bankAccountNoChangeAction = (acNo) => {
+    params.getBankAccountsByAcNo(acNo);
+  };
+
+  const uploadImage = (image) => {
+    console.log("OnlineTransferReachage Image, ", image);
+  };
+
+  const changeImageAction = (e) => {
+    if (e.currentTarget.files !== undefined) {
+      setAttachFile(e.currentTarget.files[0]);
+    }
+  };
+
   return (
     <React.Fragment>
       <Row>
@@ -23,18 +62,41 @@ const OnlineTransferReachage = ({ title, isError, submitAction, validationScema 
           slipeAttachment: "",
           transectionId: "",
           referenceNumber: "",
+          transectionDate:""
         }}
         validationSchema={validationScema}
         onSubmit={(values, actions) => {
-          setTimeout(() => {
-            alert(JSON.stringify(values, null, 2));
-            submitAction(values);
-            actions.setSubmitting(false);
-          }, 1000);
+          console.log("Selected Account ", selectedAccount);
+          submitAction(values, selectedAccount.id);
+          
         }}
       >
         {(props) => (
-          <Form>
+          <form onSubmit={props.handleSubmit}>
+            <Row className="card-pay-row">
+              <Col md={{span:6, offset:6}}>
+                <label className="form-label" htmlFor="country">
+                  Country.{" "}
+                </label>
+                <Field
+                  type="text"
+                  name={`country`}
+                  readOnly
+                  value={
+                    selectedAccount
+                      ? selectedAccount.country && selectedAccount.country.name
+                      : ""
+                  }
+                  id={`country`}
+                  className={`form-control ${
+                    isError(props.errors, props.touched, "country").cls
+                  }`}
+                />
+                <div className="invalid-feedback">
+                  {isError(props.errors, props.touched, "country").msg}
+                </div>
+              </Col>
+            </Row>
             <Row className="card-pay-row">
               <Col md={6}>
                 <label className="form-label" htmlFor="bankName">
@@ -45,12 +107,13 @@ const OnlineTransferReachage = ({ title, isError, submitAction, validationScema 
                   name={`bankName`}
                   onChange={(item) => {
                     props.setFieldValue(`bankName`, item ? item.value : "");
+                    bankNameChangeAction(item.value);
                   }}
                   onBlur={() => {
                     props.setFieldTouched(`bankName`, true);
                   }}
                   id={`bankName`}
-                  options={getNmsOptions(10, 0, 2)}
+                  options={params.bankNames}
                   className={`vselect-item ${
                     isError(props.errors, props.touched, "bankName").cls
                   }`}
@@ -67,21 +130,19 @@ const OnlineTransferReachage = ({ title, isError, submitAction, validationScema 
                 <label className="form-label" htmlFor="branchName">
                   Branch Name
                 </label>
-                <Select
-                  placeholder="Branch Name"
+                <Field
+                  type="text"
                   name={`branchName`}
-                  onChange={(item) => {
-                    props.setFieldValue(`branchName`, item ? item.value : "");
-                  }}
-                  onBlur={() => {
-                    props.setFieldTouched(`branchName`, true);
-                  }}
+                  readOnly
+                  value={
+                    selectedAccount ? selectedAccount.branchName : "Not Set yet"
+                  }
                   id={`branchName`}
-                  options={getNmsOptions(10, 0, 2)}
-                  className={`vselect-item ${
+                  className={`form-control ${
                     isError(props.errors, props.touched, "branchName").cls
                   }`}
                 />
+
                 <div className="invalid-feedback">
                   {isError(props.errors, props.touched, "branchName").msg}
                 </div>
@@ -93,18 +154,17 @@ const OnlineTransferReachage = ({ title, isError, submitAction, validationScema 
                 <label className="form-label" htmlFor="accountName">
                   Account Name
                 </label>
-                <Select
-                  placeholder="Account Name"
+                <Field
+                  type="text"
                   name={`accountName`}
-                  onChange={(item) => {
-                    props.setFieldValue(`accountName`, item ? item.value : "");
-                  }}
-                  onBlur={() => {
-                    props.setFieldTouched(`accountName`, true);
-                  }}
+                  readOnly
+                  value={
+                    selectedAccount
+                      ? selectedAccount.accountName
+                      : "Not yet set"
+                  }
                   id={`accountName`}
-                  options={getNmsOptions(10, 0, 2)}
-                  className={`vselect-item ${
+                  className={`form-control ${
                     isError(props.errors, props.touched, "accountName").cls
                   }`}
                 />
@@ -127,16 +187,23 @@ const OnlineTransferReachage = ({ title, isError, submitAction, validationScema 
                       `accountNumber`,
                       item ? item.value : ""
                     );
+                    bankAccountNoChangeAction(item.value);
                   }}
                   onBlur={() => {
                     props.setFieldTouched(`accountNumber`, true);
                   }}
                   id={`accountNumber`}
-                  options={getNmsOptions(10, 0, 2)}
+                  options={
+                    params.bankOptions && params.bankOptions.bankAccountNo
+                  }
                   className={`vselect-item ${
                     isError(props.errors, props.touched, "accountNumber").cls
                   }`}
                 />
+                {console.log(
+                  "Bank Accounts Option Component, ",
+                  params.bankOptions
+                )}
                 <div className="invalid-feedback">
                   {isError(props.errors, props.touched, "accountNumber").msg}
                 </div>
@@ -163,47 +230,44 @@ const OnlineTransferReachage = ({ title, isError, submitAction, validationScema 
                 </div>
               </Col>
               <Col md={6}>
-                <label className="form-label" htmlFor="country">
-                  Country.{" "}
+                <label className="form-label" htmlFor="transectionDate">
+                  Transection Date{" "}
                 </label>
-                <Select
-                  placeholder="Country"
-                  name={`country`}
-                  onChange={(item) => {
-                    props.setFieldValue(`country`, item ? item.value : "");
-                  }}
-                  onBlur={() => {
-                    props.setFieldTouched(`country`, true);
-                  }}
-                  id={`country`}
-                  options={getNmsOptions(10, 0, 2)}
-                  className={`vselect-item ${
-                    isError(props.errors, props.touched, "country").cls
+                <Field
+                  type="date"
+                  placeholder="Transection Id if have?"
+                  name={`transectionDate`}
+                  onChange={props.handleChange}
+                  onBlur={props.handleBlur}
+                  id={`transectionDate`}
+                  className={`form-control ${
+                    isError(props.errors, props.touched, "transectionDate").cls
                   }`}
                 />
+
                 <div className="invalid-feedback">
-                  {isError(props.errors, props.touched, "country").msg}
+                  {isError(props.errors, props.touched, "transectionDate").msg}
                 </div>
               </Col>
             </Row>
 
             <Row className="card-pay-row">
               <Col md={12}>
-                <label className="form-label" htmlFor="amount">
+                <label className="form-label" htmlFor="referenceNumber">
                   Reference Note.{" "}
                 </label>
                 <textarea
-                  placeholder="Amount"
+                  placeholder="Refrence Note"
                   name="referenceNumber"
                   onChange={props.handleChange}
                   onBlur={props.handleBlur}
                   id={`referenceNumber`}
                   className={`form-control ${
-                    isError(props.errors, props.touched, "amount").cls
+                    isError(props.errors, props.touched, "referenceNumber").cls
                   }`}
                 ></textarea>
                 <div className="invalid-feedback">
-                  {isError(props.errors, props.touched, "amount").msg}
+                  {isError(props.errors, props.touched, "referenceNumber").msg}
                 </div>
               </Col>
             </Row>
@@ -228,20 +292,38 @@ const OnlineTransferReachage = ({ title, isError, submitAction, validationScema 
                 </div>
               </Col>
               <Col md={6}>
-                <label className="form-label" htmlFor="slipeAttachment">
-                  Screnshort of fund Transfer Successful
-                </label>
-                <Field
-                  className={`form-control ${
-                    isError(props.errors, props.touched, "slipeAttachment").cls
-                  }`}
-                  type="file"
-                  name="slipeAttachment"
-                  id="slipeAttachment"
-                />
-                <div className="invalid-feedback">
-                  {isError(props.errors, props.touched, "slipeAttachment").msg}
-                </div>
+                <Row className="card-pay-row">
+                  <Col md={8}>
+                    <label className="form-label" htmlFor="slipeAttachment">
+                      Screnshort of fund Transfer Successful
+                    </label>
+                    <input
+                      className={`form-control ${
+                        isError(props.errors, props.touched, "slipeAttachment")
+                          .cls
+                      }`}
+                      type="file"
+                      name="slipeAttachment"
+                      id="slipeAttachment"
+                      onChange={(e) => {
+                        changeImageAction(e);
+                        props.setFieldValue(
+                          `slipeAttachment`,
+                          e.currentTarget.files[0]
+                        );
+                      }}
+                    />
+                    <div className="invalid-feedback">
+                      {
+                        isError(props.errors, props.touched, "slipeAttachment")
+                          .msg
+                      }
+                    </div>
+                  </Col>
+                  <Col md={4}>
+                    <Thumb file={attachFile} />
+                  </Col>
+                </Row>
               </Col>
             </Row>
 
@@ -258,11 +340,33 @@ const OnlineTransferReachage = ({ title, isError, submitAction, validationScema 
                 </Button>
               </Col>
             </Row>
-          </Form>
+          </form>
         )}
       </Formik>
     </React.Fragment>
   );
 };
 
-export default OnlineTransferReachage;
+OnlineTransferReachage.prototypes = {
+  getBankAccountsNames: PropTypes.func.isRequired,
+  getBankAccountsByName: PropTypes.func.isRequired,
+  errors: PropTypes.object.isRequired,
+  bankNames: PropTypes.object.isRequired,
+  bankOptions: PropTypes.object.isRequired,
+  bankAccount: PropTypes.object.isRequired,
+};
+
+const mapStateToProps = (state) => {
+  console.log("Transections Redux State, ", state);
+  return {
+    bankNames: state.recharge.bankNames,
+    bankOptions: state.recharge.bankAccountsOptions,
+    bankAccount: state.recharge.bankAccount,
+  };
+};
+
+export default connect(mapStateToProps, {
+  getBankAccountsNames,
+  getBankAccountsByName,
+  getBankAccountsByAcNo,
+})(OnlineTransferReachage);

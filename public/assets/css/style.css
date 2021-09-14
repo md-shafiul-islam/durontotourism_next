@@ -25,6 +25,14 @@ body {
 }
 /** React Select option validet style End */
 
+/* Thumb Images Area  Start */
+.thumb-image-area {
+  width: 100px;
+  height: 100px;
+  display: flex;
+}
+/* Thumb Images Area  End */
+
 .wallet-main-container {
   margin-bottom: 20px;
 }
@@ -45,7 +53,7 @@ body {
 
 .recharg-option-nav .nav .nav-item .nav-link {
   background-color: #fff;
-  border: 1px 1px 0px 1px;  
+  border: 1px 1px 0px 1px;
   border-radius: 8px 8px 0px 0px;
   margin-bottom: -1px;
   color: #000;

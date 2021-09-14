@@ -96,17 +96,21 @@ class WalletPage extends Component {
                     <Col sm={12} className="wallet-main-container">
                       <Nav variant="pills" className="flex-row">
                         <Nav.Item>
-                          <Nav.Link eventKey="myCash">My Cash</Nav.Link>
-                        </Nav.Item>
-                        <Nav.Item>
-                          <Nav.Link eventKey="rewardBonus">
-                            Reward Bonus
-                          </Nav.Link>
-                        </Nav.Item>
-                        <Nav.Item>
                           <Nav.Link eventKey="transection">
-                           Transection History
+                            Transection History
                           </Nav.Link>
+                        </Nav.Item>
+
+                        <Nav.Item>
+                          <Nav.Link eventKey="myCash">Top Up My cash</Nav.Link>
+                        </Nav.Item>
+
+                        <Nav.Item>
+                          <Nav.Link eventKey="accounts">Accounts</Nav.Link>
+                        </Nav.Item>
+
+                        <Nav.Item>
+                          <Nav.Link eventKey="withdraw">Withdraw</Nav.Link>
                         </Nav.Item>
                       </Nav>
                     </Col>
@@ -114,10 +118,13 @@ class WalletPage extends Component {
                   <Row>
                     <Col sm={12}>
                       <Tab.Content>
-                        <Tab.Pane eventKey="myCash">                          
+                        <Tab.Pane eventKey="myCash">
                           <RechargeWallet />
                         </Tab.Pane>
-                        <Tab.Pane eventKey="rewardBonus">
+                        <Tab.Pane eventKey="accounts">
+                          <EmptyCont height="600px" />
+                        </Tab.Pane>
+                        <Tab.Pane eventKey="Withdraw">
                           <EmptyCont height="500px" />
                         </Tab.Pane>
                       </Tab.Content>

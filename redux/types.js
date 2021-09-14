@@ -29,7 +29,7 @@ export const SET_TOKEN = "SET_TOKEN";
 
 console.log(process.env.REACT_APP_API_URL);
 
-export const HOST_ADD = "http://localhost";//"http://durontotrip.com"; //http://3.137.195.192
+export const HOST_ADD = "http://localhost"; //"http://durontotrip.com"; //http://3.137.195.192
 
 export const EXT_BASE_URL = `${HOST_ADD}:8050`; // `http://dto.durontotour.com`; //
 export const BASE_URL = `${EXT_BASE_URL}/api`;
@@ -40,8 +40,6 @@ export const BASE_BOOKING_URL = `${HOST_ADD}:9000`;
 export const EX_BOOKING_URL = `${BASE_BOOKING_URL}/cutom-book-request`;
 
 export const GET_ROUND_TRIP_BOOKING = "GET_ROUND_TRIP_BOOKING";
-
-
 
 export const GET_PACK_CATEGORIES = "GET_PACK_CATEGORIES";
 export const GET_PACK_CATEGORY = "GET_PACK_CATEGORY";
@@ -59,24 +57,27 @@ export const GET_RETURN_FLIGHTS = "GET_RETURN_FLIGHTS";
 export const GET_AIR_PRICE_RESPONSE = "GET_AIR_PRICE_RESPONSE";
 export const GET_SELECTED_AIR_PRICE = "GET_SELECTED_AIR_PRICE";
 
-export const GET_SELECTED_AIR_ROUND_TRIP_PRICE = "GET_SELECTED_AIR_ROUND_TRIP_PRICE";
+export const GET_SELECTED_AIR_ROUND_TRIP_PRICE =
+  "GET_SELECTED_AIR_ROUND_TRIP_PRICE";
 export const GET_AIRLINES = "GET_AIRLINES";
 export const GET_AIRPORTS = "GET_AIRPORTS";
 export const GET_AIRPORTS_ARR = "GET_AIRPORTS_ARR";
 
-export const GET_SELECTED_AIR_ROUND_TRIP_PRICE_DETAILS = "GET_SELECTED_AIR_ROUND_TRIP_PRICE_DETAILS";
+export const GET_SELECTED_AIR_ROUND_TRIP_PRICE_DETAILS =
+  "GET_SELECTED_AIR_ROUND_TRIP_PRICE_DETAILS";
 
 export const GET_MOD_AIR_PRICE_DEP = "AIR_PRICE_DEP";
 export const GET_MOD_AIR_PRICE_RET = "AIR_PRICE_RET";
 
-export const GET_SELECTED_ROUND_TRIP_SOLUTION = "GET_SELECTED_ROUND_TRIP_SOLUTION";
+export const GET_SELECTED_ROUND_TRIP_SOLUTION =
+  "GET_SELECTED_ROUND_TRIP_SOLUTION";
 
 export const GET_PASSENGER = [
-  {key:"ADT", value:"Adult"},
-  {key:"CHD", value:"Children"},
-  {key:"INF", value:"Infant"},
-  {key:"CNN", value:"Children"},
-]
+  { key: "ADT", value: "Adult" },
+  { key: "CHD", value: "Children" },
+  { key: "INF", value: "Infant" },
+  { key: "CNN", value: "Children" },
+];
 export const GET_DAYES = [
   "Sunday",
   "Monday",
@@ -102,7 +103,6 @@ export const GET_MONTHS = [
   "December",
 ];
 
-
 //Air Filter related Constant
 
 export const GET_ONWARD_FLIGHT_FILTER = "GET_ONWARD_FLIGHT_FILTER";
@@ -114,3 +114,19 @@ export const GET_FILTER_RET_TIME = "GET_FILTER_RET_TIME";
 
 export const GET_FILTER_DEP_STOPS = "GET_FILTER_DEP_STOPS";
 export const GET_FILTER_RET_STOPS = "GET_FILTER_RET_STOPS";
+
+/* BANKS */
+
+export const SET_BANK_NAMES = "SET_BANK_NAMES";
+
+/** URLS */
+
+export const GET_BACK_END_URL = `http://localhost:6060/api`;
+export const AUT_TOKEN =
+  "Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiRGV2ZWxvcGVyIiwiZnVsbE5hbWUiOiJNZCBTaGFmaXVsIElzbGFtIiwiaWQiOiI1ZWI5MjU5ODkyMjg0NzBlYjk0NTIzYmNjMTQ3ZWFiODIwMjEyMTI0MjQ5IiwiZXhwIjoxNjMxNTk0NzcyLCJpYXQiOjE2MzExNjI3NzIsInVzZXJuYW1lIjoibWQuc2hhZml1bC5pc2xhbTIwMTRiZEBnbWFpbC5jb20ifQ.k37JOHUsHw83D583GoJRZxmd0saSppysbQIWmE5e7KaQ88-617dKPAQxyR1stw2Svd6B-q_PDLKCNhyY3WdStw";
+export const SET_BANK_ACCOUNT_OPTIONS = "SET_BANK_ACCOUNT_OPTIONS";
+export const SET_SELCTED_BANK_ACCOUNT = "SET_SELCTED_BANK_ACCOUNT";
+
+export const SET_RECHARGE = "SET_RECHARGE";
+
+
