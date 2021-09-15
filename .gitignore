@@ -6,7 +6,8 @@
 .pnp.js
 
 #images
-/public/assets/images/**
+/public/assets/images
+/public/banks_logos
 
 # testing
 /coverage
