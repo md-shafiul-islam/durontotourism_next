@@ -1,24 +1,34 @@
-import axios from "axios";
+import Axios from "Axios";
 import { helperIsEmpty } from "../../utils/helper/helperAction";
 import {
   AUT_TOKEN,
   GET_BACK_END_URL,
   REQUEST_HEADER,
+  REQUEST_HEADER_GET,
+  SET_BANK_ACCOUNTS,
   SET_BANK_ACCOUNT_OPTIONS,
+  SET_BANK_ERROR,
   SET_BANK_NAMES,
+  SET_MOBILE_BANK_ACCOUNTS,
   SET_RECHARGE,
   SET_SELCTED_BANK_ACCOUNT,
 } from "../types";
 
+const getValidtData = (resp) => {
+  if (resp !== undefined) {
+    if (resp.data !== undefined) {
+      return resp.data.data;
+    }
+  }
+};
+
 export const getBankAccountsNames =
   (token = undefined) =>
   async (dispatch) => {
-    const axiosIns = axios.create();
-    axiosIns.defaults.headers.common["Authorization"] = token
-      ? token
-      : AUT_TOKEN;
-
-    const resp = await axiosIns.get(`${GET_BACK_END_URL}/banks/name`);
+    REQUEST_HEADER.Authorization = token ? token : AUT_TOKEN;
+    const resp = await Axios.get(`${GET_BACK_END_URL}/bankaccounts/name`, {
+      headers: REQUEST_HEADER,
+    });
 
     try {
       console.log("getBankAccountsNames Response ", resp);
@@ -61,12 +71,10 @@ const getAccountsOptions = (data) => {
 export const getBankAccountsByName =
   (name, token = undefined) =>
   async (dispatch) => {
-    const axiosIns = axios.create();
-    axiosIns.defaults.headers.common["Authorization"] = token
-      ? token
-      : AUT_TOKEN;
-
-    const resp = await axiosIns.get(`${GET_BACK_END_URL}/banks?name=${name}`);
+    REQUEST_HEADER.Authorization = token ? token : AUT_TOKEN;
+    const resp = await Axios.get(`${GET_BACK_END_URL}/banks?name=${name}`, {
+      headers: REQUEST_HEADER,
+    });
 
     try {
       console.log("getBankAccountsByName Response ", resp);
@@ -83,14 +91,10 @@ export const getBankAccountsByName =
 export const getBankAccountsByAcNo =
   (acNo, token = undefined) =>
   async (dispatch) => {
-    const axiosIns = axios.create();
-    axiosIns.defaults.headers.common["Authorization"] = token
-      ? token
-      : AUT_TOKEN;
-
-    const resp = await axiosIns.get(
-      `${GET_BACK_END_URL}/banks/account/${acNo}`
-    );
+    REQUEST_HEADER.Authorization = token ? token : AUT_TOKEN;
+    const resp = await Axios.get(`${GET_BACK_END_URL}/bankaccounts/account/${acNo}`, {
+      headers: REQUEST_HEADER,
+    });
 
     try {
       console.log("getBankAccountsByAcNo Response ", resp);
@@ -104,78 +108,117 @@ export const getBankAccountsByAcNo =
     }
   };
 
-  const createRecharge = (recharge, filePath)=>{
+const createRecharge = (recharge, filePath) => {
+  if (recharge && filePath !== undefined) {
+    let { values, type, accountId } = recharge;
+    let { amount, referenceNumber, transectionId, transectionDate } = values;
 
-    if(recharge && filePath !== undefined){
-      let {values, type, accountId} = recharge;
-      let {amount, referenceNumber, transectionId, transectionDate} = values;
-      console.log("Recharge Options ", recharge);
-      console.log("Recharge Uploded file path ", filePath);
-      console.log("Recharge Date ", transectionDate);
-
-      const requestData = {
-        accountId:accountId,
-        amount:amount,
-        transectionId:transectionId,
-        refferenceNote:referenceNumber,
-        transectionDate: transectionDate,
-        transType:type,
-        attach:filePath
+    const requestData = {
+      accountId: accountId,
+      amount: amount,
+      transectionId: transectionId,
+      refferenceNote: referenceNumber,
+      transectionDate: transectionDate,
+      transType: type,
+      attach: filePath,
     };
 
-      return requestData;
-    }
+    return requestData;
   }
+};
 
-  const getRechargeOptions = (rechargeRes)=>{
-    console.log("Recharge Response ", rechargeRes);
-    if(!helperIsEmpty(rechargeRes)){
-      return {
-        status:false,
-        recharge:rechargeRes.data,
-      }
-    }
+const getRechargeOptions = (rechargeRes) => {
+  console.log("Recharge Response ", rechargeRes);
+  if (!helperIsEmpty(rechargeRes)) {
     return {
-      status:true,
-      recharge:null,
-    }
+      status: false,
+      recharge: rechargeRes.data,
+    };
   }
-export const addRechargeAction =  (recharge, token) => async (dispatch) => {
-
+  return {
+    status: true,
+    recharge: null,
+  };
+};
+export const addRechargeAction = (recharge, token) => async (dispatch) => {
+  REQUEST_HEADER.Authorization = token ? token : AUT_TOKEN;
   dispatch({
-    type:SET_RECHARGE,
+    type: SET_RECHARGE,
     payload: getRechargeOptions(undefined),
-  })
-
-  const axiosIns = axios.create();
-  axiosIns.defaults.headers.common["Authorization"] = token ? token : AUT_TOKEN;
+  });
 
   const dateFile = new FormData();
   dateFile.append("attachFile", recharge.values.slipeAttachment);
-  const resp = await axiosIns.put(
+  const resp = await Axios.put(
     `${GET_BACK_END_URL}/uploadfile/account/recharge`,
-    dateFile
+    dateFile,
+    { headers: REQUEST_HEADER }
   );
-  
+
   try {
     const rechargeRequest = createRecharge(recharge, resp.data);
     console.log("After Account file uplodaed, ", rechargeRequest);
 
-    const rechargeRes = await axiosIns.post(`${GET_BACK_END_URL}/recharges`, rechargeRequest, {headers:REQUEST_HEADER});
+    const rechargeRes = await Axios.post(
+      `${GET_BACK_END_URL}/recharges`,
+      rechargeRequest,
+      { headers: REQUEST_HEADER }
+    );
 
     try {
       dispatch({
-        type:SET_RECHARGE,
+        type: SET_RECHARGE,
         payload: getRechargeOptions(rechargeRes.data),
-      })
+      });
     } catch (err) {
       console.log("Add Recharge Error, ", err);
     }
-    
   } catch (error) {
     console.log("Upload Error, ", error);
   }
-  
- 
-  
+};
+
+export const getBnakAccounts = (token) => async (dispatch) => {
+  REQUEST_HEADER.Authorization = token ? token : AUT_TOKEN;
+
+  console.log("REQUEST_HEADER, ", REQUEST_HEADER);
+
+  const resp = await Axios.get(`${GET_BACK_END_URL}/recharges/bankaccounts`, {
+    headers: REQUEST_HEADER,
+  });
+
+  try {
+    dispatch({
+      type: SET_BANK_ACCOUNTS,
+      payload: getValidtData(resp),
+    });
+  } catch (err) {
+    dispatch({
+      type: SET_BANK_ERROR,
+      payload: err,
+    });
+  }
+};
+
+export const getMobillBnakAccounts = (token) => async (dispatch) => {
+  REQUEST_HEADER.Authorization = token ? token : AUT_TOKEN;
+
+  const resp = await Axios.get(
+    `${GET_BACK_END_URL}/recharges/bankaccounts?type=mobile_banking`,
+    { headers: REQUEST_HEADER }
+  );
+
+  console.log("Mobile Banking Accounts Resp, ", resp);
+
+  try {
+    dispatch({
+      type: SET_MOBILE_BANK_ACCOUNTS,
+      payload: getValidtData(resp),
+    });
+  } catch (err) {
+    dispatch({
+      type: SET_BANK_ERROR,
+      payload: err,
+    });
+  }
 };

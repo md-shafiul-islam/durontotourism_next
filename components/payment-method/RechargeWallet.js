@@ -1,10 +1,7 @@
 import React, { Component } from "react";
-import { Button, Col, Nav, Row, Tab } from "react-bootstrap";
-import CashReachage from "./CashReachage";
-import ChequeReachage from "./ChequeReachage";
+import { Col, Nav, Row, Tab } from "react-bootstrap";
 import OnlineTransferReachage from "./OnlineTransferReachage";
 import * as Yup from "yup";
-import MobileBankReachage from "./MobileBankReachage";
 import { helperIsEmpty } from "../../utils/helper/helperAction";
 import { addRechargeAction } from "../../redux/actions/rechargeAction";
 import { PropTypes } from "prop-types";

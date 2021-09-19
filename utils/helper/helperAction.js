@@ -1,55 +1,50 @@
 import Axios from "axios";
 import { EXT_PRICE_URL, REQUEST_HEADER } from "../../redux/types";
 
-
 //2021-02-26T23:30:00.000+06:00
 /**
- * 
- * @param {Date} date 
+ *
+ * @param {Date} date
  * @returns @actionDate like: 2021-02-26T23:30:00.000+06:00
  */
-export const helperGetActionDateTime = (date=new Date())=>{
-
+export const helperGetActionDateTime = (date = new Date()) => {
   let dateStr = date.getDate();
-  let month = date.getMonth()+1;
+  let month = date.getMonth() + 1;
   let year = date.getFullYear();
 
   dateStr = dateStr < 10 ? `0${dateStr}` : dateStr;
-  month = (month) < 10 ? `0${month}` : month; 
+  month = month < 10 ? `0${month}` : month;
 
   // console.log("Current Action Date, ", `${year}-${month}-${dateStr}T23:30:00.000+06:00`);
   return `${year}-${month}-${dateStr}T23:30:00.000+06:00`;
-}
+};
 /**
- * 
- * @param {amountString like BDT89247897} amountSting 
+ *
+ * @param {amountString like BDT89247897} amountSting
  * @returns {{Number} amount 89247897}
  */
-export const helperGetAmount = (amountSting)=>{
-  if(amountSting){
-
+export const helperGetAmount = (amountSting) => {
+  if (amountSting) {
     return Number(amountSting.substring(3));
   }
   return 0;
-}
+};
 
-export const helperGetMltyplyTwoNumber = (val, val2)=>{
-  if(val && val2){
+export const helperGetMltyplyTwoNumber = (val, val2) => {
+  if (val && val2) {
     val = Number(val);
     val2 = Number(val2);
 
-    return (val * val2);
+    return val * val2;
   }
   return 0;
-}
+};
 /**
  * @params {JS Date date}
  * @return { date String like yyyy-mm-dd 2021-07-15 }
  */
 export const helperGetDateFormate = (date) => {
   if (date !== undefined && date !== null) {
-
-    
     let month = date.getMonth() + 1;
     let dayOfMont = date.getDate();
     month = month < 10 ? `0${month}` : month;
@@ -278,7 +273,6 @@ export const helperGetPrice = (amount) => {
   return price;
 };
 
-
 /**
  *
  * @param {DateTime Like P1DT1H30M0S} travelTime
@@ -305,24 +299,47 @@ export const helperGetTotalFlyTimeReadable = (travelTime) => {
   }
 };
 
-export const helperIsEmpty = (obj)=>{
-
-  if(obj === null || obj === undefined || typeof obj === "undefined"){
-   
+export const helperIsEmpty = (obj) => {
+  if (obj === null || obj === undefined || typeof obj === "undefined") {
     return true;
   }
 
-  if(obj.length > 0){
+  if (obj.length > 0) {
     return false;
   }
- 
-  if(Object.keys(obj).length === 0 && obj.constructor === Object){
+
+  if (Object.keys(obj).length === 0 && obj.constructor === Object) {
     return true;
   }
 
-  if(obj){
+  if (obj) {
     return false;
-  }else{
+  } else {
     return true;
-  } 
-}
+  }
+};
+
+export const esIsFieldError = (errors, touched, fieldName) => {
+  let msg = undefined;
+  if (
+    !helperIsEmpty(errors) &&
+    !helperIsEmpty(touched) &&
+    !helperIsEmpty(fieldName)
+  ) {
+    if (
+      !helperIsEmpty(errors[fieldName]) &&
+      !helperIsEmpty(touched[fieldName])
+    ) {
+      msg = errors[fieldName];
+    }
+  }
+
+  if (touched[fieldName]) {
+    if (msg) {
+      return { cls: "is-invalid", msg: msg, status: true };
+    } else {
+      return { cls: "is-valid", msg: "", status: false };
+    }
+  }
+  return { cls: "", msg: msg, status: false };
+};

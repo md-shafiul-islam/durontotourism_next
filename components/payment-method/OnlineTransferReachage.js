@@ -200,10 +200,7 @@ const OnlineTransferReachage = (params) => {
                     isError(props.errors, props.touched, "accountNumber").cls
                   }`}
                 />
-                {console.log(
-                  "Bank Accounts Option Component, ",
-                  params.bankOptions
-                )}
+                
                 <div className="invalid-feedback">
                   {isError(props.errors, props.touched, "accountNumber").msg}
                 </div>

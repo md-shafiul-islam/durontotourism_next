@@ -1,7 +1,9 @@
 /* eslint-disable import/no-anonymous-default-export */
 import {
+  SET_BANK_ACCOUNTS,
   SET_BANK_ACCOUNT_OPTIONS,
   SET_BANK_NAMES,
+  SET_MOBILE_BANK_ACCOUNTS,
   SET_RECHARGE,
   SET_SELCTED_BANK_ACCOUNT,
 } from "../types";
@@ -12,6 +14,8 @@ const initialState = {
   bankAccount: {},
   rechargeStatus: false,
   rechargeAdd: {},
+  bankAccounts:[],
+  mobileBanks:[],
 };
 
 export default function (state = initialState, action) {
@@ -40,7 +44,16 @@ export default function (state = initialState, action) {
         rechargeStatus: action.payload.status,
         rechargeAdd: action.payload.recharge,
       };
-
+    case SET_BANK_ACCOUNTS:
+      return {
+        ...state,
+        bankAccounts:action.payload,
+      }
+    case SET_MOBILE_BANK_ACCOUNTS:
+      return {
+        ...state,
+        mobileBanks:action.payload,
+      }  
     default:
       return state;
   }

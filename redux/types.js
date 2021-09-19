@@ -7,15 +7,20 @@ export const GET_CATEGORIES = "GET_CATEGORIES";
 export const GET_CATEGORY = "GET_CATEGORY";
 export const DELET_CATEGORY = "DELET_CATEGORY";
 
+export const AUT_TOKEN =
+  "Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiRGV2ZWxvcGVyIiwiZnVsbE5hbWUiOiJNZCBTaGFmaXVsIElzbGFtIiwiaWQiOiI1ZWI5MjU5ODkyMjg0NzBlYjk0NTIzYmNjMTQ3ZWFiODIwMjEyMTI0MjQ5IiwiZXhwIjoxNjMyMjAzOTY2LCJpYXQiOjE2MzE3NzE5NjYsInVzZXJuYW1lIjoibWQuc2hhZml1bC5pc2xhbTIwMTRiZEBnbWFpbC5jb20ifQ.bzvBNu2lB-YXk0zqacxZAHEGb3SoqfRL0m5r9F2NRWQaDdzDRmKJRzB9Kn-L_acsW8fZwq55A9WTEw4lWY4SCQ";
+
 export const REQUEST_HEADER = {
   "Content-Type": "application/json",
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers": "Origin, Content-Type, Accept",
+  Authorization: "",
 };
 
 export const REQUEST_HEADER_GET = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers": "Origin, Content-Type, Accept",
+  Authorization: "",
 };
 
 export const SET_CURRENT_USER = "SET_CURRENT_USER";
@@ -122,9 +127,16 @@ export const SET_BANK_NAMES = "SET_BANK_NAMES";
 /** URLS */
 
 export const GET_BACK_END_URL = `http://localhost:6060/api`;
-export const AUT_TOKEN =
-  "Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiRGV2ZWxvcGVyIiwiZnVsbE5hbWUiOiJNZCBTaGFmaXVsIElzbGFtIiwiaWQiOiI1ZWI5MjU5ODkyMjg0NzBlYjk0NTIzYmNjMTQ3ZWFiODIwMjEyMTI0MjQ5IiwiZXhwIjoxNjMyMDMzMDc1LCJpYXQiOjE2MzE2MDEwNzUsInVzZXJuYW1lIjoibWQuc2hhZml1bC5pc2xhbTIwMTRiZEBnbWFpbC5jb20ifQ.AhFyCCOZ2LpWNfvdKEsE3B9cvTNTg8GoYkMUQ_yqVBH6L3sFA-A3iOG06ger54YzMEndX5V6umMm9wepKn39lQ";
+
 export const SET_BANK_ACCOUNT_OPTIONS = "SET_BANK_ACCOUNT_OPTIONS";
 export const SET_SELCTED_BANK_ACCOUNT = "SET_SELCTED_BANK_ACCOUNT";
 
 export const SET_RECHARGE = "SET_RECHARGE";
+
+export const SET_BANK_ACCOUNTS = "SET_BANK_ACCOUNTS";
+export const SET_MOBILE_BANK_ACCOUNTS = "SET_MOBILE_BANK_ACCOUNTS";
+export const SET_BANK_ERROR = "SET_BANK_ERROR";
+
+//WithDarw Type
+export const SET_ADD_WITHDRAW_STATUS = "SET_ADD_WITHDRAW_STATUS";
+export const SET_ADD_WITHDRAW_ERROR = "SET_ADD_WITHDRAW_ERROR";
