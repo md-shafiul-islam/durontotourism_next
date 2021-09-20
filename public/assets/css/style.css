@@ -33,6 +33,11 @@ body {
 }
 /* Thumb Images Area  End */
 
+.profile-content .profile-card-area {
+  margin-top: 15px !important;
+  margin-bottom: 15px !important;
+}
+
 .wallet-main-container {
   margin-bottom: 20px;
 }

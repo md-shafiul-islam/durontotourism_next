@@ -1,13 +1,12 @@
-import React, {useState } from "react";
+import React, { useState } from "react";
 import { Card, Col, Row } from "react-bootstrap";
+import ContentModal from "../Modals/ContentModal";
 import AddTravelerModal from "../Modals/Profile/addTravelerModal";
-
+import ProfileBookingInfForm from "../profile/ProfileBookingInfForm";
 
 const ProfileSaveTraveller = () => {
-
   const [addTravelerStatus, setAddTravelerStatus] = useState(false);
 
-  
   return (
     <React.Fragment>
       <Card>
@@ -17,23 +16,36 @@ const ProfileSaveTraveller = () => {
             <Row>
               <Col md={12}>
                 <div className="heading-area">
-                  <div className="title">Save Traveller(s)</div>
-                  <p className="pfl-basi-tag">You have {/*`${count}`*/} Traveller(s)</p>
+                  <div className="title">Guest Traveller(s)</div>
+                  <p className="pfl-basi-tag">
+                    You have {/*`${count}`*/} Traveller(s)
+                  </p>
                 </div>
 
                 <div className="add-traveller-area">
-                  <button className="add-btn" onClick={()=>{
-                    setAddTravelerStatus(true);
-                  }}>Add Traveler</button>
+                  <button
+                    className="add-btn"
+                    onClick={() => {
+                      setAddTravelerStatus(true);
+                    }}
+                  >
+                    Add Traveler
+                  </button>
                 </div>
               </Col>
             </Row>
           </div>
         </Card.Body>
       </Card>
-      <AddTravelerModal hideAction={()=>{
-        setAddTravelerStatus(false);
-      }} show={addTravelerStatus} />
+
+      <ContentModal
+        actionClose={() => {
+          setAddTravelerStatus(false);
+        }}
+        show={addTravelerStatus}
+      >
+        <ProfileBookingInfForm />
+      </ContentModal>
     </React.Fragment>
   );
 };

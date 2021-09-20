@@ -26,11 +26,11 @@ const ProfileLoginDetails = () => {
           </div>
 
           <div className="pfl-table-paren mt-5">
-            <table class="table table-hover">
+            <table className="table table-hover">
               <tbody>
                 <tr>
                   <th scope="row">Mobile Number</th>
-                  <td colspan="3">
+                  <td colSpan="3">
                     <button
                       className="prf-add-btn"
                       onClick={() => {
@@ -43,7 +43,7 @@ const ProfileLoginDetails = () => {
                 </tr>
                 <tr>
                   <th scope="row">Email ID</th>
-                  <td colspan="2" className="email-text">
+                  <td colSpan="2" className="email-text">
                     md.shafiul2014bd@gmail.com
                   </td>
 
@@ -56,7 +56,7 @@ const ProfileLoginDetails = () => {
                 </tr>
                 <tr>
                   <th scope="row">Password</th>
-                  <td colspan="3">
+                  <td colSpan="3">
                     <div className="psw-area">
                       <span className="pswd">•••••••</span>
                       <span className="pswd-change">

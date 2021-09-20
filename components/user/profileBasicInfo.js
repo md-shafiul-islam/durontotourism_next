@@ -19,7 +19,7 @@ const ProfileBasicInfo = (props) => {
             <Row>
               <Col md={12}>
                 <div className="heading-area">
-                  <div className="title">Profile</div>
+                  <div className="title">{props.title}</div>
                   <p className="pfl-basi-tag">
                     Basic info, for faster booking experience
                   </p>
@@ -38,23 +38,18 @@ const ProfileBasicInfo = (props) => {
                   <td colSpan="3">MD Shafiul Islam</td>
                 </tr>
                 <tr>
-                  <th scope="row">Birthday</th>
+                  <th scope="row">Phone</th>
                   <td colSpan="3">
                     <button className="prf-add-btn" onClick={editProfileAction}>+Add</button>
                   </td>
                 </tr>
                 <tr>
-                  <th scope="row">Gender</th>
+                  <th scope="row">Email</th>
                   <td colSpan="3">
                     <button className="prf-add-btn" onClick={editProfileAction}>+Add</button>
                   </td>
                 </tr>
-                <tr>
-                  <th scope="row">Maritals status</th>
-                  <td colSpan="3">
-                    <button className="prf-add-btn" onClick={editProfileAction}>+Add</button>
-                  </td>
-                </tr>
+                
               </tbody>
             </table>
           </div>

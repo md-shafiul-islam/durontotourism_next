@@ -12,7 +12,7 @@ const ContentModal = (params) => {
         onHide={() => {
           params.actionClose(false);
         }}
-        size="lg"
+        size={params.size ? params.size : "lg"}
         aria-labelledby={`content-modal-${params.name}`}
         
       >

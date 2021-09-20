@@ -6,7 +6,7 @@ const ProfileSideBar = (props) => {
   const moveScrolPosition = (elm, e) => {
     let currentElm = document.querySelector(elm);
     let bodyReact = document.body.getBoundingClientRect();
-    let ctReact = currentElm.getBoundingClientRect();
+    let ctReact = currentElm && currentElm.getBoundingClientRect();
     let getAllItems = document.querySelectorAll(".list-group-item");
 
     if (currentElm) {
@@ -20,15 +20,17 @@ const ProfileSideBar = (props) => {
 
       if (getAllItems) {
         getAllItems.forEach((item, idx) => {
-          let id = item.getAttribute("ctElm");
+          let id = item && item.getAttribute("ctElm");
 
           // console.log();
 
           if (id === elm) {
-            item.classList.add("active");
+            item && item.classList && item.classList.add("active");
           } else {
-            if (item.classList.contains("active")) {
-              item.classList.remove("active");
+            if (item.classList !== undefined && item.classList !== null) {
+              if (item.classList.contains("active")) {
+                item.classList.remove("active");
+              }
             }
           }
         });
@@ -58,24 +60,38 @@ const ProfileSideBar = (props) => {
           </Row>
           <Row>
             <Col md={12}>
-              <ul class="list-group side-menu">
+              <ul className="list-group side-menu">
                 <li
-                  ctElm="#profile"
-                  data-id="profile"
-                  class="list-group-item active"
+                  ctElm="#general"
+                  data-id="general"
+                  className="list-group-item active"
                   onClick={(e) => {
-                    moveScrolPosition("#profile", e);
+                    moveScrolPosition("#general", e);
                   }}
                 >
                   <span className="profile-icon">
                     <i className="fas fa-user"></i>
                   </span>
-                  <span>Profile</span>
+                  <span>General</span>
                 </li>
+                <li
+                  ctElm="#bookingInf"
+                  data-id="bookingInf"
+                  className="list-group-item"
+                  onClick={(e) => {
+                    moveScrolPosition("#bookingInf", e);
+                  }}
+                >
+                  <span className="profile-icon">
+                    <i className="fas fa-users"></i>
+                  </span>{" "}
+                  <span>Booking Info</span>
+                </li>
+
                 <li
                   ctElm="#loginDetails"
                   data-id="loginDetails"
-                  class="list-group-item"
+                  className="list-group-item"
                   onClick={(e) => {
                     moveScrolPosition("#loginDetails", e);
                   }}
@@ -85,19 +101,19 @@ const ProfileSideBar = (props) => {
                   </span>
                   <span>Login Details</span>
                 </li>
-                <li
-                  ctElm="#saveTravellers"
-                  data-id="saveTravellers"
 
-                  class="list-group-item"
+                <li
+                  ctElm="#guestTraveler"
+                  data-id="guestTraveler"
+                  className="list-group-item"
                   onClick={(e) => {
-                    moveScrolPosition("#saveTravellers", e);
+                    moveScrolPosition("#guestTraveler", e);
                   }}
                 >
                   <span className="profile-icon">
-                    <i className="fas fa-users"></i>
-                  </span>{" "}
-                  <span>Save Travellers</span>
+                    <i className="fas fa-sign-in-alt"></i>
+                  </span>
+                  <span>Guest Traveler</span>
                 </li>
               </ul>
             </Col>

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Breadcrumb, Col, Container, Row } from "react-bootstrap";
+import { Breadcrumb, Card, Col, Container, Row } from "react-bootstrap";
 import EmptyCont from "../../utils/helper/emptyCont";
 
 import ProfileBasicInfo from "../../components/user/profileBasicInfo";
@@ -7,15 +7,14 @@ import ProfileLoginDetails from "../../components/user/profileLoginDetails";
 import ProfileSaveTraveller from "../../components/user/profileSaveTraveller";
 import ProfileSideBar from "../../components/user/profileSideBar";
 import ProfileStatus from "../../components/user/profileStatus";
+import ProfileBookingInformation from "../../components/profile/ProfileBookingInformation";
 
 class ProfilePage extends Component {
-
-  componentDidMount(){
+  componentDidMount() {
     this.scrollSpyActive();
   }
 
   scrollSpyActive = () => {
-
     let items = document.querySelectorAll(".prf_item");
 
     window.onscroll = () => {
@@ -24,9 +23,7 @@ class ProfilePage extends Component {
 
       items &&
         items.forEach((item, idx) => {
-        
-          if (item.offsetTop <= scrollPosition ) {
-            
+          if (item.offsetTop <= scrollPosition) {
             console.log("CT item, ", item.id);
 
             let ctActive = document.querySelector(`.list-group-item.active`);
@@ -34,7 +31,9 @@ class ProfilePage extends Component {
             if (ctActive) {
               ctActive.classList.remove("active");
             }
-            let ctitem = document.querySelector(`.list-group-item[data-id="${item.id}"]`);
+            let ctitem = document.querySelector(
+              `.list-group-item[data-id="${item.id}"]`
+            );
 
             console.log("Curent Selected Item Profile ", ctitem);
             if (ctitem) {
@@ -69,30 +68,52 @@ class ProfilePage extends Component {
                 data-bs-spy="scroll"
                 data-bs-target="#profile"
                 data-bs-offset="0"
-                className="scrollspy-example"
+                className="scrollspy-example profile-content"
                 tabIndex="0"
               >
-                <Row>
-                  <Col md={12}>
-                    <ProfileStatus />
-                  </Col>
+                <Row className="profile-card-area">
+                  <Card>
+                    <Card.Body>
+                      <Col md={12}>
+                        <ProfileStatus />
+                      </Col>
+                      <Col md={12} id="profile" className="prf_item">
+                        <ProfileBasicInfo title="Genarel Info" />
+                      </Col>
+                    </Card.Body>
+                  </Card>
                 </Row>
 
-                <Row>
-                  <Col md={12} id="profile" className="prf_item">
-                    <ProfileBasicInfo />
-                  </Col>
+                <Row className="profile-card-area">
+                  <Card>
+                    <Card.Body>
+                      <Col md={12} id="saveTravellers" className="prf_item">
+                        <ProfileBookingInformation title="Booking Details" />
+                      </Col>
+                    </Card.Body>
+                  </Card>
                 </Row>
-                <Row>
-                  <Col md={12} id="loginDetails" className="prf_item">
-                    <ProfileLoginDetails />
-                  </Col>
+
+                <Row className="profile-card-area">
+                  <Card>
+                    <Card.Body>
+                      <Col md={12} id="loginDetails" className="prf_item">
+                        <ProfileLoginDetails />
+                      </Col>
+                    </Card.Body>
+                  </Card>
                 </Row>
-                <Row>
-                  <Col md={12} id="saveTravellers" className="prf_item">
-                    <ProfileSaveTraveller />
-                  </Col>
+
+                <Row className="profile-card-area">
+                  <Card>
+                    <Card.Body>
+                      <Col md={12} id="saveTravellers" className="prf_item">
+                        <ProfileSaveTraveller />
+                      </Col>
+                    </Card.Body>
+                  </Card>
                 </Row>
+                
               </div>
             </Col>
           </Row>
