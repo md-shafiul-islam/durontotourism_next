@@ -3137,7 +3137,64 @@ body {
   margin-bottom: 15px;
 }
 
-.book-travelers-item .gender-info {
+/* Cst Radio Buttion Start */
+
+.cst-radio .gender-info {
+  border-radius: 5px;
+  border: 1px solid #ced4da;
+  padding: 0px !important;
+  display: flex;
+}
+
+.cst-radio .gender-info input[type="radio"] {
+  visibility: hidden;
+  position: absolute;
+}
+
+.cst-radio .gender-label {
+  width: 50%;
+  margin: 0px;
+  padding: 0px;
+  cursor: pointer;  
+}
+
+.cst-radio .gender-label .gen-text {
+  width: 100%;
+  text-align: center;
+  border-bottom: 3px solid transparent;
+  height: 36px;
+  display: block;
+  padding-top: 5px;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+.cst-radio .gender-label:first-child {
+  border-right: 1px solid #ced4da;
+}
+
+.cst-radio .gender-info input[type="radio"]:checked ~ .gen-text  {
+  border-bottom: 5px solid #17a2b8;
+  font-weight: 800;
+}
+
+.mpt-10{
+  margin-top: 10px;
+  padding-top: 10px;
+}
+/* Cst Radio Buttion End */
+
+/*Traveler fields Start */
+
+.input-area-row{
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+/*Traveler fields Start */
+
+
+.book-travelers-item .gender-info{
   border-radius: 5px;
   border: 1px solid #ced4da;
   padding: 0px !important;

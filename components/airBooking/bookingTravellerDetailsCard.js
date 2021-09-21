@@ -1,5 +1,5 @@
-import { Field, FieldArray, Form, Formik } from "formik";
 import React, { Component } from "react";
+import { Field, FieldArray, Form, Formik } from "formik";
 import { PropTypes } from "prop-types";
 import Select from "react-select";
 import { Button, Card, Col, Row } from "react-bootstrap";
@@ -10,6 +10,7 @@ import { initRoundTripBookingData } from "../../utils/booking/initBooking";
 import { v4 } from "uuid";
 import { connect } from "react-redux";
 import { getRoundTripBookingAction } from "../../redux/actions/bookingAction";
+import TravellerFields from "./TravellerFields";
 
 class BookingTravellerDetailsCard extends Component {
   state = {
@@ -28,7 +29,7 @@ class BookingTravellerDetailsCard extends Component {
     this.initValidationSchema(pasCounts);
   }
 
-  buttonClicAction = ()=>{
+  buttonClicAction = () => {
     const values = {
       adults: [
         {
@@ -74,11 +75,19 @@ class BookingTravellerDetailsCard extends Component {
     };
     let bookingRequestQuery = initRoundTripBookingData(values);
     this.props.getRoundTripBookingAction(bookingRequestQuery);
-  }
+  };
 
+  // : "",
+  //               : "",
+  //               : "",
+  //               : "",
+  //               : "",
+  //               pasExpDate: "",
+  //               pasExpMonth: "",
+  //               pasExpYear: "",
   initValidationSchema = (pasCounts) => {
     let { adtCount, cnnCount, infCount } = pasCounts;
-
+    //isInternational
     let travelerSchema = Yup.object({
       adults: Yup.array(
         Yup.object({
@@ -87,6 +96,42 @@ class BookingTravellerDetailsCard extends Component {
             .required("Required"),
           lastName: Yup.string().min(1),
           gender: Yup.string(1).required("Please Select Gender"),
+          nationality: Yup.string(1).when("isInternational", {
+            is:true,
+            then:Yup.string().required("Please, Select one nationality")            
+          }),
+          dobDate:Yup.string().when("isInternational", {
+            is: true,
+            then:Yup.string().required("Please, Select one date")
+          }),
+          dobMonth:Yup.string().when("isInternational", {
+            is: true,
+            then:Yup.string().required("Please, Select one Month")
+          }),
+          dobYear:Yup.string().when("isInternational", {
+            is: true,
+            then:Yup.string().required("Please, Select one Year")
+          }),
+          passportNo:Yup.string().when("isInternational", {
+            is: true,
+            then:Yup.string().required("Please, Enter Passport Number")
+          }),
+          passportIssuCountry:Yup.string().when("isInternational", {
+            is: true,
+            then:Yup.string().required("Please, Select passport issuing country")
+          }),
+          pasExpDate:Yup.string().when("isInternational", {
+            is: true,
+            then:Yup.string().required("Please, Select one passport expiry day")
+          }),
+          pasExpMonth:Yup.string().when("isInternational", {
+            is: true,
+            then:Yup.string().required("Please, Select one passport expiry month")
+          }),
+          pasExpYear:Yup.string().when("isInternational", {
+            is: true,
+            then:Yup.string().required("Please, Select one date passport expiry year")
+          })
         })
       )
         .min(adtCount, `Minimum ${adtCount} Adult Traveler Information needed`)
@@ -293,13 +338,10 @@ class BookingTravellerDetailsCard extends Component {
 
     // console.log("Get Age, ", getAge(30,7,2019));
 
-
     let bookingRequestQuery = initRoundTripBookingData(values);
     this.props.getRoundTripBookingAction(bookingRequestQuery);
 
     // this.props.getTravelersAction(passengers);
-
-    
   };
 
   render() {
@@ -311,12 +353,31 @@ class BookingTravellerDetailsCard extends Component {
       <React.Fragment>
         <Formik
           initialValues={{
-            adults: [{ firstName: "", lastName: "", gender: "", type: "ADT", key:v4() }],
+            adults: [
+              {
+                firstName: "",
+                lastName: "",
+                gender: "",
+                type: "ADT",
+                key: v4(),
+                nationality: "",
+                dobDate: "",
+                dobMonth: "",
+                dobYear: "",
+                passportNo: "",
+                passportIssuCountry: "",
+                pasExpDate: "",
+                pasExpMonth: "",
+                pasExpYear: "",
+                isInternational: true
+              },
+            ],
             childs: [],
             infants: [],
             country_code: "",
             phone_no: "",
             email: "",
+            isInternational: true,
           }}
           validationSchema={validationSchema}
           onSubmit={(values) => {
@@ -385,7 +446,7 @@ class BookingTravellerDetailsCard extends Component {
                                               adult.lastName +
                                               ", " +
                                               adult.gender
-                                            : "Adult " + (idx + 1)
+                                            : "Passenger " + (idx + 1)
                                         }`}
                                       </Col>
 
@@ -445,91 +506,20 @@ class BookingTravellerDetailsCard extends Component {
                                           </Col>
                                         </Row>
                                         <div className="row traveler-in-area">
-                                          <Col md={4}>
-                                            <Field
-                                              className={`form-control ${
-                                                this.isError(
-                                                  "adults",
-                                                  idx,
-                                                  props.errors,
-                                                  props.touched,
-                                                  "firstName"
-                                                ).cls
-                                              }`}
-                                              type="text"
-                                              name={`adults[${idx}].firstName`}
-                                              placeholder="First Name..."
-                                            />
-                                            <div className="invalid-feedback">
-                                              {
-                                                this.isError(
-                                                  "adults",
-                                                  idx,
-                                                  props.errors,
-                                                  props.touched,
-                                                  "firstName"
-                                                ).msg
-                                              }
-                                            </div>
-                                          </Col>
-
-                                          <Col md={4}>
-                                            <Field
-                                              className="form-control"
-                                              type="text"
-                                              name={`adults[${idx}].lastName`}
-                                              placeholder="Last Name..."
-                                            />
-                                          </Col>
-                                          <Col md={4}>
-                                            <div
-                                              className={`gender-info ${
-                                                this.isError(
-                                                  "adults",
-                                                  idx,
-                                                  props.errors,
-                                                  props.touched,
-                                                  "gender"
-                                                ).cls
-                                              }`}
-                                            >
-                                              <label className="gender-label">
-                                                <Field
-                                                  type="radio"
-                                                  name={`adults[${idx}].gender`}
-                                                  value="Male"
-                                                  id={`adults[${idx}].gender-male`}
-                                                />
-                                                <span className="gen-text">
-                                                  Male
-                                                </span>
-                                              </label>
-
-                                              <label className="gender-label">
-                                                <Field
-                                                  type="radio"
-                                                  name={`adults[${idx}].gender`}
-                                                  value="Female"
-                                                  id={`adults[${idx}].gender-female`}
-                                                />
-                                                <span className="gen-text">
-                                                  Female
-                                                </span>
-                                              </label>
-                                            </div>
-
-                                            <div className="invalid-feedback">
-                                              {
-                                                this.isError(
-                                                  "adults",
-                                                  idx,
-                                                  props.errors,
-                                                  props.touched,
-                                                  "gender"
-                                                ).msg
-                                              }
-                                            </div>
-                                          </Col>
+                                          <TravellerFields
+                                            isError={this.isError}
+                                            errors={props.errors}
+                                            touched={props.touched}
+                                            idx={idx}
+                                            fieldSetName="adults"
+                                            isInternational={true}
+                                            setFieldTouched={
+                                              props.setFieldTouched
+                                            }
+                                            setFieldValue={props.setFieldValue}
+                                            handleChange={props.handleChange}
+                                            handleBlur={props.handleBlur}
+                                          />
                                         </div>
                                       </Col>
                                     </Row>
@@ -549,7 +539,7 @@ class BookingTravellerDetailsCard extends Component {
                                       lastName: "",
                                       gender: "",
                                       type: "ADT",
-                                      key:v4()
+                                      key: v4(),
                                     });
                                   }
                                 }}
@@ -794,7 +784,7 @@ class BookingTravellerDetailsCard extends Component {
                                       gender: "",
                                       type: "CNN",
                                       passAge: "",
-                                      key:v4()
+                                      key: v4(),
                                     });
                                   }
                                 }}
@@ -1095,7 +1085,7 @@ class BookingTravellerDetailsCard extends Component {
                                       day: 1,
                                       month: 1,
                                       year: new Date().getFullYear() - 2,
-                                      key:v4()
+                                      key: v4(),
                                     });
                                   }
                                 }}
@@ -1261,7 +1251,7 @@ class BookingTravellerDetailsCard extends Component {
           )}
         </Formik>
         <Col>
-                  <Button onClick={this.buttonClicAction} >Test Func !!</Button>
+          <Button onClick={this.buttonClicAction}>Test Func !!</Button>
         </Col>
       </React.Fragment>
     );
@@ -1269,12 +1259,14 @@ class BookingTravellerDetailsCard extends Component {
 }
 
 BookingTravellerDetailsCard.prototypes = {
-  getRoundTripBookingAction: PropTypes.func.isRequired
+  getRoundTripBookingAction: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   errors: state.errors,
-  bookingReqponse: state.airBooking.rndBookingResponse
+  bookingReqponse: state.airBooking.rndBookingResponse,
 });
 
-export default connect(mapStateToProps, {getRoundTripBookingAction}) (BookingTravellerDetailsCard);
+export default connect(mapStateToProps, { getRoundTripBookingAction })(
+  BookingTravellerDetailsCard
+);

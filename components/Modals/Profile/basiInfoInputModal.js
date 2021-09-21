@@ -10,56 +10,83 @@ const BasiInfoInputModal = (params) => {
           <Modal.Title>Edit Profile</Modal.Title>
         </Modal.Header>
         <Formik
-            initialValues={{name:"", birthday:"", gender:"", maritals_status:""}}
+          initialValues={{
+            name: "",
+            birthday: "",
+            gender: "",
+            maritals_status: "",
+          }}
         >
-          {({setFieldTouched, setFieldValue, handleChange, validateOnBlur, values, errors, touched}) => (
+          {({
+            setFieldTouched,
+            setFieldValue,
+            handleChange,
+            validateOnBlur,
+            values,
+            errors,
+            touched,
+          }) => (
             <React.Fragment>
               <Modal.Body>
                 <Form>
-                    <Row>
-                        <Col md={6}>
-                            <label htmlFor="name">Full Name.</label>
-                            <Field
-                                type="text"
-                                name="name"
-                                id="name"
-                            />
-                        </Col>
+                  <Row>
+                    <Col md={6}>
+                      <label className="form-label" htmlFor="name">
+                        First Name.
+                      </label>
+                      <Field
+                        className="form-control"
+                        type="text"
+                        name="firstName"
+                        id="firstName"
+                      />
+                    </Col>
+                    <Col md={6}>
+                      <label className="form-label" htmlFor="lastName">
+                        Last Name.
+                      </label>
+                      <Field
+                        className="form-control"
+                        type="text"
+                        name="lastName"
+                        id="lastName"
+                      />
+                    </Col>
+                    <Col md={6}>
+                      <label className="form-label" htmlFor="phoneNo">
+                        Phone Number.
+                      </label>
+                      <Field
+                        className="form-control"
+                        type="text"
+                        name="phoneNo"
+                        id="phoneNo"
+                      />
+                    </Col>
 
-                        <Col md={6}>
-                            <label htmlFor="gender">Gender.</label>
-                            <Field
-                                type="text"
-                                name="gender"
-                                id="gender"
-                            />
-                        </Col>
-
-                        <Col md={6}>
-                            <label htmlFor="name">Maritals Status.</label>
-                            <Field
-                                type="text"
-                                name="maritals_status"
-                                id="maritals_status"
-                            />
-                        </Col>
-
-                        <Col md={6}>
-                            <label htmlFor="birthday">Birthday</label>
-                            <Field
-                                type="date"
-                                name="birthday"
-                                id="birthday"
-                            />
-                        </Col>
-                    </Row>
+                    <Col md={6}>
+                      <label className="form-label" htmlFor="email">
+                        Email
+                      </label>
+                      <Field
+                        className="form-control"
+                        type="email"
+                        name="email"
+                        id="email"
+                      />
+                    </Col>
+                  </Row>
                 </Form>
               </Modal.Body>
               <Modal.Footer>
                 <Button variant="secondary" onClick={params.hideAction}>
                   Cancel
                 </Button>
-                <Button variant="primary" onClick={params.hideAction} type="submit">
+                <Button
+                  variant="primary"
+                  onClick={params.hideAction}
+                  type="submit"
+                >
                   Save
                 </Button>
               </Modal.Footer>

@@ -1,11 +1,10 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import { Button, Card, Col, Row } from "react-bootstrap";
 import ContentModal from "../Modals/ContentModal";
 import ProfileBookingInfForm from "./ProfileBookingInfForm";
-
+import CstValidateField from "../Fields/CstValidateField";
 const ProfileBookingInformation = (props) => {
-
-    const [displayModal, setDisplayModal] = useState(false)
+  const [displayModal, setDisplayModal] = useState(false);
 
   return (
     <React.Fragment>
@@ -19,10 +18,16 @@ const ProfileBookingInformation = (props) => {
                   <div className="title">{props.title}</div>
                   <p className="pfl-basi-tag">Booking Infomation Details</p>
                 </div>
-                <div className="aaction-area">
-                    <Button onClick={()=>{
-                        setDisplayModal(true)
-                    }}>Update Booking Info</Button>
+
+                <div className="add-traveller-area">
+                  <Button
+                    onClick={() => {
+                      setDisplayModal(true);
+                    }}
+                    className="add-btn"
+                  >
+                    Edit/Update
+                  </Button>
                 </div>
               </Col>
             </Row>
@@ -105,14 +110,17 @@ const ProfileBookingInformation = (props) => {
           </div>
         </Card.Body>
         <ContentModal
-            show={displayModal}
-            actionClose={(isClose)=>{
-                setDisplayModal(isClose);
-            }}  
-            name="profil-booking-inf"     
-            title="Bookin Details" 
+          show={displayModal}
+          actionClose={(isClose) => {
+            setDisplayModal(isClose);
+          }}
+          name="profil-booking-inf"
+          title="Bookin Details"
         >
-            <ProfileBookingInfForm />
+          <ProfileBookingInfForm
+            isExtendedField={false}
+            isInternational={false}
+          />
         </ContentModal>
       </Card>
     </React.Fragment>

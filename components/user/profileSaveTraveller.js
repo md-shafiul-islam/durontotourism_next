@@ -44,7 +44,7 @@ const ProfileSaveTraveller = () => {
         }}
         show={addTravelerStatus}
       >
-        <ProfileBookingInfForm />
+        <ProfileBookingInfForm isExtendedField={true} isInternational={true} />
       </ContentModal>
     </React.Fragment>
   );

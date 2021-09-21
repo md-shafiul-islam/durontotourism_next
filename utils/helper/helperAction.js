@@ -333,13 +333,15 @@ export const esIsFieldError = (errors, touched, fieldName) => {
       msg = errors[fieldName];
     }
   }
-
-  if (touched[fieldName]) {
-    if (msg) {
-      return { cls: "is-invalid", msg: msg, status: true };
-    } else {
-      return { cls: "is-valid", msg: "", status: false };
+  if (touched !== undefined && touched !== null) {
+    if (touched[fieldName]) {
+      if (msg) {
+        return { cls: "is-invalid", msg: msg, status: true };
+      } else {
+        return { cls: "is-valid", msg: "", status: false };
+      }
     }
   }
+
   return { cls: "", msg: msg, status: false };
 };

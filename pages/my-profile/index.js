@@ -46,6 +46,8 @@ class ProfilePage extends Component {
     };
   };
 
+  valida
+
   render() {
     return (
       <React.Fragment>
