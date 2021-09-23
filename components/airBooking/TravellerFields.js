@@ -2,6 +2,9 @@ import React from "react";
 import { Field } from "formik";
 import { Button, Card, Col, Row } from "react-bootstrap";
 import CstSelectValidateField from "../Fields/CstSelectValidateField";
+import { getNmsOptions } from "../../utils/helper/esFnc";
+import CstValidateField from "../Fields/CstValidateField";
+import CstUploadFileFieldValidet from "../Fields/CstUploadFileFieldValidet";
 
 const TravellerFields = ({
   isError,
@@ -13,7 +16,6 @@ const TravellerFields = ({
   setFieldTouched,
   setFieldValue,
   handleChange,
-  handleBlur,
 }) => {
   return (
     <React.Fragment>
@@ -77,7 +79,7 @@ const TravellerFields = ({
           <Row className="input-area-row">
             <Col md={4}>
               <CstSelectValidateField
-                name="nationality"
+                name={`${fieldSetName}[${idx}].nationality`}
                 label="Nationality"
                 placeholder="Nationality"
                 clazzName={
@@ -89,7 +91,9 @@ const TravellerFields = ({
                 onChange={(item) => {
                   setFieldValue(`nationality`, item && item.value);
                 }}
-                handleBlur={handleBlur}
+                blurHandler={() => {
+                  setFieldTouched(`${fieldSetName}[${idx}].nationality`, true);
+                }}
               />
             </Col>
 
@@ -98,7 +102,7 @@ const TravellerFields = ({
               <Row>
                 <Col md={4} className="mp-0">
                   <CstSelectValidateField
-                    name="dobDate"
+                    name={`${fieldSetName}[${idx}].dobDate`}
                     placeholder="date"
                     clazzName={
                       isError(fieldSetName, idx, errors, touched, "dobDate").cls
@@ -106,23 +110,49 @@ const TravellerFields = ({
                     errorMsg={
                       isError(fieldSetName, idx, errors, touched, "dobDate").msg
                     }
+                    blurHandler={() => {
+                      setFieldTouched(`${fieldSetName}[${idx}].dobDate`, true);
+                    }}
+                    options={getNmsOptions(31, 1, 0)}
+                    onChange={(item) => {
+                      setFieldValue(
+                        `${fieldSetName}[${idx}].dobDate`,
+                        item && item.value
+                      );
+                    }}
+                    arrowStatus={false}
+                    isSmall={true}
                   />
                 </Col>
                 <Col md={4} className="mp-0">
                   <CstSelectValidateField
-                    name="dobMonth"
+                    name={`${fieldSetName}[${idx}].dobMonth`}
                     placeholder="Month"
                     clazzName={
-                      isError(fieldSetName, idx, errors, touched, "dobMonth").cls
+                      isError(fieldSetName, idx, errors, touched, "dobMonth")
+                        .cls
                     }
                     errorMsg={
-                      isError(fieldSetName, idx, errors, touched, "dobMonth").msg
+                      isError(fieldSetName, idx, errors, touched, "dobMonth")
+                        .msg
                     }
+                    blurHandler={() => {
+                      setFieldTouched(`${fieldSetName}[${idx}].dobMonth`, true);
+                    }}
+                    options={getNmsOptions(12, 1, 0)}
+                    onChange={(item) => {
+                      setFieldValue(
+                        `${fieldSetName}[${idx}].dobMonth`,
+                        item && item.value
+                      );
+                    }}
+                    arrowStatus={false}
+                    isSmall={true}
                   />
                 </Col>
                 <Col md={4} className="mp-0">
                   <CstSelectValidateField
-                    name="dobYear"
+                    name={`${fieldSetName}[${idx}].dobYear`}
                     placeholder="Year"
                     clazzName={
                       isError(fieldSetName, idx, errors, touched, "dobYear").cls
@@ -130,6 +160,18 @@ const TravellerFields = ({
                     errorMsg={
                       isError(fieldSetName, idx, errors, touched, "dobYear").msg
                     }
+                    blurHandler={() => {
+                      setFieldTouched(`${fieldSetName}[${idx}].dobYear`, true);
+                    }}
+                    options={getNmsOptions(12, 1, 1)}
+                    onChange={(item) => {
+                      setFieldValue(
+                        `${fieldSetName}[${idx}].dobYear`,
+                        item && item.value
+                      );
+                    }}
+                    arrowStatus={false}
+                    isSmall={true}
                   />
                 </Col>
               </Row>
@@ -138,23 +180,35 @@ const TravellerFields = ({
 
           <Row className="input-area-row">
             <Col md={4}>
-              <CstSelectValidateField
-                name="passportNo"
-                label="Passport No."
-                placeholder="Passport No."
-                clazzName={
+              <label
+                className="form-label"
+                htmlFor={`${fieldSetName}[${idx}].passportNo`}
+              >
+                Passport Number
+              </label>
+              <Field
+                className={`form-control ${
                   isError(fieldSetName, idx, errors, touched, "passportNo").cls
-                }
-                errorMsg={
-                  isError(fieldSetName, idx, errors, touched, "passportNo").msg
-                }
+                }`}
+                type="text"
+                name={`${fieldSetName}[${idx}].passportNo`}
+                placeholder="Password"
               />
+              <div className="invalid-feedback">
+                {isError(fieldSetName, idx, errors, touched, "passportNo").msg}
+              </div>
             </Col>
             <Col md={4}>
               <CstSelectValidateField
-                name="passportIssuCountry"
+                name={`${fieldSetName}[${idx}].passportIssuCountry`}
                 label="Passport Issuing Country"
                 placeholder="Passport Issuing Country"
+                blurHandler={() => {
+                  setFieldTouched(
+                    `${fieldSetName}[${idx}].passportIssuCountry`,
+                    true
+                  );
+                }}
                 clazzName={
                   isError(
                     fieldSetName,
@@ -173,6 +227,12 @@ const TravellerFields = ({
                     "passportIssuCountry"
                   ).msg
                 }
+                onChange={(item) => {
+                  setFieldValue(
+                    `${fieldSetName}[${idx}].passportIssuCountry`,
+                    item && item.value
+                  );
+                }}
               />
             </Col>
             <Col md={4}>
@@ -180,7 +240,7 @@ const TravellerFields = ({
               <Row>
                 <Col md={4} className="mp-0">
                   <CstSelectValidateField
-                    name="pasExpDate"
+                    name={`${fieldSetName}[${idx}].pasExpDate`}
                     placeholder="date"
                     clazzName={
                       isError(fieldSetName, idx, errors, touched, "pasExpDate")
@@ -190,12 +250,33 @@ const TravellerFields = ({
                       isError(fieldSetName, idx, errors, touched, "pasExpDate")
                         .msg
                     }
+                    blurHandler={() => {
+                      setFieldTouched(
+                        `${fieldSetName}[${idx}].pasExpDate`,
+                        true
+                      );
+                    }}
+                    onChange={(item) => {
+                      setFieldValue(
+                        `${fieldSetName}[${idx}].pasExpDate`,
+                        item && item.value
+                      );
+                    }}
+                    options={getNmsOptions(31, 1, 0)}
+                    isSmall={true}
+                    arrowStatus={false}
                   />
                 </Col>
                 <Col md={4} className="mp-0">
                   <CstSelectValidateField
-                    name="pasExpMonth"
+                    name={`${fieldSetName}[${idx}].pasExpMonth`}
                     placeholder="Month"
+                    blurHandler={() => {
+                      setFieldTouched(
+                        `${fieldSetName}[${idx}].pasExpMonth`,
+                        true
+                      );
+                    }}
                     clazzName={
                       isError(fieldSetName, idx, errors, touched, "pasExpMonth")
                         .cls
@@ -204,11 +285,26 @@ const TravellerFields = ({
                       isError(fieldSetName, idx, errors, touched, "pasExpMonth")
                         .msg
                     }
+                    onChange={(item) => {
+                      setFieldValue(
+                        `${fieldSetName}[${idx}].pasExpMonth`,
+                        item && item.value
+                      );
+                    }}
+                    options={getNmsOptions(12, 1, 0)}
+                    arrowStatus={false}
+                    isSmall={true}
                   />
                 </Col>
                 <Col md={4} className="mp-0">
                   <CstSelectValidateField
-                    name="pasExpYear"
+                    name={`${fieldSetName}[${idx}].pasExpYear`}
+                    blurHandler={() => {
+                      setFieldTouched(
+                        `${fieldSetName}[${idx}].pasExpYear`,
+                        true
+                      );
+                    }}
                     placeholder="Year"
                     clazzName={
                       isError(fieldSetName, idx, errors, touched, "pasExpYear")
@@ -218,9 +314,34 @@ const TravellerFields = ({
                       isError(fieldSetName, idx, errors, touched, "pasExpYear")
                         .msg
                     }
+                    onChange={(item) => {
+                      setFieldValue(
+                        `${fieldSetName}[${idx}].pasExpYear`,
+                        item && item.value
+                      );
+                    }}
+                    options={getNmsOptions(12, 1, 2)}
+                    arrowStatus={false}
+                    isSmall={true}
                   />
                 </Col>
               </Row>
+            </Col>
+          </Row>
+          <Row className="input-area-row">
+            <Col md={6}>
+              <CstUploadFileFieldValidet
+                blurHandler={() => {}}
+                label="Passport Image"
+                changeHandler={(file) => {}}
+              />
+            </Col>
+            <Col md={6}>
+              <CstUploadFileFieldValidet
+                label="Visa Image"
+                changeHandler={(file) => {}}
+                blurHandler={() => {}}
+              />
             </Col>
           </Row>
         </React.Fragment>

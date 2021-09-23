@@ -21,7 +21,7 @@ const ProfileBasicInfo = (props) => {
                 <div className="heading-area">
                   <div className="title">{props.title}</div>
                   <p className="pfl-basi-tag">
-                    Basic info, for faster booking experience
+                    {props.tagLine}
                   </p>
                 </div>
                 <div className="edt-btn-area">

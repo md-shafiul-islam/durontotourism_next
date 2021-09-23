@@ -85,7 +85,7 @@ const ProfileSideBar = (props) => {
                   <span className="profile-icon">
                     <i className="fas fa-users"></i>
                   </span>{" "}
-                  <span>Booking Info</span>
+                  <span>Pesonal Info</span>
                 </li>
 
                 <li
@@ -99,7 +99,7 @@ const ProfileSideBar = (props) => {
                   <span className="profile-icon">
                     <i className="fas fa-sign-in-alt"></i>
                   </span>
-                  <span>Login Details</span>
+                  <span>Security & Login</span>
                 </li>
 
                 <li

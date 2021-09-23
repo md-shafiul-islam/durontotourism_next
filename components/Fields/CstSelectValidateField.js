@@ -1,16 +1,28 @@
 import React from "react";
-import Select from "react-select";
+import Select, { components } from "react-select";
 
 const CstSelectValidateField = ({
+  arrowStatus = true,
   name,
   label = undefined,
   placeholder,
   options,
   onChange,
-  handleBlur,
+  blurHandler,
   clazzName,
   errorMsg,
+  isSmall = false,
 }) => {
+  const getCommponetSets = () => {
+    if (!arrowStatus) {
+      return {
+        DropdownIndicator: () => null,
+        IndicatorSeparator: () => null,
+      };
+    }
+
+    return null;
+  };
   return (
     <React.Fragment>
       {label ? (
@@ -20,17 +32,23 @@ const CstSelectValidateField = ({
       ) : (
         ""
       )}
+      {console.log("IsSmall ", isSmall)}
       <Select
         aria-label={name}
         name={name}
         id={name}
         placeholder={placeholder}
         options={options}
-        onBlur={handleBlur}
+        onBlur={() => {
+          blurHandler();
+        }}
         onChange={(item) => {
           onChange(item);
         }}
-        className={`vselect-item ${clazzName}`}
+        className={`${
+          isSmall ? "vselect-sm-item " : "vselect-item "
+        }${clazzName}`}
+        components={getCommponetSets()}
       />
 
       <div className="invalid-feedback">{errorMsg}</div>

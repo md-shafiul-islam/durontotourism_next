@@ -16,7 +16,7 @@ const ProfileBookingInformation = (props) => {
               <Col md={12}>
                 <div className="heading-area">
                   <div className="title">{props.title}</div>
-                  <p className="pfl-basi-tag">Booking Infomation Details</p>
+                  <p className="pfl-basi-tag">Personal Infomation Deatails</p>
                 </div>
 
                 <div className="add-traveller-area">
@@ -37,17 +37,12 @@ const ProfileBookingInformation = (props) => {
             <table className="table table-hover">
               <tbody>
                 <tr>
-                  <th scope="row">Full Name</th>
-                  <td colSpan="3">
-                    <button
-                      className="prf-add-btn"
-                      onClick={() => {
-                        setPhoneStatus(true);
-                      }}
-                    >
-                      +Add your Name same As Passport
-                    </button>
-                  </td>
+                  <th scope="row">First & Middle name</th>
+                  <td colSpan="3">Md Shafiul</td>
+                </tr>
+                <tr>
+                  <th scope="row">Last Name</th>
+                  <td colSpan="3">Islam</td>
                 </tr>
                 <tr>
                   <th scope="row">Gender</th>

@@ -23,6 +23,31 @@ body {
   background-position: right calc(0.375em + 0.1875rem) center;
   background-size: calc(0.75em + 0.375rem) calc(0.75em + 0.375rem);
 }
+
+.vselect-sm-item {
+  border-radius: 5px;
+}
+
+.vselect-sm-item.is-invalid:first-child {
+  border-color: #dc3545;
+  padding-right: calc(1.5em + 0.75rem);
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' width='12' height='12' fill='none' stroke='%23dc3545'%3e%3ccircle cx='6' cy='6' r='4.5'/%3e%3cpath stroke-linejoin='round' d='M5.8 3.6h.4L6 6.5z'/%3e%3ccircle cx='6' cy='8.2' r='.6' fill='%23dc3545' stroke='none'/%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right calc(0.375em + 0.1875rem) center;
+  background-size: calc(0.75em + 0.375rem) calc(0.75em + 0.375rem);
+  border: 1px solid #dc3545;
+}
+
+.vselect-sm-item.is-valid:first-child {
+  border-color: #198754;
+  border: 1px solid #198754;
+  padding-right: calc(1.5em + 0.75rem);
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3e%3cpath fill='%23198754' d='M2.3 6.73L.6 4.53c-.4-1.04.46-1.4 1.1-.8l1.1 1.4 3.4-3.8c.6-.63 1.6-.27 1.2.7l-4 4.6c-.43.5-.8.4-1.1.1z'/%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right calc(0.375em + 0.1875rem) center;
+  background-size: calc(0.75em + 0.375rem) calc(0.75em + 0.375rem);
+}
+
 /** React Select option validet style End */
 
 /* Thumb Images Area  Start */
@@ -80,8 +105,6 @@ body {
   min-height: 250px;
   display: flex;
 }
-
-
 
 .top-main-nav-bar {
   padding: 20px 0px;
@@ -423,10 +446,7 @@ body {
   flex-direction: column;
   align-items: center;
   padding-top: 14px;
-
 }
-
-
 
 .nav-icon-area.nav-link.active {
   box-shadow: 0 1px 7px 0 rgb(0 0 0 / 40%);
@@ -498,17 +518,17 @@ body {
   color: #d4d4d4;
 }
 
-.bank-image-area{
+.bank-image-area {
   display: flex;
   flex-direction: row;
   align-items: center;
 }
 
-.bank-log{
+.bank-log {
   margin: 0px 0px 25px 0px;
   width: 100%;
   height: 100%;
-  cursor: pointer;  
+  cursor: pointer;
 }
 
 .cash-area .reward-bonus,
@@ -3079,6 +3099,7 @@ body {
 .book-travelers-item .passenger-add-btn-area {
   padding: 10px;
   border-bottom: 1px solid #b6e8ff;
+  display: none;
 }
 
 .book-travelers-item .book-traveler-crd {
@@ -3137,7 +3158,7 @@ body {
   margin-bottom: 15px;
 }
 
-/* Cst Radio Buttion Start */
+/* Cst Fields Buttion Start */
 
 .cst-radio .gender-info {
   border-radius: 5px;
@@ -3155,7 +3176,7 @@ body {
   width: 50%;
   margin: 0px;
   padding: 0px;
-  cursor: pointer;  
+  cursor: pointer;
 }
 
 .cst-radio .gender-label .gen-text {
@@ -3173,28 +3194,43 @@ body {
   border-right: 1px solid #ced4da;
 }
 
-.cst-radio .gender-info input[type="radio"]:checked ~ .gen-text  {
+.cst-radio .gender-info input[type="radio"]:checked ~ .gen-text {
   border-bottom: 5px solid #17a2b8;
   font-weight: 800;
 }
 
-.mpt-10{
+.mpt-10 {
   margin-top: 10px;
   padding-top: 10px;
 }
+
+.cstf-phone .cstf-select-opt,
+.cstf-phone .cstf-text {
+
+}
+
+.cstf-phone .cstf-select-opt{
+  margin-right: 0px;
+  padding-right: 0px;
+}
+
+.cstf-phone .cstf-text {
+  margin-left: 0px;  
+  padding-left: 0px;
+}
+
 /* Cst Radio Buttion End */
 
 /*Traveler fields Start */
 
-.input-area-row{
+.input-area-row {
   margin-top: 10px;
   margin-bottom: 10px;
 }
 
 /*Traveler fields Start */
 
-
-.book-travelers-item .gender-info{
+.book-travelers-item .gender-info {
   border-radius: 5px;
   border: 1px solid #ced4da;
   padding: 0px !important;
@@ -3336,12 +3372,29 @@ body {
   float: left;
   display: block;
 }
+.pfl-header .general-heading-area {
+  display: flex;
+  flex-direction: row;
+}
+
+.pfl-header .header-right-content {
+  width: 250px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.pfl-header .header-right-content .image-area {
+  width: 150px;
+  height: 150px;
+}
 
 .pfl-header .edt-btn-area {
   min-width: 120px;
   height: 40px;
   float: right;
   display: block;
+  padding-top: 15px;
 }
 
 .pfl-header .pfl-basi-tag {
@@ -3989,3 +4042,52 @@ body {
 }
 
 /** Payment page End */
+
+/** Agent Style Start*/
+.agent-area {
+}
+
+.agent-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.signup-card {
+  padding: 15px 50px;
+}
+.agent-signup {
+  width: 550px;
+  margin: 50px 0px;
+}
+
+.agent-signup .signup-title {
+  font-size: 1.5em;
+  margin: 10px 0px 20px;
+  text-align: center;
+}
+
+.agent-area .agent-content,
+.agent-area .agent-sidebar {
+  background-color: #fff;
+}
+
+.agentsgn-form-area .field-area {
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.agentsgn-form-area fieldset {
+  border-radius: 5px;
+  margin: 15px 0px;
+  padding: 15px;
+}
+
+.agentsgn-form-area .signup-btn {
+  text-transform: uppercase;
+}
+
+/** Agent Style Start*/
+
+

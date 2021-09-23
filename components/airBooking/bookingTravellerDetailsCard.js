@@ -11,6 +11,14 @@ import { v4 } from "uuid";
 import { connect } from "react-redux";
 import { getRoundTripBookingAction } from "../../redux/actions/bookingAction";
 import TravellerFields from "./TravellerFields";
+import CstSelectValidateField from "../Fields/CstSelectValidateField";
+import CstValidateField from "../Fields/CstValidateField";
+import {
+  getAllFieldValidation,
+  initializeTravlerBookingForm,
+} from "./travelerValidationFunc";
+import TravellerGrpouFields from "./TravellerGrpouFields";
+import LoaderSpiner from "../../utils/helper/loaderSpiner";
 
 class BookingTravellerDetailsCard extends Component {
   state = {
@@ -20,6 +28,9 @@ class BookingTravellerDetailsCard extends Component {
     infCount: 0,
     validationSchema: {},
     initStatus: false,
+    changeStatus: true,
+    initFormStatus: false,
+    initValues: {},
   };
 
   componentDidMount() {
@@ -27,6 +38,10 @@ class BookingTravellerDetailsCard extends Component {
 
     let pasCounts = this.initPrePerdForm();
     this.initValidationSchema(pasCounts);
+    this.setState({
+      initValues: initializeTravlerBookingForm(pasCounts),
+      initFormStatus: true,
+    });
   }
 
   buttonClicAction = () => {
@@ -77,101 +92,14 @@ class BookingTravellerDetailsCard extends Component {
     this.props.getRoundTripBookingAction(bookingRequestQuery);
   };
 
-  // : "",
-  //               : "",
-  //               : "",
-  //               : "",
-  //               : "",
-  //               pasExpDate: "",
-  //               pasExpMonth: "",
-  //               pasExpYear: "",
   initValidationSchema = (pasCounts) => {
     let { adtCount, cnnCount, infCount } = pasCounts;
     //isInternational
     let travelerSchema = Yup.object({
-      adults: Yup.array(
-        Yup.object({
-          firstName: Yup.string()
-            .min(4, "Minimum 4 character or letter")
-            .required("Required"),
-          lastName: Yup.string().min(1),
-          gender: Yup.string(1).required("Please Select Gender"),
-          nationality: Yup.string(1).when("isInternational", {
-            is:true,
-            then:Yup.string().required("Please, Select one nationality")            
-          }),
-          dobDate:Yup.string().when("isInternational", {
-            is: true,
-            then:Yup.string().required("Please, Select one date")
-          }),
-          dobMonth:Yup.string().when("isInternational", {
-            is: true,
-            then:Yup.string().required("Please, Select one Month")
-          }),
-          dobYear:Yup.string().when("isInternational", {
-            is: true,
-            then:Yup.string().required("Please, Select one Year")
-          }),
-          passportNo:Yup.string().when("isInternational", {
-            is: true,
-            then:Yup.string().required("Please, Enter Passport Number")
-          }),
-          passportIssuCountry:Yup.string().when("isInternational", {
-            is: true,
-            then:Yup.string().required("Please, Select passport issuing country")
-          }),
-          pasExpDate:Yup.string().when("isInternational", {
-            is: true,
-            then:Yup.string().required("Please, Select one passport expiry day")
-          }),
-          pasExpMonth:Yup.string().when("isInternational", {
-            is: true,
-            then:Yup.string().required("Please, Select one passport expiry month")
-          }),
-          pasExpYear:Yup.string().when("isInternational", {
-            is: true,
-            then:Yup.string().required("Please, Select one date passport expiry year")
-          })
-        })
-      )
-        .min(adtCount, `Minimum ${adtCount} Adult Traveler Information needed`)
-        .max(
-          adtCount,
-          `Can't Added more then ${adtCount} Adult Traveler Information`
-        ),
+      adults: getAllFieldValidation(adtCount),
+      childs: getAllFieldValidation(cnnCount),
 
-      childs: Yup.array(
-        Yup.object({
-          firstName: Yup.string()
-            .min(4, "Minimum 4 character or letter")
-            .required("Required"),
-          lastName: Yup.string().min(1),
-          gender: Yup.string(1).required("Please Select Gender"),
-        })
-      )
-        .min(cnnCount, `Minimum ${cnnCount} Child Traveler Information needed`)
-        .max(
-          cnnCount,
-          `Can't Added more then ${cnnCount} Child Traveler Information`
-        ),
-
-      infants: Yup.array(
-        Yup.object({
-          firstName: Yup.string()
-            .min(4, "Minimum 4 character or letter")
-            .required("Required"),
-          lastName: Yup.string().min(1),
-          gender: Yup.string(1).required("Please Select Gender"),
-        })
-      )
-        .min(
-          infCount,
-          `Minimum ${cnnCount} Infant or Baby Traveler Information needed`
-        )
-        .max(
-          infCount,
-          `Can't Added more then ${cnnCount} Infant or Baby Traveler Information`
-        ),
+      infants: getAllFieldValidation(infCount),
       country_code: Yup.string().required("Country Code is Required"),
       phone_no: Yup.string().required("Mobile No. is Required"),
       email: Yup.string().email().required("Email is Required"),
@@ -184,6 +112,10 @@ class BookingTravellerDetailsCard extends Component {
       cnnCount,
       adtCount,
     });
+  };
+
+  fieldResrAction = () => {
+    console.log("rest This group fields ");
   };
 
   initPrePerdForm = () => {
@@ -345,40 +277,19 @@ class BookingTravellerDetailsCard extends Component {
   };
 
   render() {
-    let { validationSchema, initStatus } = this.state;
+    let { validationSchema, initStatus, initFormStatus } = this.state;
 
     // console.log("Validation Schema, ", JSON.stringify(validationSchema, null, 2));
-    // console.log("initStatus, ", initStatus);
+    console.log("init Fileds Sets, ", this.state.initValues);
+
+    if (!initFormStatus) {
+      return <LoaderSpiner loadingText="Geting booking Data ..." />;
+    }
+
     return (
       <React.Fragment>
         <Formik
-          initialValues={{
-            adults: [
-              {
-                firstName: "",
-                lastName: "",
-                gender: "",
-                type: "ADT",
-                key: v4(),
-                nationality: "",
-                dobDate: "",
-                dobMonth: "",
-                dobYear: "",
-                passportNo: "",
-                passportIssuCountry: "",
-                pasExpDate: "",
-                pasExpMonth: "",
-                pasExpYear: "",
-                isInternational: true
-              },
-            ],
-            childs: [],
-            infants: [],
-            country_code: "",
-            phone_no: "",
-            email: "",
-            isInternational: true,
-          }}
+          initialValues={this.state.initValues}
           validationSchema={validationSchema}
           onSubmit={(values) => {
             this.submitAction(values);
@@ -425,107 +336,34 @@ class BookingTravellerDetailsCard extends Component {
                           <React.Fragment>
                             {props.values &&
                               props.values.adults &&
-                              props.values.adults.map((adult, idx) => (
-                                <Card key={`adt-${idx}`}>
-                                  <Card.Body className="book-traveler-crd">
-                                    {/*  if traveler info not added type 1 [Adult 1] Or Traveler aname */}
-                                    <Row className="bktraveler-header">
-                                      <Col
-                                        md={8}
-                                        className="traveler-title align-middle"
-                                      >
-                                        {`${
-                                          this.getTravelerInfoStatus(
-                                            props.errors,
-                                            props.touched,
-                                            "adults",
-                                            idx
-                                          )
-                                            ? adult.firstName +
-                                              " " +
-                                              adult.lastName +
-                                              ", " +
-                                              adult.gender
-                                            : "Passenger " + (idx + 1)
-                                        }`}
-                                      </Col>
-
-                                      <Col
-                                        md={3}
-                                        className="bkt-collaps-action"
-                                      >
-                                        <div className="btn-area">
-                                          <button
-                                            className="bkt-toggle-btn accordion-button"
-                                            type="button"
-                                            data-bs-toggle="collapse"
-                                            data-bs-target={`#collapseAdt-${idx}`}
-                                            aria-expanded="true"
-                                            aria-controls={`collapseAdt-${idx}`}
-                                          ></button>
-                                        </div>
-
-                                        {this.getTravelerInfoStatus(
-                                          props.errors,
-                                          props.touched,
-                                          "adults",
-                                          idx
-                                        ) ? (
-                                          <div className="bkt-status complete">
-                                            complete
-                                          </div>
-                                        ) : (
-                                          <div className="bkt-status incomplete">
-                                            incomplete
-                                          </div>
-                                        )}
-                                      </Col>
-
-                                      <Col md={1} className="traveler-remove">
-                                        {/* icon fas fa-user-times */}
-                                        <i
-                                          className="icon far fa-trash-alt"
-                                          onClick={() => remove(idx)}
-                                        ></i>
-                                      </Col>
-                                    </Row>
-
-                                    <Row
-                                      className="accordion-collapse collapse show"
-                                      id={`collapseAdt-${idx}`}
-                                      aria-labelledby={`collapseAdt-${idx}`}
-                                    >
-                                      <Col md={12}>
-                                        <Row className="traveler-note-area">
-                                          <Col md={12}>
-                                            <span className="note-text">
-                                              IMPORTANT: Enter your name as it
-                                              is mentioned on your passport or
-                                              any government approved ID.
-                                            </span>
-                                          </Col>
-                                        </Row>
-                                        <div className="row traveler-in-area">
-                                          <TravellerFields
-                                            isError={this.isError}
-                                            errors={props.errors}
-                                            touched={props.touched}
-                                            idx={idx}
-                                            fieldSetName="adults"
-                                            isInternational={true}
-                                            setFieldTouched={
-                                              props.setFieldTouched
-                                            }
-                                            setFieldValue={props.setFieldValue}
-                                            handleChange={props.handleChange}
-                                            handleBlur={props.handleBlur}
-                                          />
-                                        </div>
-                                      </Col>
-                                    </Row>
-                                  </Card.Body>
-                                </Card>
-                              ))}
+                              props.values.adults.map((adult, idx) => {
+                                let comStatus = this.getTravelerInfoStatus(
+                                  props.errors,
+                                  props.touched,
+                                  "adults",
+                                  idx
+                                );
+                                return (
+                                  <Card key={`adt-${idx}`}>
+                                    <Card.Body className="book-traveler-crd">
+                                      <TravellerGrpouFields
+                                        accKey="collapseAdt"
+                                        travelerType="adults"
+                                        passenger={adult}
+                                        isError={this.isError}
+                                        errors={props.errors}
+                                        touched={props.touched}
+                                        fieldResrAction={this.fieldResrAction}
+                                        setFieldTouched={props.setFieldTouched}
+                                        setFieldValue={props.setFieldValue}
+                                        handleChange={props.handleChange}
+                                        idx={idx}
+                                        completeStatus={comStatus}
+                                      />
+                                    </Card.Body>
+                                  </Card>
+                                );
+                              })}
                             <div className="passenger-add-btn-area">
                               <Button
                                 onClick={() => {
@@ -540,6 +378,18 @@ class BookingTravellerDetailsCard extends Component {
                                       gender: "",
                                       type: "ADT",
                                       key: v4(),
+                                      isInternational: true,
+                                      nationality: "",
+                                      dobDate: "",
+                                      dobMonth: "",
+                                      dobYear: "",
+                                      passportNo: "",
+                                      passportIssuCountry: "",
+                                      pasExpDate: "",
+                                      pasExpMonth: "",
+                                      pasExpYear: "",
+                                      passportAttach: "",
+                                      visaAttach: "",
                                     });
                                   }
                                 }}
@@ -588,188 +438,36 @@ class BookingTravellerDetailsCard extends Component {
                           <React.Fragment>
                             {props.values &&
                               props.values.childs &&
-                              props.values.childs.map((child, idx) => (
-                                <Card key={`cld-${idx}`}>
-                                  <Card.Body className="book-traveler-crd">
-                                    {/*  if traveler info not added type 1 [Adult 1] Or Traveler aname */}
-                                    <Row className="bktraveler-header">
-                                      <Col
-                                        md={8}
-                                        className="traveler-title align-middle"
-                                      >
-                                        {`${
-                                          this.getTravelerInfoStatus(
-                                            props.errors,
-                                            props.touched,
-                                            "childs",
-                                            idx
-                                          )
-                                            ? child.firstName +
-                                              " " +
-                                              child.lastName +
-                                              ", " +
-                                              child.gender
-                                            : "Child " + (idx + 1)
-                                        }`}
-                                      </Col>
+                              props.values.childs.map((child, idx) => {
+                                let comStatus = this.getTravelerInfoStatus(
+                                  props.errors,
+                                  props.touched,
+                                  "childs",
+                                  idx
+                                );
+                                return (
+                                  <Card key={`cld-${idx}`}>
+                                    <Card.Body className="book-traveler-crd">
+                                      {/*  if traveler info not added type 1 [Adult 1] Or Traveler aname */}
 
-                                      <Col
-                                        md={3}
-                                        className="bkt-collaps-action"
-                                      >
-                                        <div className="btn-area">
-                                          <button
-                                            className="bkt-toggle-btn accordion-button"
-                                            type="button"
-                                            data-bs-toggle="collapse"
-                                            data-bs-target={`#collapseCnn-${idx}`}
-                                            aria-expanded="true"
-                                            aria-controls={`collapseCnn-${idx}`}
-                                          ></button>
-                                        </div>
-
-                                        {this.getTravelerInfoStatus(
-                                          props.errors,
-                                          props.touched,
-                                          "childs",
-                                          idx
-                                        ) ? (
-                                          <div className="bkt-status complete">
-                                            complete
-                                          </div>
-                                        ) : (
-                                          <div className="bkt-status incomplete">
-                                            incomplete
-                                          </div>
-                                        )}
-                                      </Col>
-
-                                      <Col md={1} className="traveler-remove">
-                                        {/* icon fas fa-user-times */}
-                                        <i
-                                          className="icon far fa-trash-alt"
-                                          onClick={() => remove(idx)}
-                                        ></i>
-                                      </Col>
-                                    </Row>
-
-                                    <Row
-                                      className="accordion-collapse collapse show"
-                                      id={`collapseCnn-${idx}`}
-                                      aria-labelledby={`collapseCnn-${idx}`}
-                                    >
-                                      <Col md={12}>
-                                        <Row className="traveler-note-area">
-                                          <Col md={12}>
-                                            <span className="note-text">
-                                              IMPORTANT: Enter your name as it
-                                              is mentioned on your passport or
-                                              any government approved ID.
-                                            </span>
-                                          </Col>
-                                        </Row>
-                                        <div className="row traveler-in-area">
-                                          <Col md={4}>
-                                            <Field
-                                              className={`form-control ${
-                                                this.isError(
-                                                  "childs",
-                                                  idx,
-                                                  props.errors,
-                                                  props.touched,
-                                                  "firstName"
-                                                ).cls
-                                              }`}
-                                              type="text"
-                                              name={`childs[${idx}].firstName`}
-                                              placeholder="First Name..."
-                                            />
-                                            <div className="invalid-feedback">
-                                              {
-                                                this.isError(
-                                                  "childs",
-                                                  idx,
-                                                  props.errors,
-                                                  props.touched,
-                                                  "firstName"
-                                                ).msg
-                                              }
-                                            </div>
-                                          </Col>
-
-                                          <Col md={3}>
-                                            <Field
-                                              className="form-control"
-                                              type="text"
-                                              name={`childs[${idx}].lastName`}
-                                              placeholder="Last Name..."
-                                            />
-                                          </Col>
-
-                                          <Col md={2}>
-                                            <Field
-                                              className="form-control"
-                                              type="text"
-                                              name={`childs[${idx}].passAge`}
-                                              placeholder="Age. 2-12"
-                                            />
-                                          </Col>
-
-                                          <Col md={3}>
-                                            <div
-                                              className={`gender-info ${
-                                                this.isError(
-                                                  "childs",
-                                                  idx,
-                                                  props.errors,
-                                                  props.touched,
-                                                  "gender"
-                                                ).cls
-                                              }`}
-                                            >
-                                              <label className="gender-label">
-                                                <Field
-                                                  type="radio"
-                                                  name={`childs[${idx}].gender`}
-                                                  value="Male"
-                                                  id={`childs[${idx}].gender-male`}
-                                                />
-                                                <span className="gen-text">
-                                                  Male
-                                                </span>
-                                              </label>
-
-                                              <label className="gender-label">
-                                                <Field
-                                                  type="radio"
-                                                  name={`childs[${idx}].gender`}
-                                                  value="Female"
-                                                  id={`childs[${idx}].gender-female`}
-                                                />
-                                                <span className="gen-text">
-                                                  Female
-                                                </span>
-                                              </label>
-                                            </div>
-
-                                            <div className="invalid-feedback">
-                                              {
-                                                this.isError(
-                                                  "childs",
-                                                  idx,
-                                                  props.errors,
-                                                  props.touched,
-                                                  "gender"
-                                                ).msg
-                                              }
-                                            </div>
-                                          </Col>
-                                        </div>
-                                      </Col>
-                                    </Row>
-                                  </Card.Body>
-                                </Card>
-                              ))}
+                                      <TravellerGrpouFields
+                                        accKey="collapseCnn"
+                                        travelerType="childs"
+                                        passenger={child}
+                                        isError={this.isError}
+                                        errors={props.errors}
+                                        touched={props.touched}
+                                        fieldResrAction={this.fieldResrAction}
+                                        setFieldTouched={props.setFieldTouched}
+                                        setFieldValue={props.setFieldValue}
+                                        handleChange={props.handleChange}
+                                        idx={idx}
+                                        completeStatus={comStatus}
+                                      />
+                                    </Card.Body>
+                                  </Card>
+                                );
+                              })}
                             <div className="passenger-add-btn-area">
                               <Button
                                 onClick={() => {
@@ -785,6 +483,18 @@ class BookingTravellerDetailsCard extends Component {
                                       type: "CNN",
                                       passAge: "",
                                       key: v4(),
+                                      isInternational: true,
+                                      nationality: "",
+                                      dobDate: "",
+                                      dobMonth: "",
+                                      dobYear: "",
+                                      passportNo: "",
+                                      passportIssuCountry: "",
+                                      pasExpDate: "",
+                                      pasExpMonth: "",
+                                      pasExpYear: "",
+                                      passportAttach: "",
+                                      visaAttach: "",
                                     });
                                   }
                                 }}
@@ -833,242 +543,35 @@ class BookingTravellerDetailsCard extends Component {
                           <React.Fragment>
                             {props.values &&
                               props.values.infants &&
-                              props.values.infants.map((infant, idx) => (
-                                <Card key={`inf-${idx}`}>
-                                  <Card.Body className="book-traveler-crd">
-                                    {/*  if traveler info not added type 1 [Adult 1] Or Traveler aname */}
-                                    <Row className="bktraveler-header">
-                                      <Col
-                                        md={8}
-                                        className="traveler-title align-middle"
-                                      >
-                                        {`${
-                                          this.getTravelerInfoStatus(
-                                            props.errors,
-                                            props.touched,
-                                            "infants",
-                                            idx
-                                          )
-                                            ? infant.firstName +
-                                              " " +
-                                              infant.lastName +
-                                              ", " +
-                                              infant.gender
-                                            : "Infant Or Baby " + (idx + 1)
-                                        }`}
-                                      </Col>
-
-                                      <Col
-                                        md={3}
-                                        className="bkt-collaps-action"
-                                      >
-                                        <div className="btn-area">
-                                          <button
-                                            className="bkt-toggle-btn accordion-button"
-                                            type="button"
-                                            data-bs-toggle="collapse"
-                                            data-bs-target={`#collapseInf-${idx}`}
-                                            aria-expanded="true"
-                                            aria-controls={`collapseInf-${idx}`}
-                                          ></button>
-                                        </div>
-
-                                        {this.getTravelerInfoStatus(
-                                          props.errors,
-                                          props.touched,
-                                          "infants",
-                                          idx
-                                        ) ? (
-                                          <div className="bkt-status complete">
-                                            complete
-                                          </div>
-                                        ) : (
-                                          <div className="bkt-status incomplete">
-                                            incomplete
-                                          </div>
-                                        )}
-                                      </Col>
-
-                                      <Col md={1} className="traveler-remove">
-                                        {/* icon fas fa-user-times */}
-                                        <i
-                                          className="icon far fa-trash-alt"
-                                          onClick={() => remove(idx)}
-                                        ></i>
-                                      </Col>
-                                    </Row>
-
-                                    <Row
-                                      className="accordion-collapse collapse show"
-                                      id={`collapseInf-${idx}`}
-                                      aria-labelledby={`collapseInf-${idx}`}
-                                    >
-                                      <Col md={12}>
-                                        <Row className="traveler-note-area">
-                                          <Col md={12}>
-                                            <span className="note-text">
-                                              IMPORTANT: Enter your name as it
-                                              is mentioned on your passport or
-                                              any government approved ID.
-                                            </span>
-                                          </Col>
-                                        </Row>
-                                        <div className="row traveler-in-area">
-                                          <Col md={4}>
-                                            <Field
-                                              className={`form-control ${
-                                                this.isError(
-                                                  "infants",
-                                                  idx,
-                                                  props.errors,
-                                                  props.touched,
-                                                  "firstName"
-                                                ).cls
-                                              }`}
-                                              type="text"
-                                              name={`infants[${idx}].firstName`}
-                                              placeholder="First Name..."
-                                            />
-                                            <div className="invalid-feedback">
-                                              {
-                                                this.isError(
-                                                  "infants",
-                                                  idx,
-                                                  props.errors,
-                                                  props.touched,
-                                                  "firstName"
-                                                ).msg
-                                              }
-                                            </div>
-                                          </Col>
-
-                                          <Col md={4}>
-                                            <Field
-                                              className="form-control"
-                                              type="text"
-                                              name={`infants[${idx}].lastName`}
-                                              placeholder="Last Name..."
-                                            />
-                                          </Col>
-                                          <Col md={4}>
-                                            <div
-                                              className={`gender-info ${
-                                                this.isError(
-                                                  "infants",
-                                                  idx,
-                                                  props.errors,
-                                                  props.touched,
-                                                  "gender"
-                                                ).cls
-                                              }`}
-                                            >
-                                              <label className="gender-label">
-                                                <Field
-                                                  type="radio"
-                                                  name={`infants[${idx}].gender`}
-                                                  value="Male"
-                                                  id={`infants[${idx}].gender-male`}
-                                                />
-                                                <span className="gen-text">
-                                                  Male
-                                                </span>
-                                              </label>
-
-                                              <label className="gender-label">
-                                                <Field
-                                                  type="radio"
-                                                  name={`infants[${idx}].gender`}
-                                                  value="Female"
-                                                  id={`infants[${idx}].gender-female`}
-                                                />
-                                                <span className="gen-text">
-                                                  Female
-                                                </span>
-                                              </label>
-                                            </div>
-
-                                            <div className="invalid-feedback">
-                                              {
-                                                this.isError(
-                                                  "infants",
-                                                  idx,
-                                                  props.errors,
-                                                  props.touched,
-                                                  "gender"
-                                                ).msg
-                                              }
-                                            </div>
-                                          </Col>
-                                          <Col md={4} className="date_of_birth">
-                                            <label>Date Of Birth</label>
-                                            <Row className="infants-date">
-                                              <Col md={4}>
-                                                <Select
-                                                  placeholder="Day"
-                                                  name={`infants[${idx}].day`}
-                                                  onChange={(item) => {
-                                                    props.setFieldValue(
-                                                      `infants[${idx}].day`,
-                                                      item ? item.value : ""
-                                                    );
-                                                  }}
-                                                  onBlur={props.handleBlur}
-                                                  id={`infants[${idx}].day`}
-                                                  options={getNmsOptions(
-                                                    31,
-                                                    1,
-                                                    0
-                                                  )}
-                                                />
-                                              </Col>
-
-                                              <Col md={4}>
-                                                <Select
-                                                  placeholder="Month"
-                                                  name={`infants[${idx}].month`}
-                                                  onChange={(item) => {
-                                                    props.setFieldValue(
-                                                      `infants[${idx}].month`,
-                                                      item ? item.value : ""
-                                                    );
-                                                  }}
-                                                  onBlur={props.handleBlur}
-                                                  id={`infants[${idx}].month`}
-                                                  options={getNmsOptions(
-                                                    12,
-                                                    0,
-                                                    0
-                                                  )}
-                                                />
-                                              </Col>
-
-                                              <Col md={4}>
-                                                <Select
-                                                  placeholder="Year"
-                                                  name={`infants[${idx}].year`}
-                                                  onChange={(item) => {
-                                                    props.setFieldValue(
-                                                      `infants[${idx}].year`,
-                                                      item ? item.value : ""
-                                                    );
-                                                  }}
-                                                  onBlur={props.handleBlur}
-                                                  id={`infants[${idx}].year`}
-                                                  options={getNmsOptions(
-                                                    3,
-                                                    0,
-                                                    1
-                                                  )}
-                                                />
-                                              </Col>
-                                            </Row>
-                                          </Col>
-                                        </div>
-                                      </Col>
-                                    </Row>
-                                  </Card.Body>
-                                </Card>
-                              ))}
+                              props.values.infants.map((infant, idx) => {
+                                let comStatus = this.getTravelerInfoStatus(
+                                  props.errors,
+                                  props.touched,
+                                  "infants",
+                                  idx
+                                );
+                                return (
+                                  <Card key={`inf-${idx}`}>
+                                    <Card.Body className="book-traveler-crd">
+                                      {/*  if traveler info not added type 1 [Adult 1] Or Traveler aname */}
+                                      <TravellerGrpouFields
+                                        accKey="collapseInf"
+                                        travelerType="infants"
+                                        passenger={infant}
+                                        isError={this.isError}
+                                        errors={props.errors}
+                                        touched={props.touched}
+                                        fieldResrAction={this.fieldResrAction}
+                                        setFieldTouched={props.setFieldTouched}
+                                        setFieldValue={props.setFieldValue}
+                                        handleChange={props.handleChange}
+                                        idx={idx}
+                                        completeStatus={comStatus}
+                                      />
+                                    </Card.Body>
+                                  </Card>
+                                );
+                              })}
                             <div className="passenger-add-btn-area">
                               <Button
                                 onClick={() => {
@@ -1086,6 +589,21 @@ class BookingTravellerDetailsCard extends Component {
                                       month: 1,
                                       year: new Date().getFullYear() - 2,
                                       key: v4(),
+                                      firstName: "",
+                                      lastName: "",
+                                      gender: "",
+                                      type: "CNN",
+                                      passAge: "",
+                                      key: v4(),
+                                      isInternational: true,
+                                      nationality: "",
+                                      passportNo: "",
+                                      passportIssuCountry: "",
+                                      pasExpDate: "",
+                                      pasExpMonth: "",
+                                      pasExpYear: "",
+                                      passportAttach: "",
+                                      visaAttach: "",
                                     });
                                   }
                                 }}
@@ -1213,6 +731,15 @@ class BookingTravellerDetailsCard extends Component {
                       </div>
                     </Col>
                   </div>
+                  <Row>
+                    <Col md={4}>
+                      <CstValidateField
+                        label="Post Code"
+                        name="postCode"
+                        placeholder="Post Code"
+                      />
+                    </Col>
+                  </Row>
 
                   {/* <div>
                     <pre>{JSON.stringify(props, null, 2)}</pre>

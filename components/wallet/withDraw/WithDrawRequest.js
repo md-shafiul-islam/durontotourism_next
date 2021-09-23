@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import * as Yup from "yup";
-import { Field, Form, Formik, validateYupSchema } from "formik";
+import { Field, Form, Formik } from "formik";
 
 import { Button, Card, Col, Row } from "react-bootstrap";
 import Select from "react-select";
@@ -24,8 +24,6 @@ const receiveOptions = [
 ];
 
 const WithDrawRequest = (params) => {
-  console.log("Valifation scema Formike, ", validateYupSchema);
-
   const [withDrawType, setWithDrawType] = useState({});
   const [receiveOption, setReceiveOption] = useState({});
   // const [bankStatus, setBankStatus] = useState(undefined);
@@ -118,12 +116,11 @@ const WithDrawRequest = (params) => {
     });
   };
 
-  const withdrawAction = (values)=>{
-
+  const withdrawAction = (values) => {
     console.log("Add WithDraw Action :) ", values);
 
     // params.getAddWithDarawAction(values);
-  }
+  };
 
   return (
     <Row>
@@ -147,8 +144,7 @@ const WithDrawRequest = (params) => {
             mobileBankName: "",
           }}
           validationSchema={validationSchema}
-
-          onSubmit={(values, action)=>{
+          onSubmit={(values, action) => {
             withdrawAction(values);
             action.setSubmitting(false);
           }}
@@ -331,11 +327,13 @@ WithDrawRequest.prototypes = {
   errors: PropTypes.object.isRequired,
 };
 
-const mapStateToProps = (state)=>{
+const mapStateToProps = (state) => {
   return {
-    withdarwStatus:state.withdraw.addWithDarawStatus,
-    withdarwStatus:state.withdraw.addWithDarawError,
-  }
-}
+    withdarwStatus: state.withdraw.addWithDarawStatus,
+    withdarwStatus: state.withdraw.addWithDarawError,
+  };
+};
 
-export default connect(mapStateToProps, {getAddWithDarawAction})(WithDrawRequest);
+export default connect(mapStateToProps, { getAddWithDarawAction })(
+  WithDrawRequest
+);

@@ -10,7 +10,7 @@ import { esIsFieldError } from "../../utils/helper/helperAction";
  */
 const CstValidateField = ({
   placeholder,
-  label,
+  label = undefined,
   name,
   errors,
   touched,
@@ -19,9 +19,14 @@ const CstValidateField = ({
 }) => {
   return (
     <React.Fragment>
-      <label className="form-label" htmlFor={name}>
-        {label}
-      </label>
+      {label ? (
+        <label className="form-label" htmlFor={name}>
+          {label}
+        </label>
+      ) : (
+        ""
+      )}
+
       <Field
         placeholder={placeholder}
         name={name}

@@ -46,7 +46,7 @@ class ProfilePage extends Component {
     };
   };
 
-  valida
+  valida;
 
   render() {
     return (
@@ -80,7 +80,10 @@ class ProfilePage extends Component {
                         <ProfileStatus />
                       </Col>
                       <Col md={12} id="profile" className="prf_item">
-                        <ProfileBasicInfo title="Genarel Info" />
+                        <ProfileBasicInfo
+                          title="Genarel Info"
+                          tagLine="Basic info, for faster booking experience"
+                        />
                       </Col>
                     </Card.Body>
                   </Card>
@@ -90,7 +93,7 @@ class ProfilePage extends Component {
                   <Card>
                     <Card.Body>
                       <Col md={12} id="saveTravellers" className="prf_item">
-                        <ProfileBookingInformation title="Booking Details" />
+                        <ProfileBookingInformation title="Personal Infomation" />
                       </Col>
                     </Card.Body>
                   </Card>
@@ -115,7 +118,6 @@ class ProfilePage extends Component {
                     </Card.Body>
                   </Card>
                 </Row>
-                
               </div>
             </Col>
           </Row>
