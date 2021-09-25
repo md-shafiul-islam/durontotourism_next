@@ -3206,16 +3206,15 @@ body {
 
 .cstf-phone .cstf-select-opt,
 .cstf-phone .cstf-text {
-
 }
 
-.cstf-phone .cstf-select-opt{
+.cstf-phone .cstf-select-opt {
   margin-right: 0px;
   padding-right: 0px;
 }
 
 .cstf-phone .cstf-text {
-  margin-left: 0px;  
+  margin-left: 0px;
   padding-left: 0px;
 }
 
@@ -4043,9 +4042,48 @@ body {
 
 /** Payment page End */
 
-/** Agent Style Start*/
-.agent-area {
+/**Link Styles */
+
+.basic-link{
+  font-size: 1em;
+  text-decoration: none;
+  margin: 10px 0px;
+  padding: 5px;
 }
+
+/** Agent Style Start*/
+
+.user-login-container .login-area,
+.agent-login-container .login-area {
+  padding: 50px;
+}
+
+.user-login-container .login-card,
+.agent-login-container .login-card {
+  box-sizing: border-box;
+  border: #fff solid 5px;
+  box-shadow: 2em rgba(0, 0, 0, 0.35);
+  background-color: #FFF;
+  border-radius: 20px;
+  padding: 20px 20px 0px;
+}
+
+.login-card .input-area-row {
+  margin-top: 18px;
+  margin-bottom: 18px;
+}
+
+.user-login-container .login-card .login-title,
+.agent-login-container .login-card .login-title {
+  color: #000;
+  line-height: 2em;
+  text-align: center;
+  font-size: 2em;
+  font-variant: all-small-caps;
+  font-weight: 800;
+}
+
+
 
 .agent-container {
   display: flex;
@@ -4054,12 +4092,22 @@ body {
   justify-content: center;
 }
 
-.signup-card {
-  padding: 15px 50px;
+.text-alr{
+  text-align: right;
 }
+
+
 .agent-signup {
   width: 550px;
   margin: 50px 0px;
+}
+
+.agent-signup .card{
+  border-radius: 20px;
+}
+
+.signup-card {
+  padding: 15px 50px;
 }
 
 .agent-signup .signup-title {
@@ -4088,6 +4136,9 @@ body {
   text-transform: uppercase;
 }
 
+.agent-login-container .info-text,
+.agent-login-container .info-text{
+  color: #6c757d;
+}
+
 /** Agent Style Start*/
-
-

@@ -1,5 +1,7 @@
-import React, {useState} from "react";
+import { is } from "date-fns/locale";
+import React, { useState } from "react";
 import { Col, Row } from "react-bootstrap";
+import { esIsFieldError, esIsFunction } from "../../utils/helper/helperAction";
 import Thumb from "../layout/Thumb";
 
 /**
@@ -15,15 +17,21 @@ import Thumb from "../layout/Thumb";
  */
 
 const CstUploadFileFieldValidet = (params) => {
+  console.log("CstUploadFileFieldValidet Params ", params);
+
+
   const [attachFile, setAttachFile] = useState(null);
+  const [errorState, setErrorState] = useState({clazzName:"", status:false, msg:""});
   let {
     label,
     name,
     placeholder,
-    clazzName,
-    errorMsg,
-    changeHandler,
-    blurHandler
+    errors,
+    setFieldTouched,
+    setFieldValue,
+    touched,
+    uploadFile,
+    isError = undefined
   } = params;
 
   const changeImageAction = (e) => {
@@ -31,6 +39,15 @@ const CstUploadFileFieldValidet = (params) => {
       setAttachFile(e.currentTarget.files[0]);
     }
   };
+
+  const getError = ()=>{
+  
+    if(esIsFunction(isError)){
+      return isError(errors, touched, name);
+    }else{
+      return esIsFieldError(errors, touched, name);
+    }
+  }  
 
   return (
     <React.Fragment>
@@ -44,20 +61,22 @@ const CstUploadFileFieldValidet = (params) => {
             ""
           )}
           <input
-            className={`form-control ${clazzName}`}
+            className={`form-control ${getError().cls} `} //esIsFieldError()
             placeholder={placeholder}
             type="file"
             name={name}
             id={name}
             onBlur={() => {
-              blurHandler();
+              setFieldTouched(name, true);
             }}
             onChange={(e) => {
               changeImageAction(e);
-              changeHandler(name, e.currentTarget.files[0]);
+              uploadFile(e.currentTarget.files[0]);
+              setFieldTouched(name, e.currentTarget.files[0]);
+              getError();
             }}
           />
-          <div className="invalid-feedback">{errorMsg}</div>
+          <div className="invalid-feedback">{getError().msg}</div>
         </Col>
         <Col md={4}>
           <Thumb file={attachFile} />

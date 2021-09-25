@@ -1,7 +1,7 @@
 import { Field } from "formik";
 import React from "react";
 import { Col } from "react-bootstrap";
-import { esIsFieldError } from "../../utils/helper/helperAction";
+import { esIsFieldError, isEmptyString } from "../../utils/helper/helperAction";
 
 /**
  *
@@ -16,7 +16,23 @@ const CstValidateField = ({
   touched,
   handleChange,
   handleBlur,
+  type = undefined,
+  checkIsValid=true,
+  values,
 }) => {
+
+  const getIsValided = ()=>{
+
+    if(checkIsValid){
+      return esIsFieldError(errors, touched, name).cls;
+    }else{
+      if(!isEmptyString(values[name])){
+        return esIsFieldError(errors, touched, name).cls;
+      }
+    }
+    return "";
+  }
+
   return (
     <React.Fragment>
       {label ? (
@@ -29,11 +45,12 @@ const CstValidateField = ({
 
       <Field
         placeholder={placeholder}
+        type={type ? type : "text"}
         name={name}
         onChange={handleChange}
         onBlur={handleBlur}
         id={name}
-        className={`form-control ${esIsFieldError(errors, touched, name).cls}`}
+        className={`form-control ${getIsValided()}`}
       />
       <div className="invalid-feedback">
         {esIsFieldError(errors, touched, name).msg}

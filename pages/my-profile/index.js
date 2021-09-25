@@ -29,14 +29,19 @@ class ProfilePage extends Component {
             let ctActive = document.querySelector(`.list-group-item.active`);
 
             if (ctActive) {
-              ctActive.classList.remove("active");
+              if (
+                ctActive.classList !== undefined &&
+                ctActive.classList !== null
+              ) {
+                ctActive.classList.remove("active");
+              }
             }
             let ctitem = document.querySelector(
               `.list-group-item[data-id="${item.id}"]`
             );
 
             console.log("Curent Selected Item Profile ", ctitem);
-            if (ctitem) {
+            if (ctitem !== undefined && ctitem !== null) {
               ctitem.classList.add("active");
             }
 

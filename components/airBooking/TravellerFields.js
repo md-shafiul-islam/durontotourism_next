@@ -348,10 +348,7 @@ const TravellerFields = ({
       ) : (
         ""
       )}
-      <p>Error</p>
-      <pre>{JSON.stringify(errors, null, 2)}</pre>
-      <p>Touched</p>
-      <pre>{JSON.stringify(touched, null, 2)}</pre>
+      
     </React.Fragment>
   );
 };

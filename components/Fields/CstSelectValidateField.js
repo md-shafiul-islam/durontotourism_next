@@ -12,6 +12,8 @@ const CstSelectValidateField = ({
   clazzName,
   errorMsg,
   isSmall = false,
+  defaultStringVal,
+  defaultOption
 }) => {
   const getCommponetSets = () => {
     if (!arrowStatus) {
@@ -49,6 +51,9 @@ const CstSelectValidateField = ({
           isSmall ? "vselect-sm-item " : "vselect-item "
         }${clazzName}`}
         components={getCommponetSets()}
+        defaultInputValue={defaultStringVal ? defaultStringVal : ""}
+        defaultValue={defaultOption ? defaultOption : null}
+        
       />
 
       <div className="invalid-feedback">{errorMsg}</div>

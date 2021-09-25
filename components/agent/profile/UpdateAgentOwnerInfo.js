@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 import { Form, Formik } from "formik";
-import { Card, Col, Row } from "react-bootstrap";
+import { Card, Col, Row, Button } from "react-bootstrap";
 import CstSelectValidateField from "../../Fields/CstSelectValidateField";
 import CstUploadFileFieldValidet from "../../Fields/CstUploadFileFieldValidet";
 import CstValidateField from "../../Fields/CstValidateField";
@@ -16,7 +16,25 @@ const UpdateAgentOwnerInfo = (params) => {
           <Card>
             <Card.Title>Update Agent Company Information</Card.Title>
             <Card.Body>
-              <Formik>
+              <Formik
+                initialValues={{
+                  name: "",
+                  phone: "",
+                  code: "",
+                  email: "",
+                  houseNoOrVillage: "",
+                  roadNameOrNo: "",
+                  postalCode: "",
+                  policeStation: "",
+                  district: "",
+                  country: "",
+                  nationalIdNo: "",
+                  passportNo: "",
+                }}
+                onSubmit={(values, action) => {
+                  console.log("Update Agent Info");
+                }}
+              >
                 {(props) => {
                   return (
                     <Form>
@@ -33,16 +51,11 @@ const UpdateAgentOwnerInfo = (params) => {
                         </Col>
                         <Col md={6}>
                           <CstValidatePhoneNoField
+                            {...props}
                             fileldName="phone"
-                            codeName="phoneCode"
+                            codeName="code"
                             filedPlaceholder="Phone"
                             codePlaceholder="Code"
-                            errors={props.errors}
-                            touched={props.touched}
-                            handleChange={props.handleChange}
-                            handleBlur={props.handleBlur}
-                            setTouched={props.setFieldTouched}
-                            setFieldValue={props.setFieldValue}
                           />
                         </Col>
                       </Row>
@@ -61,7 +74,7 @@ const UpdateAgentOwnerInfo = (params) => {
                         <Col md={6}>
                           <CstValidateField
                             placeholder="House No/Village"
-                            name="houseOrVillage"
+                            name="houseNoOrVillage"
                             errors={props.errors}
                             touched={props.touched}
                             handleChange={props.handleChange}
@@ -143,13 +156,14 @@ const UpdateAgentOwnerInfo = (params) => {
                         </Col>
                         <Col md={6}>
                           <CstUploadFileFieldValidet
+                            {...props}
                             name="nationalIdAttach"
                             placeholder="Attach National ID image Or Scan copy"
-                            blurHandler={() => {
-                              setFieldTouched(`nationalIdAttach`, true);
-                            }}
-                            changeHandler={(file) => {
-                              setFieldValue(file);
+                            uploadFile={(file) => {
+                              console.log(
+                                "nationalIdAttach Upload File Change, ",
+                                file
+                              );
                             }}
                           />
                         </Col>
@@ -168,15 +182,23 @@ const UpdateAgentOwnerInfo = (params) => {
                         </Col>
                         <Col md={6}>
                           <CstUploadFileFieldValidet
+                            {...props}
                             name="passportAttach"
                             placeholder="Attach Passport  image Or Scan copy"
-                            blurHandler={() => {
-                              setFieldTouched(`passportAttach`, true);
-                            }}
-                            changeHandler={(file) => {
-                              setFieldValue(file);
+                            uploadFile={(file) => {
+                              console.log(
+                                "passportAttach Upload File Change, ",
+                                file
+                              );
                             }}
                           />
+                        </Col>
+                      </Row>
+                      <Row className="input-area-row">
+                        <Col md={{ span: 4, offset: 8 }} className="d-grid">
+                          <Button type="submit" variant="success">
+                            Submit
+                          </Button>
                         </Col>
                       </Row>
                     </Form>

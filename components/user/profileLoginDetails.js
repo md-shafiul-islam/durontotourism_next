@@ -29,6 +29,14 @@ const ProfileLoginDetails = () => {
             <table className="table table-hover">
               <tbody>
                 <tr>
+                  <th scope="row">Since</th>
+                  <td colSpan="3">17/08/2018</td>
+                </tr>
+                <tr>
+                  <th scope="row">User ID</th>
+                  <td colSpan="3">US-284894985</td>
+                </tr>
+                <tr>
                   <th scope="row">Mobile Number</th>
                   <td colSpan="3">
                     <button
@@ -60,7 +68,9 @@ const ProfileLoginDetails = () => {
                     <div className="psw-area">
                       <span className="pswd">•••••••</span>
                       <span className="pswd-change">
-                        <button onClick={()=>setPasswordStatus(true)}>Change Password?</button>
+                        <button onClick={() => setPasswordStatus(true)}>
+                          Change Password?
+                        </button>
                       </span>
                     </div>
                   </td>
