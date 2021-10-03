@@ -1,10 +1,10 @@
 pipeline {
-  agent {
-    node {
-      label 'node'
-    }
-
+  agent any
+  
+  tools {
+    nodejs 'node-v14.18.0'
   }
+  
   stages {
     stage('Initializing') {
       steps {
