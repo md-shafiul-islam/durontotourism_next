@@ -1,58 +1,84 @@
 import { Field } from "formik";
 import React from "react";
 import { Col, Row } from "react-bootstrap";
-import { isEmptyString } from "../../utils/helper/helperAction";
+import {
+  esIsFieldError,
+  helperIsEmpty,
+  isEmptyString,
+} from "../../utils/helper/helperAction";
 import CstSelectValidateField from "./CstSelectValidateField";
 
 const CstValidatePhoneNoField = (props) => {
-  console.log("CstValidatePhoneNoField Props, ", props);
-
   const {
     codeName,
     fileldName,
     codePlaceholder,
     filedPlaceholder,
-    handleBlur,
     handleChange,
     setFieldTouched,
     setFieldValue,
     options,
-    clazzName,
-    errorMsg,
     values,
     checkIsValid = true,
+    errors,
+    touched,
   } = props;
 
-  const getIsValided = ()=>{
-
-    if(checkIsValid){
-      return clazzName;
-    }else{
-      if(!isEmptyString(values[fileldName])){
-        return clazzName;
+  const getIsValided = (name) => {
+    let valid = { status: false, msg: "", cls: "" };
+    if (checkIsValid) {
+      valid = esIsFieldError(errors, touched, name);
+    } else {
+      if (!isEmptyString(values[name])) {
+        valid = esIsFieldError(errors, touched, name);
       }
     }
-    return "";
-  }
+    if (!helperIsEmpty(errors)) {
+      if (errors[name] !== undefined && errors[name] !== null) {
+        valid = { status: true, msg: errors[name], cls: "is-invalid" };
+      }
+    }
+    return valid;
+  };
 
+  const getIsValidedMsg = (name, code) => {
+    let pValid = getIsValided(name);
+    let cValid = getIsValided(code);
+
+    let msg = {msg:"", cls:""};
+    if (cValid.status) {
+      msg = {msg:cValid.msg, cls:" active "};
+    }
+
+    if (pValid.status) {
+      msg = {msg:pValid.msg, cls:" active "};
+    }
+    return msg;
+  };
   return (
     <React.Fragment>
       <Row className="cstf-phone">
         <Col md={3} className="cstf-select-opt">
           <Row>
             <Col md={12}>
+              {console.log("Phone Code Class, ", getIsValided(codeName))}
               <CstSelectValidateField
                 arrowStatus={false}
                 isSmall={true}
                 blurHandler={() => {
-                  setFieldTouched(fileldName, true);
+                  setFieldTouched(codeName, true);
                 }}
-                clazzName={getIsValided()}
+                clazzName={getIsValided(codeName).cls}
                 name={codeName}
                 placeholder={codePlaceholder}
                 options={options}
                 onChange={(item) => {
-                  setFieldValue(codeName, item && item.value);
+                  let value = !helperIsEmpty(item)
+                    ? !helperIsEmpty(item.value)
+                      ? item.value
+                      : ""
+                    : "";
+                  setFieldValue(codeName, value);
                 }}
                 defaultStringVal={values && values[codeName]}
               />
@@ -60,17 +86,20 @@ const CstValidatePhoneNoField = (props) => {
           </Row>
         </Col>
         <Col md={9} className="cstf-text">
-          <input
+          <Field
             placeholder={filedPlaceholder}
             name={fileldName}
             onChange={handleChange}
-            onBlur={handleBlur}
+            onBlur={() => {
+              setFieldTouched(fileldName, true);
+            }}
             id={fileldName}
-            className={`form-control ${getIsValided()}`}
+            className={`form-control ${getIsValided(fileldName).cls}`}
             value={values && values[fileldName]}
-            autoComplete="off"
           />
-          <div className="invalid-feedback">{errorMsg}</div>
+          <div className={`invalid-feedback ${getIsValidedMsg(fileldName, codeName).cls}`}>
+            {getIsValidedMsg(fileldName, codeName).msg}
+          </div>
         </Col>
       </Row>
     </React.Fragment>

@@ -1,7 +1,11 @@
-import { is } from "date-fns/locale";
 import React, { useState } from "react";
 import { Col, Row } from "react-bootstrap";
-import { esIsFieldError, esIsFunction } from "../../utils/helper/helperAction";
+import {
+  esIsFieldError,
+  esIsFunction,
+  helperIsEmpty,
+  isEmptyString,
+} from "../../utils/helper/helperAction";
 import Thumb from "../layout/Thumb";
 
 /**
@@ -19,9 +23,8 @@ import Thumb from "../layout/Thumb";
 const CstUploadFileFieldValidet = (params) => {
   console.log("CstUploadFileFieldValidet Params ", params);
 
-
   const [attachFile, setAttachFile] = useState(null);
-  const [errorState, setErrorState] = useState({clazzName:"", status:false, msg:""});
+
   let {
     label,
     name,
@@ -31,7 +34,9 @@ const CstUploadFileFieldValidet = (params) => {
     setFieldValue,
     touched,
     uploadFile,
-    isError = undefined
+    isError = undefined,
+    isValidCheck = true,
+    values,
   } = params;
 
   const changeImageAction = (e) => {
@@ -40,14 +45,23 @@ const CstUploadFileFieldValidet = (params) => {
     }
   };
 
-  const getError = ()=>{
-  
-    if(esIsFunction(isError)){
-      return isError(errors, touched, name);
-    }else{
-      return esIsFieldError(errors, touched, name);
+  const getError = () => {
+    let errObj = { cls: "", msg: "", status: false };
+
+    if (isValidCheck) {
+      if (esIsFunction(isError)) {
+        errObj = isError(errors, touched, name);
+      } else {
+        errObj = esIsFieldError(errors, touched, name);
+      }
     }
-  }  
+
+    if (!isEmptyString(errors[name])) {
+      errObj = { cls: "is-invalid", msg: errors[name], status: true };
+    }
+
+    return errObj;
+  };
 
   return (
     <React.Fragment>
@@ -61,8 +75,9 @@ const CstUploadFileFieldValidet = (params) => {
             ""
           )}
           <input
-            className={`form-control ${getError().cls} `} //esIsFieldError()
+            className={`form-control ${getError() && getError().cls} `} //esIsFieldError()
             placeholder={placeholder}
+            title={placeholder}
             type="file"
             name={name}
             id={name}
@@ -72,11 +87,10 @@ const CstUploadFileFieldValidet = (params) => {
             onChange={(e) => {
               changeImageAction(e);
               uploadFile(e.currentTarget.files[0]);
-              setFieldTouched(name, e.currentTarget.files[0]);
-              getError();
+              setFieldValue(name, e.currentTarget.files[0]);
             }}
           />
-          <div className="invalid-feedback">{getError().msg}</div>
+          <div className="invalid-feedback">{getError() && getError().msg}</div>
         </Col>
         <Col md={4}>
           <Thumb file={attachFile} />

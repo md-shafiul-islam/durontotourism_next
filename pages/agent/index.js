@@ -1,13 +1,18 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
+import { PropTypes } from "prop-types";
 import { Breadcrumb, Card, Col, Nav, Row, Tab } from "react-bootstrap";
 import AgentCompanyInfo from "../../components/agent/profile/AgentCompanyInfo";
 import AgentGeneralInfo from "../../components/agent/profile/AgentGeneralInfo";
 import AgentOwnerInfo from "../../components/agent/profile/AgentOwnerInfo";
 import AgentSecurityContent from "../../components/agent/securityAndLogin/AgentSecurityContent";
 import SubAgentTab from "../../components/agent/subagent/SubAgentTab";
-import ProfileBasicInfo from "../../components/user/profileBasicInfo";
+import { getCurrentAgentAction } from "../../redux/actions/agentAction";
 
 class GetAgentIndexPage extends Component {
+  componentDidMount() {
+    this.props.getCurrentAgentAction();
+  }
   render() {
     return (
       <React.Fragment>
@@ -120,4 +125,17 @@ class GetAgentIndexPage extends Component {
   }
 }
 
-export default GetAgentIndexPage;
+GetAgentIndexPage.prototypes = {
+  getCurrentAgentAction: PropTypes.func.isRequired,
+  agent: PropTypes.object.isRequired,
+};
+
+const mapStateToProps = (state) => {
+  return {
+    agent: state.agent.agent,
+  };
+};
+
+export default connect(mapStateToProps, { getCurrentAgentAction })(
+  GetAgentIndexPage
+);

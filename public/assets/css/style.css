@@ -4044,7 +4044,7 @@ body {
 
 /**Link Styles */
 
-.basic-link{
+.basic-link {
   font-size: 1em;
   text-decoration: none;
   margin: 10px 0px;
@@ -4063,7 +4063,7 @@ body {
   box-sizing: border-box;
   border: #fff solid 5px;
   box-shadow: 2em rgba(0, 0, 0, 0.35);
-  background-color: #FFF;
+  background-color: #fff;
   border-radius: 20px;
   padding: 20px 20px 0px;
 }
@@ -4083,7 +4083,21 @@ body {
   font-weight: 800;
 }
 
+.agent-update .modal-dialog.modal-lg {
+  width: 1050px !important;
+}
 
+.content-modal {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.content-modal .modal-content-dilog {
+  width: 90%;
+  max-width: none!important;
+
+}
 
 .agent-container {
   display: flex;
@@ -4092,17 +4106,34 @@ body {
   justify-content: center;
 }
 
-.text-alr{
+.btn-spinner{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;  
+}
+
+.btn-spinner .text{
+  padding: 5px;
+}
+
+.btn-spinner .text,
+.btn-spinner .spinner {
+  margin: 0px 10px;
+}
+.text-alr {
   text-align: right;
 }
 
-
+.invalid-feedback.active {
+  display: block;
+}
 .agent-signup {
   width: 550px;
   margin: 50px 0px;
 }
 
-.agent-signup .card{
+.agent-signup .card {
   border-radius: 20px;
 }
 
@@ -4137,7 +4168,7 @@ body {
 }
 
 .agent-login-container .info-text,
-.agent-login-container .info-text{
+.agent-login-container .info-text {
   color: #6c757d;
 }
 

@@ -300,45 +300,42 @@ export const helperGetTotalFlyTimeReadable = (travelTime) => {
 };
 
 export const helperIsEmpty = (obj) => {
-  if (obj === null || obj === undefined || typeof obj === "undefined") {
+  if (obj === null || obj === undefined || typeof obj === "undefined" || obj === "") {
     return true;
-  }
-
-  if (obj.length > 0) {
-    return false;
   }
 
   if (Object.keys(obj).length === 0 && obj.constructor === Object) {
     return true;
   }
 
-  if (obj) {
-    return false;
-  } else {
-    return true;
-  }
+  return false;
 };
 
 export const esIsFieldError = (errors, touched, fieldName) => {
   let msg = undefined;
-  if (
-    !helperIsEmpty(errors) &&
-    !helperIsEmpty(touched) &&
-    !helperIsEmpty(fieldName)
-  ) {
-    if (
-      !helperIsEmpty(errors[fieldName]) &&
-      !helperIsEmpty(touched[fieldName])
-    ) {
+
+  if (!helperIsEmpty(errors)) {
+    if (!helperIsEmpty(errors[fieldName])) {
+      console.log(
+        "esIsFieldError Field Name, ",
+        fieldName,
+        " Error, ",
+        errors[fieldName]
+      );
       msg = errors[fieldName];
     }
   }
-  if (touched !== undefined && touched !== null) {
-    if (touched[fieldName]) {
-      if (msg) {
-        return { cls: "is-invalid", msg: msg, status: true };
-      } else {
-        return { cls: "is-valid", msg: "", status: false };
+
+  console.log(fieldName, " Field Have Error, ", msg);
+  if (!helperIsEmpty(touched)) {
+    if (touched[fieldName] !== undefined) {
+      if (touched[fieldName]) {
+        if (msg) {
+          console.log("Set it to error obj in touch");
+          return { cls: "is-invalid", msg: msg, status: true };
+        } else {
+          return { cls: "is-valid", msg: "", status: false };
+        }
       }
     }
   }
@@ -357,7 +354,7 @@ export const esIsPhoneFieldError = (errors, touched, codeName, phoneName) => {
           errorObj = {
             cls: "is-invalid",
             status: true,
-            msg: errors[codeName],
+            msg: errors[phoneName],
           };
         }
       }
@@ -397,14 +394,11 @@ export const isEmptyString = (v) => {
   return true;
 };
 
-export const esIsFile = (file, bytSize)=>{
-
-  if(file){
-
-    if(file.isFile)
-    console.log("Selected File Check ", file);
+export const esIsFile = (file, bytSize) => {
+  if (file) {
+    if (file.isFile) console.log("Selected File Check ", file);
     return true;
   }
 
   return false;
-}
+};

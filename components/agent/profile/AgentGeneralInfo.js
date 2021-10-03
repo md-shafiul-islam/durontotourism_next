@@ -7,7 +7,7 @@ const AgentGeneralInfo = (params) => {
     <React.Fragment>
       <Card>
         <Card.Body>
-          <ProfileHeader title={params.title} />
+          <ProfileHeader title={params.title} isEdit={false} />
           <div className="pfl-table-paren mt-5">
             <table className="table table-hover">
               <tbody>

@@ -1,18 +1,20 @@
 import { Form, Formik } from "formik";
-import React from "react";
+import React, { useState } from "react";
 import { Button, Card, Col, Row } from "react-bootstrap";
 import CstUploadFileFieldValidet from "../../Fields/CstUploadFileFieldValidet";
 import CstValidateField from "../../Fields/CstValidateField";
 import CstValidatePhoneNoField from "../../Fields/CstValidatePhoneNoField";
+import { connect } from "react-redux";
+import { PropTypes } from "prop-types";
 import * as Yup from "yup";
-import {
-  esIsFile,
-  esIsPhoneFieldError,
-  isEmptyString,
-} from "../../../utils/helper/helperAction";
-import { fileValidateSchema, getMaxFileSizeValidation } from "../../../utils/helper/helperValidateSchema";
+import { isEmptyString } from "../../../utils/helper/helperAction";
+import { getMaxFileSizeValidation } from "../../../utils/helper/helperValidateSchema";
+import CstSelectValidateField from "../../Fields/CstSelectValidateField";
+import { getUpdateAgentCompanyAction } from "../../../redux/actions/agentAction";
+import SubmitActionButtion from "../../Fields/SubmitActionButtion";
 
 const UpdateAgentCompanyInfo = (params) => {
+  const [countries, setCountries] = useState([]);
   const validateSchema = () => {
     return Yup.object().shape({
       companyName: Yup.string().min(0),
@@ -27,31 +29,38 @@ const UpdateAgentCompanyInfo = (params) => {
       tradeLiceseno: Yup.string().min(0),
       tradeAttach: Yup.mixed().when("tradeLiceseno", (v) => {
         if (!isEmptyString(v)) {
-          return getMaxFileSizeValidation(300);
+          return getMaxFileSizeValidation(300, "Trade Licese");
         }
       }),
       tinCertificateNo: Yup.string().min(0),
       tinAttach: Yup.mixed().when("tinCertificateNo", (v) => {
         if (!isEmptyString(v)) {
-          return getMaxFileSizeValidation(300);
+          return getMaxFileSizeValidation(300, "TIN Certificate");
         }
       }),
       binCertificateNo: Yup.string().min(0),
       binAttach: Yup.mixed().when("binCertificateNo", (v) => {
         console.log("If Bin Input , ", v);
         if (!isEmptyString(v)) {
-          return getMaxFileSizeValidation(300);
+          return getMaxFileSizeValidation(300, "BIN Certificate");
         }
       }),
+
+      companyLogoAttach: getMaxFileSizeValidation(650, "Company Logo"),
     });
   };
 
+  const submitAction = (upCompany) => {
+    if (upCompany) {
+      upCompany = JSON.stringify(upCompany, null, 2);
+      params.getUpdateAgentCompanyAction(upCompany);
+    }
+  };
   return (
     <React.Fragment>
       <Row>
         <Col md={12}>
           <Card>
-            <Card.Title>Update Agent Company Information</Card.Title>
             <Card.Body>
               <Formik
                 initialValues={{
@@ -70,10 +79,13 @@ const UpdateAgentCompanyInfo = (params) => {
                   tinAttach: "",
                   binCertificateNo: "",
                   binAttach: "",
+                  companyLogoAttach: "",
+                  country: "",
                 }}
                 validationSchema={validateSchema}
                 onSubmit={(values, action) => {
-                  console.log("Update Agent Company Action Run :) ");
+                  action.setSubmitting(true);
+                  submitAction(values);
                 }}
               >
                 {(props) => {
@@ -95,22 +107,7 @@ const UpdateAgentCompanyInfo = (params) => {
                             codeName="code"
                             filedPlaceholder="Phone"
                             codePlaceholder="Code"
-                            clazzName={
-                              esIsPhoneFieldError(
-                                props.errors,
-                                props.touched,
-                                `phone`,
-                                `code`
-                              ).cls
-                            }
-                            errorMsg={
-                              esIsPhoneFieldError(
-                                props.errors,
-                                props.touched,
-                                `phone`,
-                                `code`
-                              ).msg
-                            }
+                            checkIsValid={false}
                           />
                         </Col>
                       </Row>
@@ -170,6 +167,28 @@ const UpdateAgentCompanyInfo = (params) => {
                       </Row>
                       <Row className="input-area-row">
                         <Col md={6}>
+                          <CstSelectValidateField
+                            name="country"
+                            placeholder="Country"
+                            options={countries}
+                            checkIsValid={false}
+                            {...props}
+                          />
+                        </Col>
+                        <Col md={6}>
+                          <CstUploadFileFieldValidet
+                            {...props}
+                            name="companyLogoAttach"
+                            placeholder="Attach Company Logo"
+                            uploadFile={(file) => {
+                              console.log("Upload File Runn ");
+                            }}
+                            isValidCheck={false}
+                          />
+                        </Col>
+                      </Row>
+                      <Row className="input-area-row">
+                        <Col md={6}>
                           <CstValidateField
                             placeholder="Trade License No."
                             name="tradeLiceseno"
@@ -183,12 +202,9 @@ const UpdateAgentCompanyInfo = (params) => {
                             name="tradeAttach"
                             placeholder="Attach Trade License image Or Scan copy"
                             uploadFile={(file) => {
-                              console.log(
-                                "tradeAttach Upload File Change, ",
-                                file
-                              );
-                              props.setFieldValue(`tradeAttach`, file);
+                              console.log("Upload File Runn ");
                             }}
+                            isValidCheck={false}
                           />
                         </Col>
                       </Row>
@@ -212,6 +228,7 @@ const UpdateAgentCompanyInfo = (params) => {
                                 file
                               );
                             }}
+                            isValidCheck={false}
                           />
                         </Col>
                       </Row>
@@ -235,6 +252,7 @@ const UpdateAgentCompanyInfo = (params) => {
                                 file
                               );
                             }}
+                            isValidCheck={false}
                           />
                         </Col>
                       </Row>
@@ -245,8 +263,6 @@ const UpdateAgentCompanyInfo = (params) => {
                           </Button>
                         </Col>
                       </Row>
-                      Error:
-                      <pre>{JSON.stringify(props.errors, null, 2)}</pre>
                     </Form>
                   );
                 }}
@@ -259,4 +275,21 @@ const UpdateAgentCompanyInfo = (params) => {
   );
 };
 
-export default UpdateAgentCompanyInfo;
+UpdateAgentCompanyInfo.prototypes = {
+  getUpdateAgentAction: PropTypes.func.isRequired,
+  agent: PropTypes.object.isRequired,
+  agentUpStatus: PropTypes.object.isRequired,
+  agentError: PropTypes.object.isRequired,
+};
+
+const mapStateToProps = (state) => {
+  return {
+    agent: state.agent.upAgentCompany.agent,
+    agentUpStatus: state.agent.upAgentCompany.upStatus,
+    agentError: state.upCompanyError,
+  };
+};
+
+export default connect(mapStateToProps, { getUpdateAgentCompanyAction })(
+  UpdateAgentCompanyInfo
+);

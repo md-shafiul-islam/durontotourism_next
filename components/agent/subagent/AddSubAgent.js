@@ -42,8 +42,8 @@ const AddSubAgent = (params) => {
                   pwd: "",
                 }}
                 validationSchema={validateSchema()}
-                onSubmit={(values, action)=>{
-                  console.log("Agent Add action fire!! ")
+                onSubmit={(values, action) => {
+                  console.log("Agent Add action fire!! ");
                 }}
               >
                 {(props) => {
@@ -134,8 +134,9 @@ const AddSubAgent = (params) => {
           </Row>
         </Card.Body>
       </Card>
+      {/**
       <UpdateAgentCompanyInfo />
-      <UpdateAgentOwnerInfo />
+      <UpdateAgentOwnerInfo /> */}
     </React.Fragment>
   );
 };

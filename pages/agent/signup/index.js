@@ -1,23 +1,24 @@
 import React, { Component } from "react";
 import { Form, Formik } from "formik";
 import * as Yup from "yup";
-import { Button, Card, Col, Container, Row } from "react-bootstrap";
+import { Card, Col, Container, Row } from "react-bootstrap";
 import BasicActionLink from "../../../components/agent/BasicActionLink";
 import CstValidateField from "../../../components/Fields/CstValidateField";
 import CstValidatePhoneNoField from "../../../components/Fields/CstValidatePhoneNoField";
-import {
-  esIsFieldError,
-  esIsPhoneFieldError,
-} from "../../../utils/helper/helperAction";
+
 import { getNmsOptions } from "../../../utils/helper/esFnc";
+import SubmitActionButtion from "../../../components/Fields/SubmitActionButtion";
+import { connect } from "react-redux";
+import { PropTypes } from "prop-types";
+import { getAddSignUpAction } from "../../../redux/actions/signUpAction";
 
-class getSignUpPage extends Component {
+class GetSignUpPage extends Component {
+  submitAction = (signUp) => {
+    console.log("Sign Up Values, ", signUp);
+    this.props.getAddSignUpAction(JSON.stringify(signUp));
+  };
+
   validateSchema = () => {
-    // companyName: "", optional
-    // ownerName: "",
-    // ownerEmail: "",
-    // ownerPhone: "",
-
     return Yup.object().shape({
       applicantName: Yup.string().required(
         "Required. Please, Enter applicant name."
@@ -25,7 +26,7 @@ class getSignUpPage extends Component {
       phone: Yup.string().required(
         "Required. Please, Enter applicant Phone Number."
       ),
-      phoneCode: Yup.string().when("phone", (v) => {
+      code: Yup.string().when("phone", (v) => {
         if (v !== null || v !== "") {
           return Yup.string(2).required(
             "Required. Please, Select One Phone Code."
@@ -59,8 +60,8 @@ class getSignUpPage extends Component {
                   <Formik
                     initialValues={{
                       applicantName: "",
-                      phoneCode: "",
-                      phoneNo: "",
+                      code: "",
+                      phone: "",
                       email: "",
                       companyName: "",
                       ownerName: "",
@@ -69,7 +70,13 @@ class getSignUpPage extends Component {
                       ownCode: "",
                       pwd: "",
                     }}
-                    validationSchema={this.validateSchema()}
+                    validationSchema={this.validateSchema}
+                    onSubmit={(values, action) => {
+                      console.log("Sign Up Action ", action);
+
+                      action.setSubmitting(true);
+                      this.submitAction(values);
+                    }}
                   >
                     {(props) => {
                       return (
@@ -91,22 +98,6 @@ class getSignUpPage extends Component {
                                   filedPlaceholder="Phone"
                                   codePlaceholder="Code"
                                   options={getNmsOptions(20, 1, 0)}
-                                  clazzName={
-                                    esIsPhoneFieldError(
-                                      props.errors,
-                                      props.touched,
-                                      `phone`,
-                                      `code`
-                                    ).cls
-                                  }
-                                  errorMsg={
-                                    esIsPhoneFieldError(
-                                      props.errors,
-                                      props.touched,
-                                      `phone`,
-                                      `code`
-                                    ).msg
-                                  }
                                 />
                               </Col>
 
@@ -152,22 +143,6 @@ class getSignUpPage extends Component {
                                   codeName="ownCode"
                                   filedPlaceholder="Phone"
                                   codePlaceholder="Code"
-                                  clazzName={
-                                    esIsPhoneFieldError(
-                                      props.errors,
-                                      props.touched,
-                                      `ownPhone`,
-                                      `ownCode`
-                                    ).cls
-                                  }
-                                  errorMsg={
-                                    esIsPhoneFieldError(
-                                      props.errors,
-                                      props.touched,
-                                      `ownerPhone`,
-                                      `ownerPhoneCode`
-                                    ).msg
-                                  }
                                   checkIsValid={false}
                                 />
                               </Col>
@@ -182,22 +157,15 @@ class getSignUpPage extends Component {
                               </Col>
 
                               <Col md={12} className="d-grid">
-                                <Button
-                                  type="submit"
+                                <SubmitActionButtion
                                   variant="success"
                                   className="signup-btn"
-                                >
-                                  sign up
-                                </Button>
+                                  label="sign up"
+                                  isSubmitting={props.isSubmitting}
+                                />
                               </Col>
                             </Row>
                           </React.Fragment>
-                          <pre>{JSON.stringify(props.errors, null, 2)}</pre>
-                          <br />
-                          <br />
-                          Touched
-                          <br />
-                          <pre>{JSON.stringify(props.touched, null, 2)}</pre>
                         </Form>
                       );
                     }}
@@ -226,4 +194,18 @@ class getSignUpPage extends Component {
   }
 }
 
-export default getSignUpPage;
+GetSignUpPage.prototypes = {
+  getAddSignUpAction: PropTypes.func.isRequired,
+  signUpStatus: PropTypes.object.isRequired,
+  signUpError: PropTypes.object.isRequired,
+};
+
+const mapStateToProps = (state) => {
+  return {
+    signUpStatus: state.signup.addSignUp && state.signup.addSignUp.status,
+    signUpError: state.signup.addSignUp && state.signup.addSignUp.msg,
+    signUp: state.signup.addSignUp && state.signup.addSignUp.signUp,
+  };
+};
+
+export default connect(mapStateToProps, { getAddSignUpAction })(GetSignUpPage);

@@ -1,7 +1,11 @@
 import { Field } from "formik";
 import React from "react";
 import { Col } from "react-bootstrap";
-import { esIsFieldError, isEmptyString } from "../../utils/helper/helperAction";
+import {
+  esIsFieldError,
+  helperIsEmpty,
+  isEmptyString,
+} from "../../utils/helper/helperAction";
 
 /**
  *
@@ -17,21 +21,29 @@ const CstValidateField = ({
   handleChange,
   handleBlur,
   type = undefined,
-  checkIsValid=true,
+  checkIsValid = true,
   values,
 }) => {
-
-  const getIsValided = ()=>{
-
-    if(checkIsValid){
-      return esIsFieldError(errors, touched, name).cls;
-    }else{
-      if(!isEmptyString(values[name])){
-        return esIsFieldError(errors, touched, name).cls;
+  const getIsValided = () => {
+    let err = { cls: "", msg: "", status: false };
+    if (checkIsValid) {
+      err = esIsFieldError(errors, touched, name);
+    } else {
+      if (!isEmptyString(values[name])) {
+        err = esIsFieldError(errors, touched, name);
       }
     }
-    return "";
-  }
+
+    if (errors !== undefined && errors !== null) {
+      console.log("Cst VF Have Error, ", errors);
+      if (errors[name] !== undefined && errors[name] !== null) {
+        console.log("Befor Return Cst VF Have Error, ", errors);
+
+        err = { cls: "is-invalid", msg: errors[name], status: true };
+      }
+    }
+    return err;
+  };
 
   return (
     <React.Fragment>
@@ -42,7 +54,7 @@ const CstValidateField = ({
       ) : (
         ""
       )}
-
+      {console.log("Cst Field Error ", getIsValided())}
       <Field
         placeholder={placeholder}
         type={type ? type : "text"}
@@ -50,10 +62,10 @@ const CstValidateField = ({
         onChange={handleChange}
         onBlur={handleBlur}
         id={name}
-        className={`form-control ${getIsValided()}`}
+        className={`form-control ${getIsValided().cls}`}
       />
       <div className="invalid-feedback">
-        {esIsFieldError(errors, touched, name).msg}
+        {getIsValided() && getIsValided().msg}
       </div>
     </React.Fragment>
   );

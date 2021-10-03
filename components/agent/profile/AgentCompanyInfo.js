@@ -1,13 +1,21 @@
-import React from "react";
-import { Card, Col, Row } from "react-bootstrap";
+import React, { useState } from "react";
+import { Card } from "react-bootstrap";
+import ContentModal from "../../Modals/ContentModal";
 import ProfileHeader from "./ProfileHeader";
+import UpdateAgentCompanyInfo from "./UpdateAgentCompanyInfo";
 
 const AgentCompanyInfo = (params) => {
+  const [displayUpdateModal, setDisplayUpdateModal] = useState(false);
+
   return (
     <React.Fragment>
       <Card>
         <Card.Body>
-          <ProfileHeader title="Company Information" imageUrl="/assets/images/logo/dto.svg" />
+          <ProfileHeader
+            title="Company Information"
+            imageUrl="/assets/images/logo/dto.svg"
+            editAction={setDisplayUpdateModal}
+          />
           <div className="pfl-table-paren mt-5">
             <table className="table table-hover">
               <tbody>
@@ -64,6 +72,18 @@ const AgentCompanyInfo = (params) => {
           </div>
         </Card.Body>
       </Card>
+      <ContentModal
+        title="Update Agent Company Information"
+        show={displayUpdateModal}
+        actionClose={(isClose) => {
+          setDisplayUpdateModal(isClose);
+        }}
+        contentClass="content-modal"
+        dialogClassName="modal-content-dilog"
+        name="company-inf"
+      >
+        <UpdateAgentCompanyInfo />
+      </ContentModal>
     </React.Fragment>
   );
 };

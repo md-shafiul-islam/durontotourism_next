@@ -1,13 +1,21 @@
-import React from "react";
+import React, { useState } from "react";
 import { Button, Card, Col, Row } from "react-bootstrap";
+import ContentModal from "../../Modals/ContentModal";
 import ProfileHeader from "./ProfileHeader";
+import UpdateAgentOwnerInfo from "./UpdateAgentOwnerInfo";
 
 const AgentOwnerInfo = (params) => {
+  const [displayContentModal, setDisplayContentModal] = useState(false);
+
   return (
     <React.Fragment>
       <Card>
         <Card.Body>
-          <ProfileHeader title="Owner Information" imageUrl="/assets/images/blg-img_5.jpeg" />
+          <ProfileHeader
+            title="Owner Information"
+            imageUrl="/assets/images/blg-img_5.jpeg"
+            editAction={setDisplayContentModal}
+          />
           <div className="pfl-table-paren mt-5">
             <table className="table table-hover">
               <tbody>
@@ -65,6 +73,18 @@ const AgentOwnerInfo = (params) => {
           </Col>
         </Card.Footer>
       </Card>
+      <ContentModal
+        title="Update Agent Owner Information"
+        show={displayContentModal}
+        actionClose={(isClose) => {
+          setDisplayContentModal(isClose);
+        }}
+        contentClass="content-modal"
+        dialogClassName="modal-content-dilog"
+        name="owner-inf"
+      >
+        <UpdateAgentOwnerInfo />
+      </ContentModal>
     </React.Fragment>
   );
 };
