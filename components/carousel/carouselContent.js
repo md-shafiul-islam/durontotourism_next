@@ -1,5 +1,7 @@
 import React from "react";
+import Image from 'next/image'
 import { Col, Row } from "react-bootstrap";
+import CstImageView from "../cstView/CstImageView";
 
 /**
  *
@@ -15,12 +17,12 @@ const CarouselContent = (props) => {
           
           <div className="dtcarousel-content">
             <div className="image-container">
-              <img
+              <CstImageView
                 src={props.imgUrl}
-                alt={props.imgAlt}
-                width={props.imgWidth}
-                height={props.imgHeight}
-              />
+                altTag = {props.imgAlt}
+                width = {props.imgWidth}
+                height = {props.imgHeight}       
+                />
             </div>
 
             <div className="offer-content">

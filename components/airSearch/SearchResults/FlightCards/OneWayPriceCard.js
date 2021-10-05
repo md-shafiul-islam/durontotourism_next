@@ -101,7 +101,7 @@ const OneWayPriceCard = (params) => {
                       return <li>Not Available Fly Details Information</li>;
                     }
                     return (
-                      <li>
+                      <li key={`onpc-amli-${idx}`}>
                         {idx === 0 ? "" : <i className="far fa-check-square"></i>}{" "}
                         {item}
                       </li>
@@ -158,7 +158,7 @@ const OneWayPriceCard = (params) => {
           params.priceInf.airPriceResult &&
           params.priceInf.airPriceResult.map((airPrice, apsIdx) => {
             return (
-              <React.Fragment>
+              <React.Fragment key={`airp-mcop-${apsIdx}`}>
                 {airPrice.airPricingSolution &&
                   airPrice.airPricingSolution.map((priceSolutaion, slIdx) => {
                     let airPriceOne = priceSolutaion.airPricingInfo[0];
@@ -176,7 +176,7 @@ const OneWayPriceCard = (params) => {
                         ? singleFareInf.brand
                         : undefined;
                     return (
-                      <React.Fragment>
+                      <React.Fragment key={`pdcmcop-${slIdx}`}>
                         <Col md={12} className="price-details-option">
                           {brand !== undefined ? (
                             <React.Fragment>

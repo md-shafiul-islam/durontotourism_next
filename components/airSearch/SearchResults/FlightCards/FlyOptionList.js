@@ -10,7 +10,7 @@ const FlyOptionList = (params) => {
         params.availAbleFlight.flyOptions &&
         params.availAbleFlight.flyOptions.map((flyOption, idx) => {
           return (
-            <React.Fragment>
+            <React.Fragment key={`flic-op-${idx}`}>
               <BookingItemCard
                 flyOption={flyOption}
                 totalPrice={params.availAbleFlight.approxTotalPrice}

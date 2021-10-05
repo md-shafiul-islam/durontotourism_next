@@ -29,6 +29,7 @@ const MainTopNavBar = (params) => {
     let stickyStatus = initScrollPositionCount(sticky, setSticky);
 
     console.log("Sticky Status, ", stickyStatus);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

@@ -7,7 +7,7 @@ const PricingFareTypeDetails = (params) => {
     <Row>
       {params.texts&& params.texts.map((text, idx)=>{
         console.log("Text View : ", text);
-        return (<Col md={12}>{text}</Col>)
+        return (<Col md={12} key={`pftdt-${idx}`}>{text}</Col>)
       })}
       
     </Row>

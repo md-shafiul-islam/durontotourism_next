@@ -99,7 +99,7 @@ const AddTravelerModal = (params) => {
                 <Modal.Body className="amt_body">
                   <div className="atm_main_content">
                     <Row>
-                      <div className="atm_main_title">Add Traveler's Info</div>
+                      <div className="atm_main_title">{`Add Traveler's Info`}</div>
                     </Row>
                     <div className="atm-options">
                       <Nav

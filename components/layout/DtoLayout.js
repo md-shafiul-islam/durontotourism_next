@@ -22,6 +22,7 @@ const DtoLayout = ({ children }) => {
         console.log("Else Menu Exist, ", isTopMenuExist);
       }
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [route.asPath]);
 
   return (

@@ -19,10 +19,12 @@ const OnlineTransferReachage = (params) => {
 
   useEffect(() => {
     params.getBankAccountsNames();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
     setSelectedAccount(bankAccount);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [params.bankAccount]);
 
   const bankNameChangeAction = (bankName) => {

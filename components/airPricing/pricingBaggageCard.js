@@ -72,7 +72,7 @@ const PricingBaggageCard = (params) => {
           baggageAllowance.map((baggage, idx) => {
             let {baggageAllowances } = baggage;
             return (
-              <Row>
+              <Row key={`pba-${idx}`}>
                 <Col md={2}>
                   {baggage.key}
                   {console.log("Each Baggage: ", baggage)}

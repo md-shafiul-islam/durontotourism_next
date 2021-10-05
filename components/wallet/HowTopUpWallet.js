@@ -17,6 +17,7 @@ const HowTopUpWallet = (params) => {
   useEffect(() => {
     params.getBnakAccounts();
     params.getMobillBnakAccounts();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   let { bankAccounts, mobileBankAccounts } = params;

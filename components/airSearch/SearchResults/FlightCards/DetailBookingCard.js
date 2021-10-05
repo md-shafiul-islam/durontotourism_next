@@ -9,6 +9,7 @@ const DetailBookingCard = (params) => {
  
   useEffect(() => {
     getTravelTime(params.segment.flightTime);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const getTravelTime = (timeValue) => {

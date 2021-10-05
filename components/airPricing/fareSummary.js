@@ -88,6 +88,7 @@ const FareSummary = (params) => {
       setTaxItems({ totalTaxAmount: totalTaxNAmnt, details: allTax });
       setPriceItems({ totalPriceAmount: totalPriceNAmnt, details: allPrice });
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const getMultyplayByPassenger = (amount, qty) => {

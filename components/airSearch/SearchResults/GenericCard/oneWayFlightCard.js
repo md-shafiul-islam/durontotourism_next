@@ -131,6 +131,7 @@ const OneWayFlightCard = (params) => {
     }
 
     // console.log("State stops: ", initOpt.stops);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const getPriceDetails = () => {

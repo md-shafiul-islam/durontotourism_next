@@ -21,6 +21,7 @@ const SelectedTab = (props) => {
 
   useEffect(() => {
     setDateMonth(getDayAndMonth(props.segment&&props.segment.departureTime));
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const getDayAndMonth = (dateTime) => {

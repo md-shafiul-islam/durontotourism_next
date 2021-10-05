@@ -12,6 +12,7 @@ const ComRange = (props) => {
   useEffect(() => {
     let initVal = props.populateItem === undefined ? {name:"", value:0} :props.populateItem;
     setSelected(initVal);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const toggleItem = (item) => {

@@ -39,7 +39,7 @@ const ChargeCardDetails = (props) => {
 
           {props.data&&props.data.map((item, idx)=>{
             return(
-              <Row>
+              <Row key={`asccd-${idx}`}>
               <React.Fragment>
                 <Col className="passenger-type" md={6}>
                   {item && item.key}

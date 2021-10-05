@@ -50,7 +50,7 @@ const AirPenaltyOrRuleDetails = (params) => {
     if (item !== undefined) {
       return item.value.map((penalty, iDx) => {
         return (
-          <React.Fragment>
+          <React.Fragment key={`air-p-panelty-${iDx}`}>
             <span className="penalty-item">{`${penalty.type} : ${getAmount(
               penalty.plty.amount
             )}`}</span>
@@ -95,7 +95,7 @@ const AirPenaltyOrRuleDetails = (params) => {
               {penaltyFess &&
                 penaltyFess.map((penalty, pIdx) => {
                   return (
-                    <React.Fragment>
+                    <React.Fragment key={`airp-pf-${pIdx}`}>
                       <Row className="penalty-row">
                         <Col md={6}><span className="penalty-title">{getPenaltyTitle(penalty)}</span></Col>
                         <Col md={6} className="panelty-cnt">

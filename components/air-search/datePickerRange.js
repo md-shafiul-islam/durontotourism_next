@@ -43,6 +43,7 @@ const DatePickerRange = (props) => {
     let dDate =
       props.preSetDepDate !== undefined ? props.preSetDepDate : new Date();
     setDepDate(dDate);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -86,12 +87,14 @@ const DatePickerRange = (props) => {
       // Unbind the event listener on clean up
       document.removeEventListener("mousedown", handleClickOutside);
     };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [refDate]);
 
   useEffect(() => {
     setDisplay(!display);
     setRetDisplay(!retDisplay);
     return;
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const changeHandeller = (item) => {

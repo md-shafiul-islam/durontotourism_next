@@ -110,7 +110,7 @@ const MultiCityOptionsCards = (params) => {
           <ul className="route-air-line">
             {fOption.airStops &&
               fOption.airStops.map((item, idx) => {
-                return <li className="air-point">&nbsp;</li>;
+                return <li key={`itemempty-${idx}`} className="air-point">&nbsp;</li>;
               })}
           </ul>
         </div>
@@ -119,7 +119,7 @@ const MultiCityOptionsCards = (params) => {
             {airStop > 0 ? airStop : "Non"} stop {airStop > 0 ? " via" : ""}{" "}
             {fOption.airStops &&
               fOption.airStops.map((stop, i) => {
-                return <span>{stop}</span>;
+                return <span key={`itemempty-stp-${idx}`}>{stop}</span>;
               })}
           </p>
         </div>
@@ -141,7 +141,7 @@ const MultiCityOptionsCards = (params) => {
             {params.flighAirPricetList.multyOptions &&
               params.flighAirPricetList.multyOptions.map((mOption, mOpIdx) => {
                 return (
-                  <React.Fragment>
+                  <React.Fragment key={`airplmcop-${mOpIdx}`}>
                     <Col md={12}>
                       <Card className="multi-city-area">
                         <Card.Title>
@@ -156,11 +156,11 @@ const MultiCityOptionsCards = (params) => {
                           {mOption.multiCityAirOptions &&
                             mOption.multiCityAirOptions.map((item, iDx) => {
                               return (
-                                <React.Fragment>
+                                <React.Fragment key={`airplmcop-item-${iDx}-${mOpIdx}`}>
                                   {item.flyOptions &&
                                     item.flyOptions.map((flyOption, flyIdx) => {
                                       return (
-                                        <React.Fragment>
+                                        <React.Fragment key={`airplmcop-eitem-${flyIdx}-${iDx}-${mOpIdx}`}>
                                           <Row className="fly-inf-area">
                                             <Col md={3}>
                                               <div>
@@ -168,7 +168,7 @@ const MultiCityOptionsCards = (params) => {
                                                   flyOption.carriers.map(
                                                     (cCode, idx) => {
                                                       return (
-                                                        <span className="air-icon">
+                                                        <span className="air-icon" key={`airicon-${flyIdx}-${iDx}-${mOpIdx}-${idx}`}>
                                                           {cCode}
                                                         </span>
                                                       );
@@ -181,7 +181,7 @@ const MultiCityOptionsCards = (params) => {
                                                   flyOption.flightNumbers.map(
                                                     (fNum, fidx) => {
                                                       return (
-                                                        <React.Fragment>
+                                                        <React.Fragment key={`airnf-${flyIdx}-${iDx}-${mOpIdx}-${idx}`}>
                                                           <span className="air-number">
                                                             {fidx > 0
                                                               ? " | "

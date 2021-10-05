@@ -27,6 +27,7 @@ const AutoCompleteSearch = (props) => {
       setLocalSugegestions([]);
     }
     
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const getSugestionViaReq = async (recValue)=>{

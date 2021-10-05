@@ -31,6 +31,7 @@ const BookingCardRoundTripOptions = (params) => {
     if (params.elmKey === params.preSetItem) {
       params.getSelectedItem({ elmKey: params.elmKey, flight: params.flight });
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loadingStatus]);
 
   

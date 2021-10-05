@@ -42,6 +42,7 @@ const AutoSuggestionInptTextField = (props) => {
       // Unbind the event listener on clean up
       document.removeEventListener("mousedown", handleClickOutside);
     };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [refItem]);
 
   return (

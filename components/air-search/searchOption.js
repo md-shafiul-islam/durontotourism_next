@@ -24,11 +24,13 @@ const SearchOption = (props) => {
       // Unbind the event listener on clean up
       document.removeEventListener("mousedown", handleClickOutside);
     };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ref]);
 
   useEffect(() => {
     setSelectedItem(props.populateItem);
     setDisplay(!display);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {

@@ -1,4 +1,6 @@
 import React from "react";
+import { Col, Row } from "react-bootstrap";
+import ShortInfCard from "./ShortInfCard";
 
 const FlyAccordianAnother = (params) => {
   return (

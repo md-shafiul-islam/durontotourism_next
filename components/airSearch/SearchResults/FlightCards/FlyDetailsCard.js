@@ -119,7 +119,10 @@ const FlyDetailsCard = (props) => {
           <Card.Body>
             {props.availavleFlight.flightOptions.map((option, idx) => {
               return (
-                <div className="callout callout-info position-relative p-3">
+                <div
+                  className="callout callout-info position-relative p-3"
+                  key={`fldc-${idx}`}
+                >
                   <React.Fragment>
                     <div className="ribbon-wrapper ribbon-lg">
                       <div className="ribbon bg-primary">
@@ -136,7 +139,7 @@ const FlyDetailsCard = (props) => {
                     {option.flyOptions &&
                       option.flyOptions.map((flyOptn, fIdx) => {
                         return (
-                          <React.Fragment>
+                          <React.Fragment key={`fldcfop-${fIdx}`}>
                             <Col md={12}>
                               <Row>
                                 <Col md={12}>
@@ -170,7 +173,9 @@ const FlyDetailsCard = (props) => {
                                       let arrivDate = new Date(arrivalTime);
 
                                       return (
-                                        <React.Fragment>
+                                        <React.Fragment
+                                          key={`flii-${fIdx}-${bIdx}`}
+                                        >
                                           <div
                                             className={`fly-item ${getSelectedClass(
                                               fIdx,

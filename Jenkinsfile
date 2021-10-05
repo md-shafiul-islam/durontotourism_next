@@ -29,11 +29,21 @@ pipeline {
 
         stage('Start Or Deploye') {
             steps {
-                script {
+                echo 'Deploye :)'
+                // script {
+                //     if (isUnix()) sh 'npm run start'
+                //     else bat 'npm run strat'
+                // }
+            }
+        }
+    }
+
+    post{
+        success{
+            script {
                     if (isUnix()) sh 'npm run start'
                     else bat 'npm run strat'
                 }
-            }
         }
     }
 }

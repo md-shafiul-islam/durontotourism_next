@@ -235,7 +235,7 @@ class SearchLowFareAir extends Component {
                                                 props.values.SearchCriteriaFlight.map(
                                                   (flight, inx) => {
                                                     return (
-                                                      <React.Fragment>
+                                                      <React.Fragment key={`alfs-${inx}`}>
                                                         <Row
                                                           key={`SearchCriteriaFlight-${inx}`}
                                                         >

@@ -13,6 +13,7 @@ const AutoSearchSuggestionList = (props) => {
     setSelectedItem(props.preSetItem);
     props.getSelectedData(props.preSetItem);
     console.log("Auto props: Pre Set Item: ", props, " : ", props.preSetItem);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
