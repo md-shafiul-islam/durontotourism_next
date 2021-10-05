@@ -11,10 +11,10 @@ import CstValidateField from "../../Fields/CstValidateField";
 import CstValidatePhoneNoField from "../../Fields/CstValidatePhoneNoField";
 import { isEmptyString } from "../../../utils/helper/helperAction";
 import { getMaxFileSizeValidation } from "../../../utils/helper/helperValidateSchema";
+import { getUpdateAgentOwnerAction } from "../../../redux/actions/agentAction";
 
 const UpdateAgentOwnerInfo = (params) => {
   const [countries, setCountries] = useState();
-
 
   const validationSchema = () => {
     return Yup.object().shape({
