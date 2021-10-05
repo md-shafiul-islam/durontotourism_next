@@ -13,7 +13,7 @@ import {
 } from "../redux/actions/airSearchAction";
 import { localDataStore } from "../utils/helper/localDataStore";
 import MenuTab from "../components/tabs/MenuTab";
-import HomePageMenu from "../components/layout/menu/homePageMenu";
+import HomePageMenu from "../components/layout/menu/HomePageMenu";
 
 class Home extends React.Component {
   componentDidMount() {
