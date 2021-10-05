@@ -1,4 +1,4 @@
-import Axios from "Axios";
+import Axios from "axios";
 import { helperIsEmpty } from "../../utils/helper/helperAction";
 import {
   AUT_TOKEN,
