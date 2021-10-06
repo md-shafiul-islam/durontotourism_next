@@ -1,11 +1,10 @@
 import React, { Component } from "react";
-import { Row, Col, Form } from "react-bootstrap";
+import { Row, Col } from "react-bootstrap";
 import { useRouter } from "next/router";
 
 import OneWaySearchForm from "./OneWaySearchForm";
 import RoundTripSearchForm from "./RoundTripSearchForm";
 import MultiCitySearchForm from "./MultiCitySearchForm";
-import { addDays } from "date-fns";
 import { PropTypes } from "prop-types";
 import { connect } from "react-redux";
 import {
@@ -25,6 +24,7 @@ import {
   Radio,
   RadioGroup,
 } from "@material-ui/core";
+import { esGetDateByAdding } from "../../utils/helper/esDateFunc";
 
 //Prev Option sample { name: "Aalborg", code: "AAL" }
 
@@ -47,7 +47,7 @@ class AirSearchForm extends Component {
     multyInitValue: {
       passDetails: [
         { from: "", to: "", depTime: new Date() },
-        { from: "", to: "", depTime: addDays(new Date(), 1) },
+        { from: "", to: "", depTime: esGetDateByAdding(new Date(), 1) },
       ],
       traveler: { ADT: 0, CNN: 0, INF: 0, cabClass: 0 },
       tripCat: null,
@@ -369,12 +369,7 @@ class AirSearchForm extends Component {
                 from: values.passDetails[0].from,
                 to: values.passDetails[0].to,
                 depTime: values.passDetails[0].depTime,
-                returnTime: addDays(
-                  values.passDetails[0].depTime !== undefined
-                    ? values.passDetails[0].depTime
-                    : new Date(),
-                  5
-                ),
+                returnTime: values.passDetails[0].depTime !== undefined ? esGetDateByAdding(values.passDetails[0].depTime, 2) : new Date(),
               },
             ],
             traveler: { ADT: 0, CNN: 0, INF: 0, cabClass: 0 },

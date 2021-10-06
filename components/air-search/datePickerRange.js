@@ -4,7 +4,10 @@ import { Row, Col, Card } from "react-bootstrap";
 import "react-date-range/dist/styles.css"; // main style file
 import "react-date-range/dist/theme/default.css"; // theme css file
 import { DateRange } from "react-date-range";
-import { addDays } from "date-fns";
+import {
+  esGetDateByAdding,
+  esMakeStingToDate,
+} from "../../utils/helper/esDateFunc";
 
 const days = [
   "Sunday",
@@ -39,30 +42,22 @@ const DatePickerRange = (props) => {
   const [retDisplay, setRetDisplay] = useState(true);
   const [depDate, setDepDate] = useState(new Date());
 
-  useEffect(() => {
-    let dDate =
-      props.preSetDepDate !== undefined ? props.preSetDepDate : new Date();
-    setDepDate(dDate);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  useEffect(() => {
-    let dDate =
-      props.preSetDepDate !== undefined ? props.preSetDepDate : new Date();
-    setDepDate(dDate);
-  }, [props.preSetDepDate]);
-
-  const [state, setState] = useState([
+  const [dateState, setDateState] = useState([
     {
-      startDate:
-        props.preSetDepDate !== undefined ? props.preSetDepDate : depDate,
-      endDate: addDays(
-        props.preSetDepDate !== undefined ? props.preSetDepDate : depDate,
-        5
-      ),
+      startDate: depDate ? depDate : new Date(),
+      endDate: esGetDateByAdding(depDate, 2),
       key: "selection",
     },
   ]);
+
+  useEffect(() => {
+    let initDepDate =
+      props.preSetDepDate !== undefined
+        ? esMakeStingToDate(props.preSetDepDate)
+        : new Date();
+    setDepDate(initDepDate);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     /**
@@ -87,18 +82,39 @@ const DatePickerRange = (props) => {
       // Unbind the event listener on clean up
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [refDate]);
 
   useEffect(() => {
     setDisplay(!display);
     setRetDisplay(!retDisplay);
     return;
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const getWeekDay = (pDate) => {
+    // console.log("Week Date is: ", pDate);
+    if (pDate !== undefined && pDate !== null) {
+      let day = `${days[pDate.getDay()]}`;
+      // console.log("Week Day is: ", day);
+      if (
+        day === undefined ||
+        day === null ||
+        day === "NaN" ||
+        day === "Na" ||
+        day === "aN" ||
+        day === "undefined"
+      ) {
+        return "";
+      }
+
+      return day;
+    }
+    return "";
+  };
+
   const changeHandeller = (item) => {
-    setState([item.selection]);
+    setDateState([item.selection]);
 
     let selected = item.selection;
 
@@ -137,13 +153,13 @@ const DatePickerRange = (props) => {
     setRetDisplay(!retDisplay);
 
     if (status[1] === 1) {
-      state[0].endDate = null;
+      dateState[0].endDate = null;
     }
   };
 
   const toggoleDateRangeDep = (e, status) => {
     if (status[0] === 0) {
-      state[0].endDate = null;
+      dateState[0].endDate = null;
     }
 
     setReturnStatus(false);
@@ -155,51 +171,61 @@ const DatePickerRange = (props) => {
     if (month !== undefined && month !== "" && month !== null) {
       let stMonth =
         months[month] && months[month].toString().substring(0, lenght);
-
+      // console.log("Date Month, ", stMonth);
       if (
-        stMonth !== undefined &&
-        stMonth !== null &&
-        stMonth !== "" &&
-        stMonth !== "NaN" &&
-        stMonth !== "Na"
+        stMonth === undefined ||
+        stMonth === null ||
+        stMonth === "" ||
+        stMonth === "NaN" ||
+        stMonth === "Na" ||
+        stMonth === "aN"
       ) {
-        return stMonth;
+        return "";
       }
+      return `${stMonth}`;
     }
 
     return "";
   };
 
-  const getStringYear = (year, lenght) => {
+  const getStringYear = (year, size = 0) => {
     if (year === undefined || year === "" || year === null) {
       return "";
     }
-    let stYear = year.toString().substring(0, lenght);
 
+    let lnt = year.toString().length;
+    lnt = Number(lnt) - Number(size);
+
+    let stYear = year.toString().substring(lnt);
+
+    // console.log("Date Eare ", stYear);
     if (
-      stYear !== undefined &&
-      stYear !== null &&
-      stYear !== "" &&
-      stYear !== "NaN" &&
-      stYear !== "Na"
+      stYear === undefined ||
+      stYear === null ||
+      stYear === "" ||
+      stYear === "NaN" ||
+      stYear === "Na" ||
+      stYear === "aN"
     ) {
-      return stYear;
+      return "";
     }
-    return "";
+    return ` ${stYear}`;
   };
 
   const getDayByDate = (vDate) => {
     if (vDate !== undefined && vDate !== null && "" !== vDate) {
-      let stringDay = days[state[0].endDate.getDay()];
+      let stringDay = days[dateState[0].endDate.getDay()];
+      // console.log("Date Day, ", stringDay);
 
       if (
-        stringDay !== null &&
-        stringDay !== "" &&
-        stringDay !== undefined &&
-        stringDay !== "NaN" &&
-        stringDay !== "Na"
+        stringDay === null ||
+        stringDay === "" ||
+        stringDay === undefined ||
+        stringDay === "NaN" ||
+        stringDay === "Na" ||
+        stringDay === "aN"
       ) {
-        return stringDay;
+        return `${stringDay} `;
       }
     }
 
@@ -209,18 +235,17 @@ const DatePickerRange = (props) => {
   const getDateByState = (dateVal) => {
     if (dateVal !== undefined && dateVal !== null && dateVal !== "") {
       let strDate = dateVal.getDate();
-
+      // console.log("End Date, ", strDate);
       if (
         strDate === null ||
         strDate === "" ||
-        strDate !== undefined ||
-        strDate !== "NaN" ||
-        strDate !== "Na"
+        strDate === undefined ||
+        isNaN(strDate) ||
+        strDate === "Na"
       ) {
         return "";
-      } else {
-        return strDate;
       }
+      return strDate;
     }
 
     return " ";
@@ -249,27 +274,28 @@ const DatePickerRange = (props) => {
                 onClick={(e) => toggoleDateRangeDep(e, [0, 0])}
               >
                 <p>
-                  {state && state[0].startDate && (
+                  {dateState && dateState[0].startDate && (
                     <React.Fragment>
-                      <span className="search-bstyle">
-                        {state[0].startDate.getDate()}
+                      <span className="search-bstyle start">
+                        {dateState[0].startDate.getDate()}
                       </span>
                       <span className="search-nstyle">
                         &nbsp;
-                        {getStringMonth(state[0].startDate.getMonth(), 3)}
+                        {getStringMonth(
+                          dateState[0].startDate &&
+                            dateState[0].startDate.getMonth(),
+                          3
+                        )}
                         {getStringYear(
-                          state[0].startDate.getFullYear(),
+                          dateState[0].startDate &&
+                            dateState[0].startDate.getFullYear(),
                           2
                         )}{" "}
                       </span>
                     </React.Fragment>
                   )}
                 </p>
-                <p>
-                  {state &&
-                    state[0].startDate &&
-                    `${days[state[0].startDate.getDay()]}`}
-                </p>
+                <p>{getWeekDay(dateState && dateState[0].startDate)}</p>
               </div>
             </Col>
             <Col md={6} className="no-margin-padding">
@@ -296,23 +322,23 @@ const DatePickerRange = (props) => {
                 ) : (
                   <React.Fragment>
                     <p>
-                      {state &&
-                        (state[0] !== undefined ? (
-                          state[0].endDate !== undefined ? (
+                      {dateState &&
+                        (dateState[0] !== undefined ? (
+                          dateState[0].endDate !== undefined ? (
                             <React.Fragment>
-                              <span className="search-bstyle">
-                                {getDateByState(state[0].endDate)}
+                              <span className="search-bstyle enddate">
+                                {getDateByState(dateState[0].endDate)}
                               </span>
                               <span className="search-nstyle">
                                 &nbsp;
                                 {getStringMonth(
-                                  state[0].endDate &&
-                                    state[0].endDate.getMonth(),
+                                  dateState[0].endDate &&
+                                    dateState[0].endDate.getMonth(),
                                   3
                                 )}
                                 {getStringYear(
-                                  state[0].endDate &&
-                                    state[0].endDate.getFullYear(),
+                                  dateState[0].endDate &&
+                                    dateState[0].endDate.getFullYear(),
                                   2
                                 )}
                               </span>
@@ -325,9 +351,7 @@ const DatePickerRange = (props) => {
                         ))}
                     </p>
                     <p>
-                      {state && state[0] === undefined
-                        ? getDayByDate(state[0].endDate)
-                        : null}
+                      <p>{getWeekDay(dateState && dateState[0].endDate)}</p>
                     </p>
                   </React.Fragment>
                 )}
@@ -341,9 +365,11 @@ const DatePickerRange = (props) => {
               <Card.Body>
                 <DateRange
                   editableDateInputs={true}
-                  onChange={(item) => changeHandeller(item)}
+                  onChange={(item) => {
+                    changeHandeller(item);
+                  }}
                   moveRangeOnFirstSelection={false}
-                  ranges={state}
+                  ranges={dateState}
                   initialFocusedRange={focusStatus}
                   onRangeFocusChange={(e) => setChangeFocus(e)}
                   startDatePlaceholder="Departure"
