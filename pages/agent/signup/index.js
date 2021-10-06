@@ -208,9 +208,6 @@ const mapStateToProps = (state) => {
   };
 };
 
-export async function getStaticProps({ params: {slug} }) {
-  // ↓add 
-  console.log(`GetSignUpPage slug: ${slug}`)
-}
+
 
 export default connect(mapStateToProps, { getAddSignUpAction })(GetSignUpPage);

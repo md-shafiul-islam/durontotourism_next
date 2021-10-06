@@ -134,9 +134,5 @@ class ProfilePage extends Component {
 }
 
 
-export async function getStaticProps({ params: {slug} }) {
-  // ↓add 
-  console.log(`BookingPage slug: ${slug}`)
-}
 
 export default ProfilePage;

@@ -12,4 +12,5 @@ import { Row, Col} from 'react-bootstrap';
     )
 }
 
+
 export default About;

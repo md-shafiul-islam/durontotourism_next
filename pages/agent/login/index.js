@@ -81,9 +81,6 @@ const GetLoginPage = (props) => {
   );
 };
 
-export async function getStaticProps({ params: {slug} }) {
-  // ↓add 
-  console.log(`GetLoginPage slug: ${slug}`)
-}
+
 
 export default GetLoginPage;
