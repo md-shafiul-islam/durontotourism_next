@@ -1,6 +1,8 @@
-import Link from "next/link";
+
 import React, { useState } from "react";
-import { Nav, NavDropdown } from "react-bootstrap";
+import { Nav} from "react-bootstrap";
+import LogOutActionItem from "../authentication/LogOutActionItem";
+import LoginMenuItem from "./LoginMenuItem";
 
 const LoginDropdown = ({ name }) => {
   const [display, setDisplay] = useState(false);
@@ -13,59 +15,32 @@ const LoginDropdown = ({ name }) => {
   return (
     <React.Fragment>
       <div className="top-menu-profile-area">
-        <Nav.Item onClick={clickHandeler} > My Profile</Nav.Item>
+        <Nav.Item onClick={clickHandeler}> {name}</Nav.Item>
         <div className={`loing-menu-area ${display ? " active" : ""}`}>
           <span className="msg-text">you are viewing personal profile: </span>
-          <div className="log-menu-item">
-            <Link href="/my-profile">
-              <a>
-                <span className="icon-area">
-                  <i className="fas fa-user"></i>
-                </span>
-                <span className="text">
-                  <span className="title">My Profile</span>
-                  <span className="content">
-                    Manage your profile, traveller details, login details and
-                    password
-                  </span>
-                </span>
-              </a>
-            </Link>
-          </div>
+          <LoginMenuItem
+            action="/my-profile"
+            iconClassName="fas fa-user"
+            title="My Profile"
+            content="Manage your profile, traveller details, login details and
+                    password"
+          />
+          <LoginMenuItem
+            action="/booking-summary"
+            iconClassName="fas fa-suitcase"
+            title="My Booking"
+            content="Manage your profile, traveller details, login details and
+                    password"
+          />
+          <LoginMenuItem
+            action="/my-wallet"
+            iconClassName="fas fa-wallet"
+            title="My Wallet"
+            content="Manage your profile, traveller details, login details and
+                    password"
+          />
 
-          <div className="log-menu-item">
-            <Link href="/booking-summary">
-              <a>
-                <span className="icon-area">
-                  <i className="fas fa-suitcase"></i>
-                </span>
-                <span className="text">
-                  <span className="title">My Booking</span>
-                  <span className="content">
-                    Manage your profile, traveller details, login details and
-                    password
-                  </span>
-                </span>
-              </a>
-            </Link>
-          </div>
-
-          <div className="log-menu-item">
-            <Link href="/my-wallet">
-              <a>
-                <span className="icon-area">
-                  <i className="fas fa-wallet"></i>
-                </span>
-                <span className="text">
-                  <span className="title">My Wallet</span>
-                  <span className="content">
-                    Manage your profile, traveller details, login details and
-                    password
-                  </span>
-                </span>
-              </a>
-            </Link>
-          </div>
+          <LogOutActionItem />
         </div>
       </div>
     </React.Fragment>

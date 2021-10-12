@@ -5,6 +5,7 @@ import EmptyCont from "../../utils/helper/emptyCont";
 import RechargeWallet from "../../components/payment-method/RechargeWallet";
 import HowTopUpWallet from "../../components/wallet/HowTopUpWallet";
 import WithDrawContent from "../../components/wallet/WithDrawContent";
+import { getSession } from "next-auth/react";
 
 class WalletPage extends Component {
   render() {
@@ -142,6 +143,22 @@ class WalletPage extends Component {
       </React.Fragment>
     );
   }
+}
+
+export async function getServerSideProps(context) {
+  let session = await getSession({ req: context.req });
+
+  if (!session) {
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+  }
+  return {
+    props: session,
+  };
 }
 
 

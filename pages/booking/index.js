@@ -103,5 +103,4 @@ class BookingPage extends Component {
 }
 
 
-
 export default BookingPage;

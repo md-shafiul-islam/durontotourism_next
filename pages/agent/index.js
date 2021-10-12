@@ -136,6 +136,22 @@ const mapStateToProps = (state) => {
   };
 };
 
+export async function getServerSideProps(context) {
+  let session = await getSession({ req: context.req });
+  
+  if (!session) {
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+  }
+  return {
+    props: session,
+  };
+}
+
 export default connect(mapStateToProps, { getCurrentAgentAction })(
   GetAgentIndexPage
 );

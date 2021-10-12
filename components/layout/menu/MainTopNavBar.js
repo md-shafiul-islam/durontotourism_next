@@ -5,10 +5,16 @@ import Link from "next/link";
 import { Container, Nav, Navbar, NavDropdown } from "react-bootstrap";
 import { initScrollPositionCount } from "../../../utils/ui/menuAction";
 import LoginDropdown from "../../login-signup/LoginDropdown";
+import { useSession } from "next-auth/react";
+import ContentModal from "../../Modals/ContentModal";
+import SignOrLoginContent from "../../authentication/SignOrLoginContent";
 
 const MainTopNavBar = (params) => {
+  const { status, data } = useSession();
+
+  const [loginModaDisplay, setLoginModaDisplay] = useState(false);
+
   const [display, setDisplay] = useState(false);
-  const [isLogin, setIsLogin] = useState(true);
 
   const [sticky, setSticky] = useState({
     stickyNavStatus: false,
@@ -19,7 +25,11 @@ const MainTopNavBar = (params) => {
   console.log("Use Next Route, ", route);
 
   useEffect(() => {
-    if (route.asPath === "/" || route.asPath === "/payment" || route.asPath === "/booking-summary") {
+    if (
+      route.asPath === "/" ||
+      route.asPath === "/payment" ||
+      route.asPath === "/booking-summary"
+    ) {
       setDisplay(false);
     } else {
       setDisplay(true);
@@ -29,9 +39,13 @@ const MainTopNavBar = (params) => {
     let stickyStatus = initScrollPositionCount(sticky, setSticky);
 
     console.log("Sticky Status, ", stickyStatus);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const loginDisplayAction = ()=>{
+    console.log("Login Sign In Action ", loginModaDisplay);
+    setLoginModaDisplay(true);
+  }
   return (
     <React.Fragment>
       <Navbar
@@ -130,7 +144,13 @@ const MainTopNavBar = (params) => {
               </Nav.Item>
             </Nav>
             <Nav className="es-info-area">
-              {isLogin ? <LoginDropdown name="My profile" /> : <Nav.Item>Log In</Nav.Item>}
+              {status === "authenticated" ? (
+                <LoginDropdown
+                  name={`Hi, ${data && data.user && data.user.fullName}`}
+                />
+              ) : (
+                <Nav.Item className="signin-item" onClick={loginDisplayAction}>Log In</Nav.Item>
+              )}
 
               <Nav.Item>
                 <span className="menu-text">Currency</span>
@@ -139,6 +159,12 @@ const MainTopNavBar = (params) => {
           </Navbar.Collapse>
         </Container>
       </Navbar>
+      <ContentModal title="User Login Or Sign In" name="loginor-signin" show={loginModaDisplay} actionClose={(isClose)=>{
+        setLoginModaDisplay(isClose);
+      }}>
+        <SignOrLoginContent />
+      </ContentModal>
+
     </React.Fragment>
   );
 };

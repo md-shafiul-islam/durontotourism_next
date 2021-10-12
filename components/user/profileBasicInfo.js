@@ -4,8 +4,7 @@ import BasiInfoInputModal from "../Modals/Profile/basiInfoInputModal";
 
 const ProfileBasicInfo = (props) => {
 
-  const [displayStatus, setDisplayStatus] = useState(false);
-
+  const [displayStatus, setDisplayStatus] = useState(false);  
   const editProfileAction = ()=>{
     setDisplayStatus(true);
   }

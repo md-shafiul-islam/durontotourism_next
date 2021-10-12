@@ -1,3 +1,4 @@
+import { getSession } from "next-auth/react";
 import React, { Component } from "react";
 import { Card, Col, Container, Nav, Row, Tab } from "react-bootstrap";
 import CardPayment from "../../components/payment-method/CardPayment";
@@ -82,5 +83,20 @@ class PaymetPage extends Component {
   }
 }
 
+export async function getServerSideProps(context) {
+  let session = await getSession({ req: context.req });
+
+  if (!session) {
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+  }
+  return {
+    props: session,
+  };
+}
 
 export default PaymetPage;

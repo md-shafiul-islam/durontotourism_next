@@ -1,7 +1,7 @@
 import React from "react";
 import Image from "next/image";
 const CstImageView = ({
-  src,
+  src="/assets/images/placeholder.jpg",
   altTag = "Image Not found",
   width = 500,
   height = 500,

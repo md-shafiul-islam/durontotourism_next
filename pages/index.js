@@ -14,8 +14,11 @@ import {
 import { localDataStore } from "../utils/helper/localDataStore";
 import MenuTab from "../components/tabs/MenuTab";
 import HomePageMenu from "../components/layout/menu/HomePageMenu";
+import ViewSession from "../components/authentication/ViewSession";
 
 class Home extends React.Component {
+
+  
   componentDidMount() {
     this.props.getAirLines();
     this.props.getAirports();
@@ -60,6 +63,7 @@ class Home extends React.Component {
               </Container>
             </React.Fragment>
           </Col>
+          <ViewSession />
         </Row>
       </React.Fragment>
     );

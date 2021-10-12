@@ -4,6 +4,17 @@ body {
   overflow-x: hidden;
 }
 
+/** Sign Out Start*/
+.signout-item {
+  cursor: pointer;
+}
+
+.signin-item{
+  cursor: pointer;
+}
+/** Sign Out End*/
+
+
 /** React Select option validet style Start */
 
 .vselect-item.is-invalid > div {
@@ -354,7 +365,7 @@ body {
 }
 
 .home-top-menu .top-nav-right .nav-item {
-  width: 10vw;
+  width: 12vw;
   border-right: 2px dotted grey;
   height: 100%;
 }

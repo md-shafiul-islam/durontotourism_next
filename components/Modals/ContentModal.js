@@ -1,6 +1,12 @@
 import React from "react";
 import { Button, Col, Modal, ModalFooter, Row } from "react-bootstrap";
 
+/**
+ * 
+ * @param { show, name, contentClass, dialogClassName, title, children, actionClose} params 
+ * @returns 
+ */
+
 const ContentModal = (params) => {
   console.log("Content Modal Params, ", params);
 

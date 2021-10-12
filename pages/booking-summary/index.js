@@ -1,3 +1,4 @@
+import { getSession } from "next-auth/react";
 import React, { Component } from "react";
 import { Breadcrumb, Col, Nav, Row } from "react-bootstrap";
 import CancelledBookingList from "../../components/user/cancelledBookingList";
@@ -26,7 +27,7 @@ class BookingSummeryPage extends Component {
           //   " <= ",
           //   scrollPosition
           // );
-          if (item.offsetTop <= scrollPosition ) {
+          if (item.offsetTop <= scrollPosition) {
             // console.log(
             //   " IDX ",
             //   idx,
@@ -204,5 +205,20 @@ class BookingSummeryPage extends Component {
   }
 }
 
+export async function getServerSideProps(context) {
+  let session = await getSession({ req: context.req });
+
+  if (!session) {
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+  }
+  return {
+    props: session,
+  };
+}
 
 export default BookingSummeryPage;

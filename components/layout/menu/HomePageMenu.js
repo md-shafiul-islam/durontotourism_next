@@ -1,17 +1,25 @@
 /* eslint-disable @next/next/no-img-element */
-import React, {useState, useEffect}from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Nav, Navbar, NavDropdown } from "react-bootstrap";
 import LoginDropdown from "../../login-signup/LoginDropdown";
+import { useSession } from "next-auth/react";
+import ContentModal from "../../Modals/ContentModal";
+import SignOrLoginContent from "../../authentication/SignOrLoginContent";
 
 const HomePageMenu = (params) => {
-
-  const [isLogin, setIsLogin] = useState(true);
-
+  const { status, data } = useSession();
+  const [loginModaDisplay, setLoginModaDisplay] = useState(false);
+  console.log("User Login Session, ", useSession());
   useEffect(() => {
     //Check DB is login or Not
-  }, [])
+  }, []);
+
+  const loginDisplayAction = () => {
+    console.log("Login Sign In Action ", loginModaDisplay);
+    setLoginModaDisplay(true);
+  };
 
   return (
     <React.Fragment>
@@ -32,14 +40,29 @@ const HomePageMenu = (params) => {
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="me-auto">&nbsp;</Nav>
           <Nav className="top-nav-right">
-            <Nav.Item>  
-              {isLogin ? <LoginDropdown name="My profile" /> : "LogIn"}
+            <Nav.Item>
+              {status === "authenticated" ? (
+                <LoginDropdown
+                  name={`Hi, ${data && data.user && data.user.fullName}`}
+                />
+              ) : (
+                <span className="signin-item" onClick={loginDisplayAction}>LogIn</span>
+              )}
             </Nav.Item>
-            <Nav.Item> &nbsp; BD | ENG | BDT</Nav.Item>            
-            
+            <Nav.Item> &nbsp; BD | ENG | BDT</Nav.Item>
           </Nav>
         </Navbar.Collapse>
       </Navbar>
+      <ContentModal
+        title="User Login Or Sign In"
+        name="loginor-signin"
+        show={loginModaDisplay}
+        actionClose={(isClose) => {
+          setLoginModaDisplay(isClose);
+        }}
+      >
+        <SignOrLoginContent />
+      </ContentModal>
     </React.Fragment>
   );
 };

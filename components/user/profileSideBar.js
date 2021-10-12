@@ -1,8 +1,14 @@
+import { useSession } from "next-auth/react";
 import React, { useEffect } from "react";
 import { Card, Col, Row } from "react-bootstrap";
 import ProfileImage from "./profileImage";
 
 const ProfileSideBar = (props) => {
+
+  const {data, status} = useSession();
+
+console.log("Current User ", data);
+
   const moveScrolPosition = (elm, e) => {
     let currentElm = document.querySelector(elm);
     let bodyReact = document.body.getBoundingClientRect();
@@ -54,7 +60,7 @@ const ProfileSideBar = (props) => {
 
           <Row>
             <Col md={12} className="prof-name-tag">
-              <h5>Name</h5>
+              <h5>{data&&data.user&&data.user.fullName}</h5>
               <span>personal profile</span>
             </Col>
           </Row>

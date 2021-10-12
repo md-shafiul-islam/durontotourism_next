@@ -65,7 +65,6 @@ class LocalDataStore {
         ) &&
         this.isValidString(this.localStore.getItem("rndBookPriceReturnOption"))
       ) {
-
         this.rndPriceFlights.detureItem = JSON.parse(
           this.localStore.getItem("rndBookPriceDeparturOption")
         );
@@ -77,25 +76,28 @@ class LocalDataStore {
       }
     }
     return false;
-  
   };
 
-  getDepartureBookingItem = ()=>{
-    if(this.localStore.getItem("rndBookPriceDeparturOption")){
-      const departureInf = JSON.parse(this.localStore.getItem("rndBookPriceDeparturOption"));
+  getDepartureBookingItem = () => {
+    if (this.localStore.getItem("rndBookPriceDeparturOption")) {
+      const departureInf = JSON.parse(
+        this.localStore.getItem("rndBookPriceDeparturOption")
+      );
       console.log("Before Dep Flight Book Inf Return !!, ", departureInf);
 
       return departureInf;
     }
-  }
+  };
 
-  getReturnBookingItem = ()=>{
-    if(this.localStore.getItem("rndBookPriceReturnOption")){
-      const returnInf = JSON.parse(this.localStore.getItem("rndBookPriceReturnOption"));
+  getReturnBookingItem = () => {
+    if (this.localStore.getItem("rndBookPriceReturnOption")) {
+      const returnInf = JSON.parse(
+        this.localStore.getItem("rndBookPriceReturnOption")
+      );
       console.log("Before Dep Flight Book Inf Return !!, ", returnInf);
       return returnInf;
     }
-  }
+  };
 
   isValidString = (strData) => {
     if (strData) {
@@ -251,13 +253,15 @@ class LocalDataStore {
     }
   };
 
-  getPassengers = ()=>{
+  getPassengers = () => {
     if (this.hasSearchQuery()) {
-      if(this.searchQuery.type == 2){
-        return this.searchQuery.depQuery&&this.searchQuery.depQuery.passengers;
+      if (this.searchQuery.type == 2) {
+        return (
+          this.searchQuery.depQuery && this.searchQuery.depQuery.passengers
+        );
       }
     }
-  }
+  };
 
   hasSearchQuery = () => {
     if (!helperIsEmpty(this.localStore)) {
@@ -304,6 +308,24 @@ class LocalDataStore {
       }
     }
   };
+
+  /** Store token */
+
+  addUserJwtToken = (token) => {
+    if (token) {
+      this.createStore();
+      this.localStore.setItem("token", JSON.stringify(token, null, 2));
+    }
+  };
+
+  getJwtToken = ()=>{
+    if(!helperIsEmpty(this.localStore)){
+      let strToken = this.localStore.getItem("token");
+      if(strToken){
+        return JSON.parse(strToken);
+      }
+    }
+  }
 }
 
 export const localDataStore = new LocalDataStore();

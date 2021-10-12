@@ -10,6 +10,8 @@ import rechargeReducer from "./rechargeReducer";
 import signUpReducer from "./signUpReducer";
 import withDrawReducer from "./withDrawReducer";
 import agentReducer from "./agentReducer"
+import loginReducer from "./loginReducer";
+import userReducer from "./userReducer";
 
 export default combineReducers({
   airSearch: airSearchReducer,
@@ -23,4 +25,6 @@ export default combineReducers({
   withdraw:withDrawReducer,
   signup:signUpReducer,
   agent:agentReducer,
+  login:loginReducer,
+  user:userReducer,
 });

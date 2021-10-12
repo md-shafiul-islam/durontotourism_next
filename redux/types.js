@@ -10,6 +10,11 @@ export const DELET_CATEGORY = "DELET_CATEGORY";
 export const AUT_TOKEN =
   "Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiRGV2ZWxvcGVyIiwiZnVsbE5hbWUiOiJNZCBTaGFmaXVsIElzbGFtIiwiaWQiOiI1ZWI5MjU5ODkyMjg0NzBlYjk0NTIzYmNjMTQ3ZWFiODIwMjEyMTI0MjQ5IiwiZXhwIjoxNjMyMjAzOTY2LCJpYXQiOjE2MzE3NzE5NjYsInVzZXJuYW1lIjoibWQuc2hhZml1bC5pc2xhbTIwMTRiZEBnbWFpbC5jb20ifQ.bzvBNu2lB-YXk0zqacxZAHEGb3SoqfRL0m5r9F2NRWQaDdzDRmKJRzB9Kn-L_acsW8fZwq55A9WTEw4lWY4SCQ";
 
+export const COMMON_REQUEST_HEADER = {
+  "Content-Type": "application/json",
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Headers": "Origin, Content-Type, Accept",
+};
 export const REQUEST_HEADER = {
   "Content-Type": "application/json",
   "Access-Control-Allow-Origin": "*",
@@ -24,6 +29,7 @@ export const REQUEST_HEADER_GET = {
 };
 
 export const SET_CURRENT_USER = "SET_CURRENT_USER";
+export const SET_CURRENT_USER_ERROR = "SET_CURRENT_USER_ERROR";
 
 export const GET_ACCESSES = "GET_ACCESSES";
 export const GET_ACCESS = "GET_ACCESS";
@@ -33,6 +39,10 @@ export const GET_BACKLOG = "GET_BACKLOG";
 export const SET_TOKEN = "SET_TOKEN";
 
 console.log(process.env.REACT_APP_API_URL);
+
+/** URLS */
+
+export const GET_BACK_END_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
 
 export const HOST_ADD = "http://localhost"; //"http://durontotrip.com"; //http://3.137.195.192
 
@@ -124,10 +134,6 @@ export const GET_FILTER_RET_STOPS = "GET_FILTER_RET_STOPS";
 
 export const SET_BANK_NAMES = "SET_BANK_NAMES";
 
-/** URLS */
-
-export const GET_BACK_END_URL = `http://localhost:6060/api`;
-
 export const SET_BANK_ACCOUNT_OPTIONS = "SET_BANK_ACCOUNT_OPTIONS";
 export const SET_SELCTED_BANK_ACCOUNT = "SET_SELCTED_BANK_ACCOUNT";
 
@@ -154,3 +160,6 @@ export const SET_LOGIN_AGENT_ERROR = "SET_LOGIN_AGENT_ERROR";
 export const SET_AGENT_OWNER_UPDATE = "SET_AGENT_OWNER_UPDATE";
 export const SET_AGENT_OWNER_UPDATE_ERROR = "SET_AGENT_OWNER_UPDATE_ERROR";
 
+//User Or Customer
+export const CUSTOMER_LOGIN = "CUSTOMER_LOGIN";
+export const CUSTOMER_LOGIN_ERROR = "CUSTOMER_LOGIN_ERROR";

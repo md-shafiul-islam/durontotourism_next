@@ -1,35 +1,29 @@
-import React from "react";
-import {signIn} from 'next-auth/react';
 import { Field, Form, Formik } from "formik";
-import { PropTypes } from "prop-types";
-import { connect } from "react-redux";
+import { signIn } from "next-auth/react";
 import { useRouter } from "next/router";
+import React from "react";
 import { Card, Col, Container, Row } from "react-bootstrap";
+import BasicActionLink from "../agent/BasicActionLink";
+import SubmitActionButtion from "../Fields/SubmitActionButtion";
 
-import BasicActionLink from "../../../components/agent/BasicActionLink";
-import SubmitActionButtion from "../../../components/Fields/SubmitActionButtion";
-import { getUserLogin } from "../../../redux/actions/userAction";
+const SignOrLoginContent = (params) => {
+  const router = useRouter();
 
-const GetLoginPage = (params) => {
-  const route = useRouter();
-  params.login && params.login.success ? route.push("/agent") : "";
-
-  const loginAction = (loginData)=>{
-    signIn('credentials', {
-      username:loginData.username,
-      password:loginData.password,
-      callbackUrl:`${window.location.origin}/`,
-      userStatus:"agent",
-    })
-  }
+  const loginAction = (loginData) => {
+      console.log("User Login Action ...")
+    signIn("credentials", {
+      username: loginData.username,
+      password: loginData.password,
+      callbackUrl: `${window.location.origin}/`,
+      userStatus: 'customer'
+    });
+  };
   return (
     <React.Fragment>
-      <Container className="agent-login-container">
-        <Col md={{ offset: 3, span: 6 }} className="login-area">
+      <Row>
+        <Col md={12} className="login-area">
           <Card className="login-card">
-            <Card.Body>
-              <div className="login-title">Agent Login</div>
-
+            <Card.Body>            
               <Formik
                 initialValues={{
                   username: "",
@@ -77,7 +71,7 @@ const GetLoginPage = (params) => {
                               <Col md={6}>
                                 <BasicActionLink
                                   label="Forget Password ?"
-                                  action={`/agent/fogetpassword`}
+                                  action={`/user/fogetpassword`}
                                 />
                               </Col>
                               <Col
@@ -86,7 +80,7 @@ const GetLoginPage = (params) => {
                               >
                                 <BasicActionLink
                                   label="Register/Sign Up"
-                                  action={`/agent/signup`}
+                                  action={`/user/signup`}
                                 />
                               </Col>
                             </Row>
@@ -100,20 +94,9 @@ const GetLoginPage = (params) => {
             </Card.Body>
           </Card>
         </Col>
-      </Container>
+      </Row>
     </React.Fragment>
   );
 };
 
-GetLoginPage.prototype = {
-  getUserLogin: PropTypes.func.isRequired,
-};
-
-const mapStateToProps = (state) => {
-  return {
-    login: state.login.loginResp,
-    loginError: state.login.loginError,
-  };
-};
-
-export default connect(mapStateToProps, { getUserLogin })(GetLoginPage);
+export default SignOrLoginContent;
