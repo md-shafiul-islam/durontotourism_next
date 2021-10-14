@@ -8,6 +8,7 @@ import AgentOwnerInfo from "../../components/agent/profile/AgentOwnerInfo";
 import AgentSecurityContent from "../../components/agent/securityAndLogin/AgentSecurityContent";
 import SubAgentTab from "../../components/agent/subagent/SubAgentTab";
 import { getCurrentAgentAction } from "../../redux/actions/agentAction";
+import { getSession } from "next-auth/react";
 
 class GetAgentIndexPage extends Component {
   componentDidMount() {
@@ -140,6 +141,7 @@ export async function getServerSideProps(context) {
   let session = await getSession({ req: context.req });
   
   if (!session) {
+    console.log("Current Agent Session, ", session);
     return {
       redirect: {
         destination: "/",

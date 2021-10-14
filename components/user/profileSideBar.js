@@ -4,10 +4,7 @@ import { Card, Col, Row } from "react-bootstrap";
 import ProfileImage from "./profileImage";
 
 const ProfileSideBar = (props) => {
-
-  const {data, status} = useSession();
-
-console.log("Current User ", data);
+  const { data, status } = useSession();
 
   const moveScrolPosition = (elm, e) => {
     let currentElm = document.querySelector(elm);
@@ -60,7 +57,7 @@ console.log("Current User ", data);
 
           <Row>
             <Col md={12} className="prof-name-tag">
-              <h5>{data&&data.user&&data.user.fullName}</h5>
+              <h5>{data && data.user && data.user.fullName}</h5>
               <span>personal profile</span>
             </Col>
           </Row>

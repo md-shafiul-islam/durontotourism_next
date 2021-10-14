@@ -44,6 +44,8 @@ console.log(process.env.REACT_APP_API_URL);
 
 export const GET_BACK_END_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
 
+export const AGENT_LOGIN_END_URL = process.env.NEXT_PUBLIC_BACKEND_AGENT_LOGIN_URL;
+
 export const HOST_ADD = "http://localhost"; //"http://durontotrip.com"; //http://3.137.195.192
 
 export const EXT_BASE_URL = `${HOST_ADD}:8050`; // `http://dto.durontotour.com`; //
@@ -163,3 +165,8 @@ export const SET_AGENT_OWNER_UPDATE_ERROR = "SET_AGENT_OWNER_UPDATE_ERROR";
 //User Or Customer
 export const CUSTOMER_LOGIN = "CUSTOMER_LOGIN";
 export const CUSTOMER_LOGIN_ERROR = "CUSTOMER_LOGIN_ERROR";
+
+export const SET_CUSTOMER = "SET_CUSTOMER";
+export const SET_CUSTOMER_ERROR = "SET_CUSTOMER_ERROR";
+export const SET_CUSTOMER_UPDATE = "SET_CUSTOMER_UPDATE"
+export const SET_CUSTOMER_UPDATE_ERROR = "SET_CUSTOMER_UPDATE_ERROR"

@@ -9,10 +9,18 @@ import ProfileSideBar from "../../components/user/profileSideBar";
 import ProfileStatus from "../../components/user/profileStatus";
 import ProfileBookingInformation from "../../components/profile/ProfileBookingInformation";
 import { getSession } from "next-auth/react";
+import { PropTypes } from "prop-types";
+import { connect } from "react-redux";
+import { getCustomerAction } from "../../redux/actions/customerAction";
+import { initialJwTokenToAuth } from "../../redux/actions/initialAction";
 
 class ProfilePage extends Component {
+  
   componentDidMount() {
     this.scrollSpyActive();
+    
+    initialJwTokenToAuth(this.props.accessToken);
+    this.props.getCustomerAction();
   }
 
   scrollSpyActive = () => {
@@ -135,12 +143,10 @@ class ProfilePage extends Component {
 }
 
 export async function getServerSideProps(context) {
-  console.log("getServerSideProps context, ", context);
   let session = await getSession({req:context.req});
 
-  console.log("Session Response ", session);
-
   if(!session){
+    
     return {
       redirect:{
         destination:"/",
@@ -148,9 +154,21 @@ export async function getServerSideProps(context) {
       }
     }
   }
+  
   return {
     props:session,
   }
 }
 
-export default ProfilePage;
+ProfilePage.prototypes = {
+  getCustomerAction: PropTypes.func.isRequired,
+  customer: PropTypes.object.isRequired,
+};
+
+const mapStateToProps = (state)=>{
+  return {
+    customer: state.customer&&state.customer.customer,
+  }
+}
+
+export default connect(mapStateToProps, {getCustomerAction})(ProfilePage);
