@@ -1,26 +1,33 @@
 import React, { Component } from "react";
+import { PropTypes } from "prop-types";
+import { connect } from "react-redux";
 import HelperLoader from "../../../utils/helper/helperLoader";
+import LoaderSpiner from "../../../utils/helper/loaderSpiner";
 import OneWayFlightCard from "../SearchResults/GenericCard/oneWayFlightCard";
+import { helperIsEmpty } from "../../../utils/helper/helperAction";
 
 class OneWaySearchResult extends Component {
   state = {
     result: {},
     flights: [],
-    prePerdStatus:false,
+    prePerdStatus: true,
   };
 
   componentDidMount() {
     this.getFlights();
-    // console.log("OneWaySearchResult componentDidMount, ", this.props);
 
-    if (this.props.result !== undefined && this.props.result !== null) {
-      this.setState({ result: this.props.result });
+    if (this.props.airSearchResponse) {
+      if (this.props.airSearchResponse.response) {
+        this.setState({ result: this.props.airSearchResponse.response });
+      }
     }
   }
 
   getFlights = () => {
-    
-    let { airPricePoints } = this.props.result;
+    if (helperIsEmpty(this.props.airSearchResponse)) {
+      return;
+    }
+    let { airPricePoints } = this.props.airSearchResponse.response;
 
     const localFlights = [];
     let changePenaltiesList = new Map();
@@ -28,8 +35,7 @@ class OneWaySearchResult extends Component {
 
     airPricePoints &&
       airPricePoints.forEach((airPrice, apIdx) => {
-
-        //console.log("Air Price Prosseing, ", airPrice);
+        console.log("One Way Air Price Prosseing, ", airPrice);
         let {
           approximateFees,
           approximateTaxes,
@@ -37,7 +43,7 @@ class OneWaySearchResult extends Component {
           basePrice,
           taxes,
           totalPrice,
-          approximateBasePrice          
+          approximateBasePrice,
         } = airPrice;
         let priceInfos = {
           approximateFees,
@@ -54,23 +60,35 @@ class OneWaySearchResult extends Component {
         airPrice &&
           airPrice.airPricingInfo &&
           airPrice.airPricingInfo.forEach((pricingInfo, piIdx) => {
-            let { cancelPenalty, changePenalty, passengerType, platingCarrier} = pricingInfo;
+            let {
+              cancelPenalty,
+              changePenalty,
+              passengerType,
+              platingCarrier,
+            } = pricingInfo;
 
             cancelPenalties.push({
               key: passengerType[0].code,
               group: apIdx,
-              penalty:cancelPenalty,
+              penalty: cancelPenalty,
             });
             changePenalties.push({
               key: passengerType[0].code,
               group: apIdx,
-              penalty:changePenalty,
+              penalty: changePenalty,
             });
 
             if (passengerType[0].code === "ADT" && piIdx === 0) {
-              //console.log("pricingInfo Each One: ", pricingInfo);
-              
-              let eachPrices = {eachTotalPrice:pricingInfo && pricingInfo.totalPrice, eachApxBasePrice:pricingInfo && pricingInfo.approximateBasePrice, eachBasePrice:pricingInfo && pricingInfo.basePrice, eachEqBasePrice:pricingInfo && pricingInfo.equivalentBasePrice, eachTotalTax:pricingInfo && pricingInfo.taxes}
+              console.log("pricingInfo Each One: ", pricingInfo);
+
+              let eachPrices = {
+                eachTotalPrice: pricingInfo && pricingInfo.totalPrice,
+                eachApxBasePrice:
+                  pricingInfo && pricingInfo.approximateBasePrice,
+                eachBasePrice: pricingInfo && pricingInfo.basePrice,
+                eachEqBasePrice: pricingInfo && pricingInfo.equivalentBasePrice,
+                eachTotalTax: pricingInfo && pricingInfo.taxes,
+              };
               pricingInfo &&
                 pricingInfo.flightOptionsList &&
                 pricingInfo.flightOptionsList.flightOption &&
@@ -87,7 +105,7 @@ class OneWaySearchResult extends Component {
                           destination,
                           option,
                           platingCarrier,
-                          eachPrices
+                          eachPrices,
                         });
                       });
                   }
@@ -101,7 +119,15 @@ class OneWaySearchResult extends Component {
 
     const flights = localFlights.map((flight, idx) => {
       console.log("Flights Prosseing, ", flight);
-      let { destination, origin, option, priceInfos, group, platingCarrier, eachPrices} = flight;
+      let {
+        destination,
+        origin,
+        option,
+        priceInfos,
+        group,
+        platingCarrier,
+        eachPrices,
+      } = flight;
       let item = {
         group,
         destination,
@@ -111,7 +137,7 @@ class OneWaySearchResult extends Component {
         cancelPenalties: cancelPenaltiesList.get(group),
         changePenalties: changePenaltiesList.get(group),
         platingCarrier,
-        eachPrices
+        eachPrices,
       };
 
       return item;
@@ -120,8 +146,7 @@ class OneWaySearchResult extends Component {
     //console.log("After Prosses Flights, ", flights);
     // console.log("cancelPenaltiesList, ", cancelPenaltiesList);
     // console.log("changePenaltiesList, ", changePenaltiesList);
-    this.setState({ flights: flights, prePerdStatus:true });
-
+    this.setState({ flights: flights, prePerdStatus: false });
   };
   render() {
     let {
@@ -132,20 +157,28 @@ class OneWaySearchResult extends Component {
       routeList,
       airPricePoints,
       traceId,
-      currencyType
+      currencyType,
     } = this.state.result;
 
-    let {prePerdStatus, flights} = this.state;
-    console.log("Status: ", prePerdStatus);
-    if(!prePerdStatus){
-      return <HelperLoader />
-    }
+    let { prePerdStatus, flights } = this.state;
+
+    console.log("One Response Loading Status: ", prePerdStatus);
 
     return (
       <React.Fragment>
+        <LoaderSpiner show={prePerdStatus} loadingText="Geting Flights ..." />
         {flights.map((flight, idx) => {
           console.log("Flight OWSR: ", flight);
-          let {destination, origin, option,priceInfos, cancelPenalties, changePenalties, platingCarrier, eachPrices} = flight;
+          let {
+            destination,
+            origin,
+            option,
+            priceInfos,
+            cancelPenalties,
+            changePenalties,
+            platingCarrier,
+            eachPrices,
+          } = flight;
           return (
             <React.Fragment key={`owcr-${idx}`}>
               <OneWayFlightCard
@@ -169,8 +202,18 @@ class OneWaySearchResult extends Component {
         })}
       </React.Fragment>
     );
-    
   }
 }
 
-export default OneWaySearchResult;
+OneWaySearchResult.prototypes = {
+  errors: PropTypes.object.isRequired,
+  airSearchResponse: PropTypes.object.isRequired,
+};
+
+const mapStateToProps = (state) => {
+  return {
+    airSearchResponse: state.airSearch.airSearchResponse,
+  };
+};
+
+export default connect(mapStateToProps, null)(OneWaySearchResult);

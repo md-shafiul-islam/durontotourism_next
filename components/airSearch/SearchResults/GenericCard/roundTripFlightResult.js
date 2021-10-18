@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import { Col, Row } from "react-bootstrap";
 import { PropTypes } from "prop-types";
 import { connect } from "react-redux";
-import HelperLoader from "../../../../utils/helper/helperLoader";
 import {
   setSelectedPrcingDetailsRoundTrip,
   setPriceRoundTrip,
@@ -131,12 +130,12 @@ class RoundTripFlightResult extends Component {
     this.getFilterOptions(depFlight, airLincesList, onwardDepartureDateTimeList, onwardArrivalDateTimeList, flightStopsType);
     this.getFilterOptions(retFlight, airLincesList, returnDepartureDateTimeList, returnArrivalDateTimeList, flightStopsType);
     
-    console.log("onwardDepartureDateTimeList, ", onwardDepartureDateTimeList);
-    console.log("onwardArrivalDateTimeList, ", onwardArrivalDateTimeList);
-    console.log("returnDepartureDateTimeList, ", returnDepartureDateTimeList);
-    console.log("returnArrivalDateTimeList, ", returnArrivalDateTimeList);
-    console.log("flightStopsType, ", flightStopsType);
-    console.log("airLincesList, ", airLincesList);
+    // console.log("onwardDepartureDateTimeList, ", onwardDepartureDateTimeList);
+    // console.log("onwardArrivalDateTimeList, ", onwardArrivalDateTimeList);
+    // console.log("returnDepartureDateTimeList, ", returnDepartureDateTimeList);
+    // console.log("returnArrivalDateTimeList, ", returnArrivalDateTimeList);
+    // console.log("flightStopsType, ", flightStopsType);
+    // console.log("airLincesList, ", airLincesList);
     
     this.props.setOnwardFlightFilterOptions(airLincesList, onwardDepartureDateTimeList, onwardArrivalDateTimeList, flightStopsType);
     this.props.setReturnFlightFilterOptions(airLincesList, onwardDepartureDateTimeList, onwardArrivalDateTimeList, flightStopsType);

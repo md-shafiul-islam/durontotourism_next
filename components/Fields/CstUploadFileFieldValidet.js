@@ -56,8 +56,10 @@ const CstUploadFileFieldValidet = (params) => {
       }
     }
 
-    if (!isEmptyString(errors[name])) {
-      errObj = { cls: "is-invalid", msg: errors[name], status: true };
+    if (errors) {
+      if (!isEmptyString(errors[name])) {
+        errObj = { cls: "is-invalid", msg: errors[name], status: true };
+      }
     }
 
     return errObj;

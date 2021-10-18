@@ -1,15 +1,17 @@
 import {
   GET_AIR_SEARCH_RESPONSE,
   GET_ERRORS,
-  BASE_URL,
   REQUEST_HEADER,
-  EXT_BASE_URL,
   GET_SEARCH_QUERY,
   GET_AIRLINES,
   GET_AIRPORTS,
   GET_AIRPORTS_ARR,
   GET_DEPARTURE_FLIGHTS,
   GET_RETURN_FLIGHTS,
+  AIR_SEARCH_URL,
+  RET_RESP_DATA_STATUS,
+  DEP_RESP_DATA_STATUS,
+  GET_AIR_SEARCH_RESPONSE_ERROR,
 } from "../types";
 import Axios from "axios";
 import { isEmpty } from "../actions/helperAction";
@@ -18,7 +20,7 @@ import { localDataStore } from "../../utils/helper/localDataStore";
 
 export const getAirSearchRequest = (requestData) => async (dispatch) => {
   try {
-    let url = `${EXT_BASE_URL}/flights`;
+    let url = `${AIR_SEARCH_URL}/flights`;
 
     console.log("Send Search Request and wait ...");
 
@@ -40,6 +42,11 @@ export const getAirSearchRequest = (requestData) => async (dispatch) => {
             : "Error: Response  not Or Air not found  "
           : "Error: Network Connection  ",
     });
+
+    dispatch({
+      type:GET_AIR_SEARCH_RESPONSE_ERROR,
+      payload:true,
+    })
   }
 };
 
@@ -52,7 +59,7 @@ export const getAirSearchRequest = (requestData) => async (dispatch) => {
  */
 export const getAirSearchRequestType = (requestData, type, completeAction) => async (dispatch) => {
   try {
-    let url = `${EXT_BASE_URL}/flights`;
+    let url = `${AIR_SEARCH_URL}/flights`;
 
     console.log("Send Search Request and wait ...");
 
@@ -72,6 +79,11 @@ export const getAirSearchRequestType = (requestData, type, completeAction) => as
         type: GET_DEPARTURE_FLIGHTS,
         payload: !isEmpty(res.data) ? true : false,
       });
+
+      dispatch({
+        type:DEP_RESP_DATA_STATUS,
+        payload:res.data&&res.data.data&&res.data.data.status
+      })
     }
 
     if(type === "returnFlights"){
@@ -81,7 +93,11 @@ export const getAirSearchRequestType = (requestData, type, completeAction) => as
         type: GET_RETURN_FLIGHTS,
         payload: !isEmpty(res.data) ? true : false,
       });
-    }
+      dispatch({
+        type:RET_RESP_DATA_STATUS,
+        payload:res.data&&res.data.data&&res.data.data.status
+      })
+    }   
 
     completeAction();    
 
@@ -102,7 +118,7 @@ export const getAirSearchRequestType = (requestData, type, completeAction) => as
 export const getOneWayAirSearchRequest = (requestData) => async (dispatch) => {
   try {
     //http://localhost:8050/flights
-    let url = `${EXT_BASE_URL}/flights`;
+    let url = `${AIR_SEARCH_URL}/flights`;
 
     const res = await Axios.post(url, JSON.stringify(requestData, null, 2), {
       headers: REQUEST_HEADER,
@@ -124,12 +140,16 @@ export const getOneWayAirSearchRequest = (requestData) => async (dispatch) => {
             : "Error: Response  not Or Air not found  "
           : "Error: Network Connection  ",
     });
+    dispatch({
+      type:GET_AIR_SEARCH_RESPONSE_ERROR,
+      payload:true,
+    })
   }
 };
 
 export const getSearchResult = (requestData) => async (dispatch) => {
   try {
-    let url = `${EXT_BASE_URL}/api/catalogofferings`;
+    let url = `${AIR_SEARCH_URL}/catalogofferings`;
     
     const res = await Axios.post(url, JSON.stringify(requestData, null, 2), {
       headers: REQUEST_HEADER,
@@ -185,7 +205,7 @@ const getProperDate = (pValue) => {
 
 export const getAirLines = () => async (dispatch) => {
   try {
-    let url = `${EXT_BASE_URL}/airline?type=1`;
+    let url = `${AIR_SEARCH_URL}/airline?type=1`;
   
     const res = await Axios.get(url, {headers:REQUEST_HEADER});
     
@@ -208,7 +228,7 @@ export const getAirLines = () => async (dispatch) => {
 
 export const getAirports = ()=>async (dispatch)=>{
   try {
-    let url = `${EXT_BASE_URL}/airport?type=1`;
+    let url = `${AIR_SEARCH_URL}/airport?type=1`;
     
     const res = await Axios.get(url, {headers:REQUEST_HEADER});
     
@@ -238,7 +258,7 @@ export const setSearchQuery = (data) => async (dispatch) => {
 
 export const airPortsArray = ()=>async (dispatch)=>{
   try {
-    let url = `${EXT_BASE_URL}/airport?type=0`;
+    let url = `${AIR_SEARCH_URL}/airport?type=0`;
     
     const res = await Axios.get(url, {headers:REQUEST_HEADER});
     

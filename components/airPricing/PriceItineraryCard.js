@@ -51,7 +51,7 @@ const PriceItineraryCard = (prams) => {
           }
         });
 
-        selectedText = selectedText.split("•");
+        selectedText = selectedText&&selectedText.split("•");
 
         selectedText.shift();
 

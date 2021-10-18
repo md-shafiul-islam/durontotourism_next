@@ -3,7 +3,7 @@ import { Card } from "react-bootstrap";
 import { PropTypes } from "prop-types";
 import Axios from "axios";
 import { connect } from "react-redux";
-import { EXT_BASE_URL, REQUEST_HEADER } from "../../redux/types";
+import { AIR_SEARCH_URL, REQUEST_HEADER } from "../../redux/types";
 
 class InputTextAutoSuggestion extends Component {
   constructor() {
@@ -34,7 +34,7 @@ class InputTextAutoSuggestion extends Component {
     if (!e.target) return;
     console.log("Change Event Auto Suggestions, ", e.target.value);
     this.setState({ text: e.target.value });
-    let url = `${EXT_BASE_URL}/airports-query/${e.target.value}`;
+    let url = `${AIR_SEARCH_URL}/airports-query/${e.target.value}`;
 
     
     if (e.target.value.length > 0) {
@@ -172,6 +172,7 @@ class InputTextAutoSuggestion extends Component {
   }
 
   focusMoveAction = (keyCode, whc) => {
+    
     if (keyCode) {
       const currentElm = document.querySelector(
         `#sa-${this.props.id} .list-group-item.sugestion.active-item`

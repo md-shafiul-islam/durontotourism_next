@@ -31,8 +31,7 @@ class PricingModalDetailsCard extends Component {
 
   pricingDetailsAction = () =>{
     //Redirect Pricing Page
-
-    this.setState({redirectStatus:true});
+    this.props.router&&this.props.router.push("/pricing");
   }
   UNSAFE_componentWillReceiveProps(next_props) {
     // console.log("PMDC UNSAFE_componentWillReceiveProps !!");
@@ -102,13 +101,8 @@ class PricingModalDetailsCard extends Component {
     }
   }
   render() {
-      let {retPricing, depPricing, redirectStatus} = this.state;
+      let {retPricing, depPricing} = this.state;
       // console.log("Air Pricing Modal Details Card, DepPrice, ", depPricing, " Ret Price, ", retPricing);
-
-      if(redirectStatus){
-        return <HelperRedirect to="/pricing" />;
-      }
-
     return (
       <React.Fragment>
         <PricingDetailsOptionCard

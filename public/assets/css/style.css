@@ -1,7 +1,13 @@
 body {
-  font-family: "Lato-Regular", Arial, Helvetica, sans-serif;
+  font-family: 'Times New Roman', Times, serif !important;
   background: #f1f1f1 !important;
   overflow-x: hidden;
+}
+
+/* "Lato-Regular", Arial, Helvetica, sans-serif*/
+
+.main-parent-container{
+  max-width: 1250px;
 }
 
 /** Sign Out Start*/

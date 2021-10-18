@@ -46,14 +46,12 @@ export const GET_BACK_END_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
 
 export const AGENT_LOGIN_END_URL = process.env.NEXT_PUBLIC_BACKEND_AGENT_LOGIN_URL;
 
-export const HOST_ADD = "http://localhost"; //"http://durontotrip.com"; //http://3.137.195.192
+export const AIR_SEARCH_URL = process.env.NEXT_PUBLIC_SEARCH_URL;
 
-export const EXT_BASE_URL = `${HOST_ADD}:8050`; // `http://dto.durontotour.com`; //
-export const BASE_URL = `${EXT_BASE_URL}/api`;
 
-export const EXT_PRICE_URL = `${HOST_ADD}:8181`;
 
-export const BASE_BOOKING_URL = `${HOST_ADD}:9000`;
+export const EXT_PRICE_URL = process.env.NEXT_PUBLIC_PRICE_URL;
+export const BASE_BOOKING_URL = process.env.NEXT_PUBLIC_BOOK_URL;
 export const EX_BOOKING_URL = `${BASE_BOOKING_URL}/cutom-book-request`;
 
 export const GET_ROUND_TRIP_BOOKING = "GET_ROUND_TRIP_BOOKING";
@@ -66,6 +64,9 @@ export const GET_DESIGNATIONS = "GET_DESIGNATIONS";
 export const GET_DESIGNATION = "GET_DESIGNATION";
 
 export const GET_AIR_SEARCH_RESPONSE = "GET_AIR_SEARCH_RESPONSE";
+export const GET_AIR_SEARCH_RESPONSE_ERROR = "GET_AIR_SEARCH_RESPONSE_ERROR";
+
+
 export const GET_SEARCH_QUERY = "GET_SEARCH_QUERY";
 
 export const GET_DEPARTURE_FLIGHTS = "GET_DEPARTURE_FLIGHTS";
@@ -168,5 +169,10 @@ export const CUSTOMER_LOGIN_ERROR = "CUSTOMER_LOGIN_ERROR";
 
 export const SET_CUSTOMER = "SET_CUSTOMER";
 export const SET_CUSTOMER_ERROR = "SET_CUSTOMER_ERROR";
-export const SET_CUSTOMER_UPDATE = "SET_CUSTOMER_UPDATE"
-export const SET_CUSTOMER_UPDATE_ERROR = "SET_CUSTOMER_UPDATE_ERROR"
+export const SET_CUSTOMER_UPDATE = "SET_CUSTOMER_UPDATE";
+export const SET_CUSTOMER_UPDATE_ERROR = "SET_CUSTOMER_UPDATE_ERROR";
+
+//Flight Response Status
+export const DEP_RESP_DATA_STATUS = "DEP_RESP_DATA_STATUS";
+export const RET_RESP_DATA_STATUS = "RET_RESP_DATA_STATUS";
+

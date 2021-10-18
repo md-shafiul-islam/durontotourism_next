@@ -17,7 +17,7 @@ import Sidebar from "../../layout/sidebare/sidebar";
 class AirSearchResult extends Component {
   state = {
     searchQuery: {},
-    searchType: 2,
+    searchType: 0,
     pStatus: true,
     bookingOption: [{}],
     selectedRndFly: {
@@ -69,20 +69,16 @@ class AirSearchResult extends Component {
   }
 
   initPreSelectItem = () => {
-
     if (this.state.responseData === undefined) {
       return;
     }
-    
+
     if (this.state.responseData.response === undefined) {
       return;
     }
-    
 
-    let {
-      availableAirOptions,
-      lowFareSearchRsp,
-    } = this.state.responseData.response;
+    let { availableAirOptions, lowFareSearchRsp } =
+      this.state.responseData.response;
 
     if (availableAirOptions === undefined) {
       return;
@@ -203,11 +199,10 @@ class AirSearchResult extends Component {
 
   render() {
     let { searchType, response } = this.state;
-    console.log("searchType, ", searchType);
-    
+    console.log("Search Result searchType, ", searchType);
+
     return (
       <React.Fragment>
-        
         <Row>
           <Col md={3}>
             <Row>
@@ -215,20 +210,21 @@ class AirSearchResult extends Component {
             </Row>
           </Col>
           <Col md={9}>
-            {searchType === 1 ? <OneWaySearchResult result={response} /> : ""}
-            {searchType === 2 ? <RoundTripFlightResult type={searchType} /> : ""}
-          </Col>
-        </Row>
-
-
-        <Row>
-          <Col md={3}></Col>
-          <Col md={9}>
-            {/* searchType === 3
+            {this.state.searchType === 1 ? (
+              <OneWaySearchResult result={response} status={true} />
+            ) : (
+              ""
+            )}
+            {this.state.searchType === 2 ? (
+              <RoundTripFlightResult type={this.state.searchType} />
+            ) : (
+              ""
+            )}
+            {this.state.searchType === 3
               ? multyFlightAirInf &&
                 multyFlightAirInf.map((item, mIdx) => {
                   return (
-                    <React.Fragment>
+                    <React.Fragment key={`mltCity-card-${mIdx}`}>
                       <MultiCityOptionsCards
                         flighAirPricetList={item}
                         elmId={mIdx}
@@ -236,10 +232,10 @@ class AirSearchResult extends Component {
                     </React.Fragment>
                   );
                 })
-              : "" */}
+              : ""}
           </Col>
         </Row>
-      
+
         <Row className="bootom-space">
           <Col md={12}></Col>
         </Row>
@@ -255,10 +251,16 @@ AirSearchResult.prototypes = {
   searchQuery: PropTypes.object.isRequired,
 };
 
-const mapStateToProps = (state) => ({
-  errors: state.errors,
-  airSearchResponse: state.airSearch,
-  searchQuery: state.searchQuery,
-});
+const mapStateToProps = (state) => {
+
+  return {
+    errors: state.errors,
+    airSearchResponse: state.airSearch.airSearchResponse,
+    searchQuery: state.searchQuery.sQuery,
+    airLinesList: state.airSearch.airLinesList,
+    airPortsArr: state.airSearch.airPortsArr,
+    airLinesList: state.airSearch.airLinesList,
+  }
+};
 
 export default connect(mapStateToProps, { getSearchResult })(AirSearchResult);

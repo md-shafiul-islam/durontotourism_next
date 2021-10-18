@@ -1,6 +1,6 @@
 import Axios from "axios";
 import {
-  EX_BOOKING_URL,
+  AIR_BOOK_URL,
   GET_BACK_END_URL,
   GET_ERRORS,
   GET_ROUND_TRIP_BOOKING,
@@ -10,7 +10,7 @@ import {
 import { AxiosIns } from "./AxiosInstance ";
 
 export const getRoundTripBookingAction = (query) => async (dispatch) => {
-  let url = EX_BOOKING_URL;
+  let url = `${AIR_BOOK_URL}/cutom-book-request`;
 
   const result = await Axios.post(url, query, {
     headers: REQUEST_HEADER,

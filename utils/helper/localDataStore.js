@@ -236,7 +236,19 @@ class LocalDataStore {
     }
   };
 
-  /* Booking Page Repository Function Start */
+
+  setOneWayFareSummary = (oneWayFareSummary)=>{
+    this.localStore.setItem("one_way_summeary", JSON.stringify(oneWayFareSummary, null, 2));
+  }
+
+  getOneWayFareSummary = ()=>{
+    let summaryStr = this.localStore.getItem("one_way_summeary");
+    if(summaryStr){
+      return JSON.parse(summaryStr);
+    }
+  }
+
+  /* Booking Page Repository Function End */
 
   /** Search Query Start */
   setSearchQuery = (searchQry) => {

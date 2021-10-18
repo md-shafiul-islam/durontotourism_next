@@ -5,13 +5,10 @@ import Select from "react-select";
 import { Button, Card, Col, Row } from "react-bootstrap";
 import * as Yup from "yup";
 import { helperIsEmpty } from "../../utils/helper/helperAction";
-import { getNmsOptions, helperPreSetTravelr } from "../../utils/helper/esFnc";
 import { initRoundTripBookingData } from "../../utils/booking/initBooking";
 import { v4 } from "uuid";
 import { connect } from "react-redux";
 import { getRoundTripBookingAction } from "../../redux/actions/bookingAction";
-import TravellerFields from "./TravellerFields";
-import CstSelectValidateField from "../Fields/CstSelectValidateField";
 import CstValidateField from "../Fields/CstValidateField";
 import {
   getAllFieldValidation,

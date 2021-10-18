@@ -14,8 +14,6 @@ const COMMON_REQUEST_HEADER = {
 const getCurrentUserBySessionOrToken = (jwtToken) =>{
   if (jwtToken) {  
     const decodedJwtToken = jwt_decode(jwtToken);
-
-    console.log("decodedJwtToken, ", decodedJwtToken);
     return decodedJwtToken;
   }
   return {};
@@ -75,5 +73,9 @@ export default NextAuth({
       session.user = getCurrentUserBySessionOrToken(token.accessToken);
       return session;
     },
+
+    async redirect({ url, baseUrl }) {
+      return url;
+    }
   },
 });

@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { Row, Col } from "react-bootstrap";
-import { useRouter } from "next/router";
 
 import OneWaySearchForm from "./OneWaySearchForm";
 import RoundTripSearchForm from "./RoundTripSearchForm";
@@ -25,12 +24,15 @@ import {
   RadioGroup,
 } from "@material-ui/core";
 import { esGetDateByAdding } from "../../utils/helper/esDateFunc";
+import LoaderSpiner from "../../utils/helper/loaderSpiner";
 
 //Prev Option sample { name: "Aalborg", code: "AAL" }
 
 class AirSearchForm extends Component {
   state = {
     redirectStatus: false,
+    airSerchStatus: false,
+    searchMsg: "",
     selectedItemFrom: {},
     selectedItemTo: {},
     oneWayInitValue: {
@@ -63,84 +65,6 @@ class AirSearchForm extends Component {
     pStatus: true,
   };
 
-  searchOneWayTrip = (queryData) => {
-    // console.log("One Way Search Query: ", queryData);
-    const airLegs = [];
-    const permittedCarriers = ["QR", "TK", "AI", "H1", "UK"];
-    const passengers = [];
-    //const currencyType = "USD";
-    let cabinClass = "Economy";
-
-    if (queryData !== undefined) {
-      queryData.passDetails &&
-        queryData.passDetails.forEach((item, idx) => {
-          let origin = item.from && item.from.code;
-          let destination = item.to && item.to.code;
-
-          let date = helperGetDateFormate(item.depTime);
-          airLegs.push({
-            orgCode: origin,
-            destCode: destination,
-            depTime: date,
-          });
-        });
-
-      if (queryData.traveler !== undefined) {
-        if (
-          queryData.traveler.ADT !== undefined &&
-          queryData.traveler.ADT !== null
-        ) {
-          for (let a = 0; a < queryData.traveler.ADT.value; a++) {
-            passengers.push({ code: "ADT" });
-          }
-        }
-
-        if (
-          queryData.traveler.CNN !== undefined &&
-          queryData.traveler.CNN !== null
-        ) {
-          for (let c = 0; c < queryData.traveler.CNN.value; c++) {
-            passengers.push({ code: "CNN" });
-          }
-        }
-
-        if (
-          queryData.traveler.INF !== undefined &&
-          queryData.traveler.INF !== null
-        ) {
-          for (let i = 0; i < queryData.traveler.INF.value; i++) {
-            passengers.push({ code: "INF" });
-          }
-        }
-
-        cabinClass = queryData.traveler.cabClass.value;
-      }
-    }
-
-    let intQuery = {
-      itemCount: 5,
-      airLegReqs: airLegs,
-      airSearchModifiersReq: {
-        permittedCarriers: permittedCarriers,
-      },
-      passengers: passengers,
-      airPricingModifiersReq: {
-        //currencyType: currencyType,
-      },
-      cabinClass: cabinClass,
-    };
-
-    let queryType = { searchQuery: intQuery, type: 1 };
-
-    this.props.setSearchQuery(queryType);
-
-    this.props.getOneWayAirSearchRequest(intQuery);
-
-    this.setState({ redirectStatus: true });
-
-    console.log("Query Befor Send: ", JSON.stringify(intQuery, null, 2));
-  };
-
   setOneWayTripInf = (values, type, travelerInf) => {
     if (type === 5 && travelerInf !== null) {
       console.log(
@@ -151,115 +75,6 @@ class AirSearchForm extends Component {
       );
     } else {
       console.log("After Change One Way Form Field Value:, ", values);
-    }
-  };
-
-  submitRoundTripAction = (queryData) => {
-    console.log("submitRoundTripAction, ", queryData);
-
-    if (queryData !== undefined && queryData !== null) {
-      let searchModifire = {
-        permittedCarriers: [],
-      };
-
-      let tPassengers = [];
-
-      let airPricingModifiers = {
-        currencyType: "USD",
-      };
-
-      let { traveler, passDetails } = queryData;
-      let airLegDep = [],
-        airLegRet;
-      let cabinClass = "Economy";
-
-      if (passDetails !== undefined && passDetails !== null) {
-        let { depTime, from, to, returnTime } = passDetails[0];
-        console.log("Air Legs Details: ", from, " - ", to);
-        let departureDate = helperGetDateFormate(depTime);
-        let reDate = helperGetDateFormate(returnTime);
-
-        airLegDep = [
-          {
-            orgCode: from && from.iataCode,
-            destCode: to && to.iataCode,
-            depTime: departureDate,
-          },
-        ];
-
-        airLegRet = [
-          {
-            orgCode: to && to.iataCode,
-            destCode: from && from.iataCode,
-            depTime: reDate,
-          },
-        ];
-      }
-
-      if (traveler !== undefined && traveler !== null) {
-        if (traveler.cabClass !== undefined && traveler.cabClass !== null) {
-          if (traveler.cabClass.length > 4) {
-            cabinClass = traveler.cabClass;
-          }
-        }
-
-        if (this.state.pStatus) {
-          if (traveler.ADT !== undefined) {
-            for (let a = 0; a < traveler.ADT.value; a++) {
-              tPassengers.push({ code: "ADT" });
-            }
-          }
-          if (traveler.CNN !== undefined) {
-            for (let c = 0; c < traveler.CNN.value; c++) {
-              tPassengers.push({ code: "CNN" });
-            }
-          }
-          if (traveler.INF !== undefined) {
-            for (let i = 0; i < traveler.INF.value; i++) {
-              tPassengers.push({ code: "INF" });
-            }
-          }
-        } else {
-          tPassengers.push({ code: "ADT" });
-        }
-      }
-
-      let searchQueryCstDep = {
-        itemCount: 5,
-
-        airLegReqs: airLegDep,
-        airSearchModifiersReq: null,
-        passengers: tPassengers,
-        airPricingModifiersReq: null, //{ currencyType: "USD",},
-        cabinClass: cabinClass,
-      };
-
-      let searchQueryCstRet = {
-        itemCount: 5,
-
-        airLegReqs: airLegRet,
-        airSearchModifiersReq: null,
-        passengers: tPassengers,
-        airPricingModifiersReq: null, //{ currencyType: "USD",},
-        cabinClass: cabinClass,
-      };
-
-      let queryBoth = {
-        depQuery: searchQueryCstDep,
-        retQuery: searchQueryCstRet,
-      };
-      let queryType = { searchQuery: queryBoth, type: 2 };
-
-      this.props.setSearchQuery(queryType);
-      localDataStore.setSearchQuery(queryType);
-
-      let queryDep = JSON.stringify(searchQueryCstDep, null, 2);
-      let queryRet = JSON.stringify(searchQueryCstRet, null, 2);
-      console.log("searchQueryCst, Round Trip, ", queryBoth);
-
-      this.props.getAirSearchRequestType(queryDep, "departureFlights");
-      this.props.getAirSearchRequestType(queryRet, "returnFlights");
-      this.setState({ redirectStatus: true });
     }
   };
 
@@ -369,7 +184,10 @@ class AirSearchForm extends Component {
                 from: values.passDetails[0].from,
                 to: values.passDetails[0].to,
                 depTime: values.passDetails[0].depTime,
-                returnTime: values.passDetails[0].depTime !== undefined ? esGetDateByAdding(values.passDetails[0].depTime, 2) : new Date(),
+                returnTime:
+                  values.passDetails[0].depTime !== undefined
+                    ? esGetDateByAdding(values.passDetails[0].depTime, 2)
+                    : new Date(),
               },
             ],
             traveler: { ADT: 0, CNN: 0, INF: 0, cabClass: 0 },
@@ -400,6 +218,11 @@ class AirSearchForm extends Component {
     let setLastDate = lastDate !== undefined ? lastDate : new Date();
     return (
       <React.Fragment>
+        {console.log(
+          "Current Air Response Status, ",
+          this.state.aieSerchStatus
+        )}
+
         <Row className="mp-0">
           <Col md={6}>
             <FormControl component="fieldset">
@@ -458,7 +281,6 @@ class AirSearchForm extends Component {
             getOneWayTripData={this.setOneWayTripInf}
             setAllRangeData={this.setAllRangeData}
             setDataToRoundTrip={this.setDataToRoundTrip}
-            getSearchValueAndSubmit={this.searchOneWayTrip}
           />
         ) : (
           ""
@@ -473,7 +295,6 @@ class AirSearchForm extends Component {
             setAllRangeData={this.setAllRangeData}
             preSetRoundTripForm={preSetRoundTripForm}
             preSetRoundTripTo={preSetRoundTripTo}
-            getDataAndSubmit={this.submitRoundTripAction}
           />
         ) : (
           ""
@@ -496,7 +317,6 @@ class AirSearchForm extends Component {
 }
 
 AirSearchForm.prototypes = {
-  getOneWayAirSearchRequest: PropTypes.func.isRequired,
   getAirSearchRequest: PropTypes.func.isRequired,
   setSearchQuery: PropTypes.func.isRequired,
   airPorts: PropTypes.object.isRequired,
@@ -516,6 +336,6 @@ export default connect(mapStateToProps, {
   getAirSearchRequestType,
 })(AirSearchForm);
 
-export const getServerSideProps = wrapper.getServerSideProps(async (params) => {
-  console.log("Get Serverside Props With Redux ", params);
-});
+export const getServerSideProps = wrapper.getServerSideProps(
+  async (params) => {}
+);

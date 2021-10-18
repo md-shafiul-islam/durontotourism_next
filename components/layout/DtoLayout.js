@@ -48,7 +48,9 @@ const DtoLayout = (params) => {
       <Meta />
       {isTopMenuExist ? <MainTopNavBar /> : console.log("Top Menu Not Visible !!")}
       <Container fluid className={bgClass}>
-        {params.children}
+        <div className="main-parent-container">
+          {params.children}
+        </div>
       </Container>
     </React.Fragment>
   );

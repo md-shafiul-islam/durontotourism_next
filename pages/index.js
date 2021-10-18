@@ -1,11 +1,7 @@
 import React from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import { connect } from "react-redux";
-import AirSearchForm from "../components/air-search/AirSearchForm";
-import AutoSuggestionInptTextField from "../components/autosuggestion/autoSuggestionInptTextField";
-import BlogHomePageCard from "../components/blogComp/blogHomePageCard";
 import { PropTypes } from "prop-types";
-import OffersCard from "../components/carousel/offersCard";
 import {
   getAirLines,
   getAirports,

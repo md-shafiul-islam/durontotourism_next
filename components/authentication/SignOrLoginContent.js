@@ -9,12 +9,14 @@ import SubmitActionButtion from "../Fields/SubmitActionButtion";
 const SignOrLoginContent = (params) => {
   const router = useRouter();
 
+  console.log("Modal Window Login Current Url Route, ", router);
+
   const loginAction = (loginData) => {
-      console.log("User Login Action ...")
+      
     signIn("credentials", {
       username: loginData.username,
       password: loginData.password,
-      callbackUrl: `${window.location.origin}/`,
+      callbackUrl: `${window.origin}${router.pathname}`,
       userStatus: 'customer'
     });
   };

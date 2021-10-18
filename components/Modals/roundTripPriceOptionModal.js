@@ -1,9 +1,11 @@
+import { useRouter } from "next/router";
 import React from "react";
 import { Modal } from "react-bootstrap";
 import PricingModalDetailsCard from "../airPricing/pricingSplitCommponent/pricingModalDetailsCard";
 
 const RoundTripPriceOptionModal = (props) => {
 
+  const router = useRouter();
   return (
     <React.Fragment>
       <Modal
@@ -20,7 +22,7 @@ const RoundTripPriceOptionModal = (props) => {
         </Modal.Header>
         <Modal.Body>
           
-          <PricingModalDetailsCard />
+          <PricingModalDetailsCard router={router} />
         </Modal.Body>
       </Modal>
     </React.Fragment>

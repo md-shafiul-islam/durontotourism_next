@@ -1,5 +1,5 @@
 import React from "react";
-import {signIn} from 'next-auth/react';
+import { getSession, signIn } from "next-auth/react";
 import { Field, Form, Formik } from "formik";
 import { PropTypes } from "prop-types";
 import { connect } from "react-redux";
@@ -13,15 +13,15 @@ import { getUserLogin } from "../../../redux/actions/userAction";
 const GetLoginPage = (params) => {
   const route = useRouter();
   params.login && params.login.success ? route.push("/agent") : "";
-
-  const loginAction = (loginData)=>{
-    signIn('credentials', {
-      username:loginData.username,
-      password:loginData.password,
-      callbackUrl:`${window.location.origin}/`,
-      userStatus:"agent",
-    })
-  }
+  console.log("Next Router, ", route);
+  const loginAction = (loginData) => {
+    signIn("credentials", {
+      username: loginData.username,
+      password: loginData.password,
+      callbackUrl: `${window.origin}${router.pathname}/agent`,
+      userStatus: "agent",
+    });
+  };
   return (
     <React.Fragment>
       <Container className="agent-login-container">
@@ -115,5 +115,21 @@ const mapStateToProps = (state) => {
     loginError: state.login.loginError,
   };
 };
+
+export async function getServerSideProps(context) {
+  let session = await getSession({ req: context.req });
+
+  if (session) {
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+  }
+  return {
+    props: {userTypeL:"Agent"},
+  };
+}
 
 export default connect(mapStateToProps, { getUserLogin })(GetLoginPage);

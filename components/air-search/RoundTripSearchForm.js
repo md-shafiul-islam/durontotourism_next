@@ -5,10 +5,129 @@ import DatePickerRange from "./datePickerRange";
 import TravellersAndClass from "./travellersAndClass";
 // import AutoSearchSuggestionList from "./AutoSearchSuggestionList";
 import AutoSuggestionInptTextField from "../autosuggestion/autoSuggestionInptTextField";
+import { useRouter } from "next/router";
+import { helperGetDateFormate, helperIsEmpty } from "../../utils/helper/helperAction";
+import { localDataStore } from "../../utils/helper/localDataStore";
+import { getAirSearchRequestType, setSearchQuery } from "../../redux/actions/airSearchAction";
+import { PropTypes } from "prop-types";
+import { connect } from "react-redux";
 
 const RoundTripSearchForm = (params) => {
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
+  const router = useRouter();
+
+  const submitRoundTripAction = (queryData) => {
+    console.log("submitRoundTripAction, ", queryData);
+
+    if (queryData !== undefined && queryData !== null) {
+      let searchModifire = {
+        permittedCarriers: [],
+      };
+
+      let tPassengers = [];
+
+      let airPricingModifiers = {
+        currencyType: "USD",
+      };
+
+      let { traveler, passDetails } = queryData;
+      let airLegDep = [],
+        airLegRet;
+      let cabinClass = "Economy";
+
+      if (passDetails !== undefined && passDetails !== null) {
+        let { depTime, from, to, returnTime } = passDetails[0];
+        console.log("Air Legs Details: ", from, " - ", to);
+        let departureDate = helperGetDateFormate(depTime);
+        let reDate = helperGetDateFormate(returnTime);
+
+        airLegDep = [
+          {
+            orgCode: from && from.iataCode,
+            destCode: to && to.iataCode,
+            depTime: departureDate,
+          },
+        ];
+
+        airLegRet = [
+          {
+            orgCode: to && to.iataCode,
+            destCode: from && from.iataCode,
+            depTime: reDate,
+          },
+        ];
+      }
+
+      if (traveler !== undefined && traveler !== null) {
+        if (traveler.cabClass !== undefined && traveler.cabClass !== null) {
+          if (traveler.cabClass.length > 4) {
+            cabinClass = traveler.cabClass;
+          }
+        }
+
+        if (traveler.ADT !== undefined) {
+          for (let a = 0; a < traveler.ADT.value; a++) {
+            tPassengers.push({ code: "ADT" });
+          }
+        }
+        if (traveler.CNN !== undefined) {
+          for (let c = 0; c < traveler.CNN.value; c++) {
+            tPassengers.push({ code: "CNN" });
+          }
+        } 
+        
+        if (traveler.INF !== undefined) {
+          for (let i = 0; i < traveler.INF.value; i++) {
+            tPassengers.push({ code: "INF" });
+          }
+        }
+        
+        if(tPassengers.length === 0){
+          tPassengers.push({ code: "ADT" });
+        }
+      }
+
+      let searchQueryCstDep = {
+        itemCount: 5,
+
+        airLegReqs: airLegDep,
+        airSearchModifiersReq: null,
+        passengers: tPassengers,
+        airPricingModifiersReq: null, //{ currencyType: "USD",},
+        cabinClass: cabinClass,
+      };
+
+      let searchQueryCstRet = {
+        itemCount: 5,
+
+        airLegReqs: airLegRet,
+        airSearchModifiersReq: null,
+        passengers: tPassengers,
+        airPricingModifiersReq: null, //{ currencyType: "USD",},
+        cabinClass: cabinClass,
+      };
+
+      let queryBoth = {
+        depQuery: searchQueryCstDep,
+        retQuery: searchQueryCstRet,
+      };
+      let queryType = { searchQuery: queryBoth, type: 2 };
+
+      params.setSearchQuery(queryType);
+      localDataStore.setSearchQuery(queryType);
+      let queryDep = JSON.stringify(searchQueryCstDep, null, 2);
+      let queryRet = JSON.stringify(searchQueryCstRet, null, 2);
+      console.log("searchQueryCst, Round Trip, ", queryBoth);
+
+      params.getAirSearchRequestType(queryDep, "departureFlights");
+      params.getAirSearchRequestType(queryRet, "returnFlights");
+      
+      console.log("Before Redirect ...");
+      router.push("/flights/search");
+
+    }
+  };
 
   return (
     <React.Fragment>
@@ -16,7 +135,7 @@ const RoundTripSearchForm = (params) => {
         enableReinitialize={true}
         initialValues={params.roundInitValue}
         onSubmit={(values, actions) => {
-          params.getDataAndSubmit(values);
+          submitRoundTripAction(values);
         }}
       >
         {(props) => (
@@ -158,4 +277,12 @@ const RoundTripSearchForm = (params) => {
   );
 };
 
-export default RoundTripSearchForm;
+RoundTripSearchForm.prototypes = {
+  getAirSearchRequestType: PropTypes.func.isRequired,
+  setSearchQuery: PropTypes.func.isRequired,
+};
+
+const mapStateToProps = (state)=>{
+  return {}
+}
+export default connect(mapStateToProps, {setSearchQuery, getAirSearchRequestType})(RoundTripSearchForm);

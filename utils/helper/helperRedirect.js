@@ -3,9 +3,10 @@ import React from 'react'
 
 const HelperRedirect = (props)=> {
     const route = useRouter();
+    route.push(props.to)
     return (
-        <div onLoad={route.push(props.to)}>
-            
+        <div>
+            &nbsp;
         </div>
     )
 }

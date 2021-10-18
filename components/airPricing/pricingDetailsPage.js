@@ -1,40 +1,45 @@
-import React, { Component } from "react";
+import React from "react";
 import { Col, Row } from "react-bootstrap";
+import { PropTypes } from "prop-types";
+import { connect } from "react-redux";
 import OneWayPriceing from "./oneWayPriceing";
 import RndTripPriceingDetailsPage from "./RndTripDetailsPage/rndTripPriceingDetailsPage";
+import { useRouter } from "next/router";
 
+const PricingDetailsPage = (props) => {
 
-class PricingDetailsPage extends Component {
+  const router = useRouter();
 
-  componentDidMount(){
-    console.log("PricingDetailsPage Run !!", this.props);
-  }
+  return (
+    <React.Fragment>
+      <Row>
+        {props.search.type === 1 && (
+          <Col md={12}>
+            <OneWayPriceing router={router} />
+          </Col>
+        )}
 
-  render() {
-    return (
-      <React.Fragment>
-        <Row>
-          {false && (
-            <Col md={12}>
-              <OneWayPriceing />
-            </Col>
-          )}
+        {props.search.type === 2 && (
+          <Col md={12}>
+            <RndTripPriceingDetailsPage router={router} />
+          </Col>
+        )}
 
-          {true && (
-            <Col md={12}>
-              <RndTripPriceingDetailsPage />
-            </Col>
-          )}
+        {props.search.type === 3 && <Col md={12}></Col>}
+      </Row>
+    </React.Fragment>
+  );
+};
 
-          {false && (
-            <Col md={12}>
-              
-            </Col>
-          )}
-        </Row>
-      </React.Fragment>
-    );
-  }
-}
+PricingDetailsPage.prototypes = {
+  search: PropTypes.object.isRequired,
+};
 
-export default PricingDetailsPage;
+const mapStateToProps = (state) => {
+  // console.log("Current State Air Price Details: ",  state);
+  return {
+    search: state.searchQuery.sQuery,
+  };
+};
+
+export default connect(mapStateToProps, null)(PricingDetailsPage);

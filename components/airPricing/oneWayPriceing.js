@@ -10,6 +10,7 @@ import AirPricringItinerayTitle from "./airPricringItinerayTitle";
 import FareSummary from "./fareSummary";
 import { helperGetTotalFlyTimeBetweenTwoDate } from "../../redux/actions/helperAction";
 import PricingLayover from "./pricingLayover";
+import { localDataStore } from "../../utils/helper/localDataStore";
 
 let prevDate = null;
 
@@ -256,6 +257,20 @@ class OneWayPriceing extends Component {
             <FareSummary
               airPriceSummary = {this.state.airPriceSummary}
             />
+          </Col>
+        </Row>
+        <Row>
+          <Col md={3}>
+            <button
+              type="button"
+              onClick={() => {
+                localDataStore.setOneWayFareSummary(this.state.farePriceSummery);
+                this.props.router && this.props.router.push("/booking");
+              }}
+              className="btdc-btn rounded-pill btn btn-primary btn-block"
+            >
+              Continue
+            </button>
           </Col>
         </Row>
       </React.Fragment>
