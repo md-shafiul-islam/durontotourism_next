@@ -7,6 +7,7 @@ import OneWaySearchResult from "../../components/airSearch/oneWaySearch/oneWaySe
 import MultiCityOptionsCards from "../../components/airSearch/SearchResults/FlightCards/MultiCityOptionsCards";
 import RoundTripFlightResult from "../../components/airSearch/SearchResults/GenericCard/roundTripFlightResult";
 import Sidebar from "../../components/layout/sidebare/sidebar";
+import SearchmodifierAccordion from "../../components/Accordion/SearchmodifierAccordion";
 
 class SearchResultPage extends Component {
   state = {
@@ -199,6 +200,11 @@ class SearchResultPage extends Component {
 
     return (
       <React.Fragment>
+        <Row>
+          <Col md={12}>
+            <SearchmodifierAccordion />
+          </Col>
+        </Row>
         <Row>
           <Col md={3}>
             <Row>

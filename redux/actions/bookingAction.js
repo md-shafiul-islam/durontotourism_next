@@ -7,7 +7,6 @@ import {
   REQUEST_HEADER,
   SET_BANK_NAMES,
 } from "../types";
-import { AxiosIns } from "./AxiosInstance ";
 
 export const getRoundTripBookingAction = (query) => async (dispatch) => {
   let url = `${AIR_BOOK_URL}/cutom-book-request`;

@@ -2,10 +2,7 @@ import React, { useState } from "react";
 import { Formik, Form, FieldArray } from "formik";
 import { Row, Col, Button } from "react-bootstrap";
 
-import TravellersAndClass from "./travellersAndClass";
 import SingleDatePicker from "./SingleDatePicker";
-import AutoSearchSuggestionList from "./AutoSearchSuggestionList";
-import AutoSuggestionInptTextField from "../autosuggestion/autoSuggestionInptTextField";
 import { PropTypes } from "prop-types";
 import { connect } from "react-redux";
 import { useRouter } from "next/router";
@@ -15,6 +12,8 @@ import {
 } from "../../redux/actions/airSearchAction";
 import { helperGetDateFormate } from "../../utils/helper/helperAction";
 import LoaderSpiner from "../../utils/helper/loaderSpiner";
+import CstAsyncSerachField from "../Fields/CstAsyncSerachField";
+import TravellerAndClassCard from "./traveller/TravellerAndClassCard";
 
 const OneWaySearchForm = (params) => {
   const [lastDate, setLastDate] = useState(new Date());
@@ -22,6 +21,8 @@ const OneWaySearchForm = (params) => {
   const [searchingStatus, setSearchingStatus] = useState(false);
   const [resMsg, setResMsg] = useState(false);
   const router = useRouter();
+
+  console.log("Current Router, ", router);
 
   const {
     searchRespStatus,
@@ -34,7 +35,11 @@ const OneWaySearchForm = (params) => {
     if (searchRespStatus) {
       if (airSearchResponse) {
         if (airSearchResponse.status) {
-          router.push("/flights/search");
+          if (router.asPath !== "/flights/search") {
+            router.push("/flights/search");
+          } else {
+            setSearchingStatus(false);
+          }
         } else {
           setResMsg(airSearchResponse.message);
           setSearchingStatus(false);
@@ -123,8 +128,9 @@ const OneWaySearchForm = (params) => {
     params.setSearchQuery(queryType);
 
     params.getOneWayAirSearchRequest(intQuery);
-
-    setSearchingStatus(true);
+    if (router.asPath !== "/flights/search") {
+      setSearchingStatus(true);
+    }
 
     console.log(
       "One Way Search Form Query Befor Send: ",
@@ -175,7 +181,7 @@ const OneWaySearchForm = (params) => {
                                         params.getOneWayTripData(props.values, 1, null);
                                       }}
                                     /> */}
-                                    <AutoSuggestionInptTextField
+                                    {/* <AutoSuggestionInptTextField
                                       change={(airPort) => {
                                         props.setFieldValue(
                                           `passDetails[${indx}].from`,
@@ -195,45 +201,41 @@ const OneWaySearchForm = (params) => {
                                       name={`passDetails[${indx}].from`}
                                       label="From"
                                       id={`passDetails-${indx}-from`}
-                                    />
-                                  </Col>
-                                  <Col md={6} className="no-margin-padding">
-                                    {/* <AutoSearchSuggestionList
-                                      title="To"
-                                      suggestions={params.sugList}
-                                      name={`passDetails[${indx}].to`}
-                                      id={`passDetails[${indx}].to`}
-                                      getSelectedData={(value) => {
-                                        console.log("Pre Selected Or S: ", value);
-                                        props.setFieldValue(
-                                          `passDetails[${indx}].to`,
-                                          value !== undefined ? {name:value.name, code:value.iataCode} : null
-                                        );
-                                        params.getOneWayTripData(props.values, 2, null);
-
-                                      }}
                                     /> */}
 
-                                    <AutoSuggestionInptTextField
-                                      change={(airPort) => {
+                                    <CstAsyncSerachField
+                                      label="From"
+                                      placeholder="Enter air port name, code or location"
+                                      fieldName={`passDetails-${indx}-from`}
+                                      onChangeHandler={(item) => {
                                         props.setFieldValue(
-                                          `passDetails[${indx}].to`,
-                                          airPort !== undefined
+                                          `passDetails[${indx}].from`,
+                                          item !== undefined
                                             ? {
-                                                name: airPort.name,
-                                                code: airPort.iataCode,
+                                                name: item.name,
+                                                code: item.iataCode,
                                               }
                                             : { name: "", code: "" }
                                         );
-                                        params.getOneWayTripData(
-                                          props.values,
-                                          1,
-                                          null
+                                      }}
+                                    />
+                                  </Col>
+                                  <Col md={6} className="no-margin-padding">
+                                    <CstAsyncSerachField
+                                      placeholder="Enter air port name, code or location"
+                                      label="To"
+                                      fieldName={`passDetails-${indx}-to`}
+                                      onChangeHandler={(item) => {
+                                        props.setFieldValue(
+                                          `passDetails[${indx}].to`,
+                                          item !== undefined
+                                            ? {
+                                                name: item.name,
+                                                code: item.iataCode,
+                                              }
+                                            : { name: "", code: "" }
                                         );
                                       }}
-                                      name={`passDetails[${indx}].to`}
-                                      label="To"
-                                      id={`passDetails-${indx}-to`}
                                     />
                                   </Col>
                                 </Row>
@@ -256,12 +258,6 @@ const OneWaySearchForm = (params) => {
                                         );
 
                                         setLastDate(item);
-
-                                        params.getOneWayTripData(
-                                          props.values,
-                                          3,
-                                          null
-                                        );
                                       }}
                                     />
                                   </Col>
@@ -285,7 +281,24 @@ const OneWaySearchForm = (params) => {
                               </Col>
 
                               <Col md={3} className="no-margin-padding">
-                                <TravellersAndClass
+                                <TravellerAndClassCard
+                                  setAdtTraveler={(item) => {
+                                    props.setFieldValue(`traveler.ADT`, item);
+                                  }}
+                                  setCnnTraveler={(item) => {
+                                    props.setFieldValue(`traveler.CNN`, item);
+                                  }}
+                                  setInfTraveler={(item) => {
+                                    props.setFieldValue(`traveler.INF`, item);
+                                  }}
+                                  setCabinClass={(item) => {
+                                    props.setFieldValue(
+                                      `traveler.cabClass`,
+                                      item
+                                    );
+                                  }}
+                                />
+                                {/* <TravellersAndClass
                                   getAllRangeData={(
                                     adults,
                                     child,
@@ -310,7 +323,7 @@ const OneWaySearchForm = (params) => {
                                       cabinClass,
                                     });
                                   }}
-                                />
+                                /> */}
                               </Col>
                             </Row>
                           ))}

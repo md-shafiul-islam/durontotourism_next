@@ -17,6 +17,10 @@ class MyDocument extends Document {
             rel="stylesheet"
           />
 
+          <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.6.1/font/bootstrap-icons.css"
+          />
 
           <link
             rel="stylesheet"
@@ -35,7 +39,6 @@ class MyDocument extends Document {
             crossOrigin="anonymous"
           />
 
-          
           {/**
             <link
             rel="stylesheet"

@@ -6,11 +6,16 @@ import TravellersAndClass from "./travellersAndClass";
 // import AutoSearchSuggestionList from "./AutoSearchSuggestionList";
 import AutoSuggestionInptTextField from "../autosuggestion/autoSuggestionInptTextField";
 import { useRouter } from "next/router";
-import { helperGetDateFormate, helperIsEmpty } from "../../utils/helper/helperAction";
+import { helperGetDateFormate } from "../../utils/helper/helperAction";
 import { localDataStore } from "../../utils/helper/localDataStore";
-import { getAirSearchRequestType, setSearchQuery } from "../../redux/actions/airSearchAction";
+import {
+  getAirSearchRequestType,
+  setSearchQuery,
+} from "../../redux/actions/airSearchAction";
 import { PropTypes } from "prop-types";
 import { connect } from "react-redux";
+import CstAsyncSerachField from "../Fields/CstAsyncSerachField";
+import TravellerAndClassCard from "./traveller/TravellerAndClassCard";
 
 const RoundTripSearchForm = (params) => {
   const [startDate, setStartDate] = useState(null);
@@ -75,15 +80,15 @@ const RoundTripSearchForm = (params) => {
           for (let c = 0; c < traveler.CNN.value; c++) {
             tPassengers.push({ code: "CNN" });
           }
-        } 
-        
+        }
+
         if (traveler.INF !== undefined) {
           for (let i = 0; i < traveler.INF.value; i++) {
             tPassengers.push({ code: "INF" });
           }
         }
-        
-        if(tPassengers.length === 0){
+
+        if (tPassengers.length === 0) {
           tPassengers.push({ code: "ADT" });
         }
       }
@@ -122,10 +127,9 @@ const RoundTripSearchForm = (params) => {
 
       params.getAirSearchRequestType(queryDep, "departureFlights");
       params.getAirSearchRequestType(queryRet, "returnFlights");
-      
+
       console.log("Before Redirect ...");
       router.push("/flights/search");
-
     }
   };
 
@@ -158,46 +162,29 @@ const RoundTripSearchForm = (params) => {
                                     md={6}
                                     className="no-margin-padding each-content"
                                   >
-                                    <AutoSuggestionInptTextField
-                                      change={(airPort) => {
+                                    <CstAsyncSerachField
+                                      label="From"
+                                      placeholder="Enter air port name, code or location"
+                                      fieldName={`passDetails[${indx}].from`}
+                                      onChangeHandler={(airPort) => {
                                         props.setFieldValue(
                                           `passDetails[${indx}].from`,
                                           airPort
                                         );
                                       }}
-                                      name={`passDetails[${indx}].from`}
-                                      label="From"
-                                      id={`passDetails-${indx}-from`}
-
-                                      // preSetItem={params.preSetRoundTripForm} not set yet
                                     />
-                                    {/* <AutoSearchSuggestionList
-                                      title="From"
-                                      suggestions={params.sugList}
-                                      name={`passDetails[${indx}].from`}
-                                      id={`passDetails[${indx}].from`}
-                                      getSelectedData={(value) => {
-                                        props.setFieldValue(
-                                          `passDetails[${indx}].from`,
-                                          value
-                                        );
-                                      }}
-                                      preSetItem={params.preSetRoundTripForm}
-                                    /> */}
                                   </Col>
                                   <Col md={6} className="no-margin-padding">
-                                    <AutoSuggestionInptTextField
-                                      change={(airPort) => {
+                                    <CstAsyncSerachField
+                                      label="To"
+                                      placeholder="Enter air port name, code or location"
+                                      fieldName={`passDetails[${indx}].to`}
+                                      onChangeHandler={(airPort) => {
                                         props.setFieldValue(
                                           `passDetails[${indx}].to`,
                                           airPort
                                         );
                                       }}
-                                      name={`passDetails[${indx}].to`}
-                                      label="To"
-                                      id={`passDetails-${indx}-to`}
-
-                                      // preSetItem={params.preSetRoundTripForm} not set yet
                                     />
                                   </Col>
                                 </Row>
@@ -228,22 +215,20 @@ const RoundTripSearchForm = (params) => {
                               </Col>
 
                               <Col md={3} className="no-margin-padding">
-                                <TravellersAndClass
-                                  getAllRangeData={(
-                                    adults,
-                                    child,
-                                    infants,
-                                    cabinClass
-                                  ) => {
-                                    props.setFieldValue(`traveler.ADT`, adults);
-                                    props.setFieldValue(`traveler.CNN`, child);
-                                    props.setFieldValue(
-                                      `traveler.INF`,
-                                      infants
-                                    );
+                                <TravellerAndClassCard
+                                  setAdtTraveler={(item) => {
+                                    props.setFieldValue(`traveler.ADT`, item);
+                                  }}
+                                  setCnnTraveler={(item) => {
+                                    props.setFieldValue(`traveler.CNN`, item);
+                                  }}
+                                  setInfTraveler={(item) => {
+                                    props.setFieldValue(`traveler.INF`, item);
+                                  }}
+                                  setCabinClass={(item) => {
                                     props.setFieldValue(
                                       `traveler.cabClass`,
-                                      cabinClass
+                                      item
                                     );
                                   }}
                                 />
@@ -282,7 +267,10 @@ RoundTripSearchForm.prototypes = {
   setSearchQuery: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = (state)=>{
-  return {}
-}
-export default connect(mapStateToProps, {setSearchQuery, getAirSearchRequestType})(RoundTripSearchForm);
+const mapStateToProps = (state) => {
+  return {};
+};
+export default connect(mapStateToProps, {
+  setSearchQuery,
+  getAirSearchRequestType,
+})(RoundTripSearchForm);

@@ -13,6 +13,7 @@ import agentReducer from "./agentReducer"
 import loginReducer from "./loginReducer";
 import userReducer from "./userReducer";
 import customerReducer from "./customerReducer";
+import esSearchReducer from "./esSearchReducer";
 
 export default combineReducers({
   airSearch: airSearchReducer,
@@ -29,4 +30,5 @@ export default combineReducers({
   login:loginReducer,
   user:userReducer,
   customer:customerReducer,
+  airPort:esSearchReducer,
 });

@@ -1,13 +1,14 @@
 body {
-  font-family: 'Times New Roman', Times, serif !important;
+  font-family: "Times New Roman", Times, serif !important;
   background: #f1f1f1 !important;
   overflow-x: hidden;
 }
 
 /* "Lato-Regular", Arial, Helvetica, sans-serif*/
 
-.main-parent-container{
+.main-parent-container {
   max-width: 1250px;
+  margin: 0 auto;
 }
 
 /** Sign Out Start*/
@@ -15,11 +16,10 @@ body {
   cursor: pointer;
 }
 
-.signin-item{
+.signin-item {
   cursor: pointer;
 }
 /** Sign Out End*/
-
 
 /** React Select option validet style Start */
 
@@ -65,7 +65,420 @@ body {
   background-size: calc(0.75em + 0.375rem) calc(0.75em + 0.375rem);
 }
 
+.cst-search-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.cst-search-wrapper .cst-label {
+  margin-left: 10px;
+  margin-top: 5px;
+  font-weight: 700;
+}
+
+.cst-search-container {
+  height: 80px !important;
+}
+.option-item-content {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.cst-search-selcet__value-container {
+  height: 65px !important;
+  width: 100%;
+}
+
+.cst-search-selcet__single-value {
+  width: 100%;
+}
+
+.cst-search-selcet__control {
+  border: none !important;
+  box-shadow: none;
+}
+
+.cst-search-selcet__control.cst-search-selcet__control--is-focused {
+  box-shadow: none !important;
+  box-shadow: 0px;
+}
+
+.cst-search-selcet__value-container .cst-search-selcet__input {
+  line-height: 70px;
+}
+
+.cst-search-selcet__value-container .cst-search-selcet__input input {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.option-item-content .option-content {
+  font-size: 1em;
+  font-weight: bold;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding-right: 10px;
+}
+
+.option-item-content .location {
+}
+
+.option-item-content .option-content .text {
+}
+
+.option-item-content .option-content .code {
+}
+
+.search-type-container {
+}
+
+.search-type-container .form-label {
+  color: #fff;
+}
+
+.search-type-container .cst-search-type__value-container {
+  height: 30px !important;
+  width: 100%;
+}
+
+.search-type-container .cst-search-type__single-value {
+  width: 100%;
+}
+
+.search-type-container .cst-search-type__control {
+  border: none !important;
+  box-shadow: none;
+  background-color: transparent !important;
+}
+
+.search-type-container
+  .cst-search-type__control.cst-search-selcet__control--is-focused {
+  box-shadow: none !important;
+  box-shadow: 0px;
+}
+
+.search-type-container
+  .cst-search-type__value-container
+  .cst-search-selcet__input {
+  line-height: 70px;
+}
+
+.search-type-container
+  .cst-search-type__value-container
+  .cst-search-selcet__input
+  input {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.search-type-container .cst-search-type__indicator-separator {
+  border: none !important;
+}
+
+.sticy-search-wrapper {
+  display: flex;
+  flex-direction: column;
+  padding: 5px;
+}
+
+.sticy-search-wrapper .sticy-label {
+  color: #0066ff;
+  margin-left: 10px;
+  margin-top: 5px;
+  font-weight: 700;
+}
+
+.sticy-search-wrapper .single-option-content {
+  color: #fff;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+}
+
+.sticy-search-wrapper .single-option-content .single-content {
+  display: flex;
+  flex-direction: row;
+  font-size: 12px;
+}
+
+.sticy-search-wrapper .single-option-content .single-content .code {
+  margin-right: 10px;
+}
+
+.sticy-search-selcet-container {
+  height: 30px !important;
+}
+.option-item-content {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.sticy-search-selcet__value-container {
+  width: 100%;
+}
+
+.sticy-search-selcet__single-value {
+  width: 100%;
+}
+
+.sticy-search-selcet__control {
+  border: none !important;
+  box-shadow: none;
+  background-color: transparent !important;
+}
+
+.sticy-search-selcet__control.sticy-search-selcet__control--is-focused {
+  box-shadow: none !important;
+  box-shadow: 0px;
+}
+
+.sticy-search-selcet__value-container .sticy-search-selcet__input {
+  line-height: 1em;
+}
+
+.sticy-search-selcet__value-container .sticy-search-selcet__input > input {
+  font-size: 1.15 !important;
+  color: #fff !important;
+}
+
 /** React Select option validet style End */
+
+/* sticky menu strat */
+.sticky-menu-container {
+  padding: 0px;
+}
+.mitembg {
+  background-color: hsla(0, 0%, 100%, 0.1);
+  border-radius: 5px;
+}
+
+.search-type-container .form-label {
+  margin-left: 10px;
+}
+.search-type-container .travel-type {
+  color: #fff;
+}
+
+.sticky-location-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.sticky-location-container .sticky-switch-content {
+  width: 5%;
+  text-align: center;
+  cursor: pointer;
+  color: #0066ff;
+}
+
+.sticky-location-container .sticky-search-box {
+  width: 47.5%;
+}
+
+.sticky-data-range-wrapper {
+  height: 55px;
+  display: flex;
+  flex-direction: column;
+}
+
+.sticky-date-card-area {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+.sticky-date-item {
+  width: 47.5%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+
+.sticky-date-item .sticky-date-label {
+  cursor: pointer;
+  color: #0066ff;
+  padding-left: 10px;
+}
+
+.sticky-date-item .sticky-date-text {
+  color: #fff;
+  padding-left: 10px;
+  font-size: 1.25em;
+}
+
+.sticky-data-range-wrapper .sticky-date-card-area {
+}
+
+/*Calender Parent */
+.sticky-data-range-wrapper .sticky-calender-area {
+  position: relative;
+  min-height: 2px;
+}
+
+/*Calender  */
+.sticky-data-range-wrapper .sticky-calender {
+  display: none;
+  min-width: 2px;
+  position: absolute;
+  z-index: 25;
+}
+
+.sticky-data-range-wrapper .sticky-calender.active {
+  display: block !important;
+}
+
+.sticky-data-range-wrapper .sticky-calender .sticky-calender-card {
+}
+
+.sticky-trv-content-area {
+  width: 100%;
+  min-height: 55px;
+}
+
+.sticky-trv-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  cursor: pointer;
+}
+
+.sticky-trv-container .sticky-trv-info {
+  width: 100%;
+  min-height: 35px;
+  color: #fff;
+  align-self: center;
+  padding: 5px;
+  display: flex;
+  flex-direction: column;
+}
+
+.sticky-trv-container .sticky-trv-content {
+  width: 350px;
+  min-height: 15px;
+  position: relative;
+  display: none;
+  left: -200px;
+}
+
+.sticky-trv-container .sticky-trv-content.active {
+  display: block;
+}
+
+.sticky-trv-container .sticky-trv-card {
+  background-color: #fff;
+  border-radius: 10px;
+}
+
+/* sticky menu End */
+
+/**Searc Modifire Style Start */
+.search-modify-accordion {
+  margin: 0px 0px 10px 0px;
+  padding: 10px 0px;
+}
+
+.search-modify-accordion .card {
+  padding-bottom: 12px;
+}
+
+.search-modify-accordion .card .card-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+}
+.search-modify-accordion .card .card-header .success .action-btn {
+  width: 150px;
+  height: 35px;
+}
+
+.search-modify-accordion .card .card-header .danger .action-btn {
+  width: 35px;
+  height: 35px;
+}
+
+.search-modify-accordion .card .card-header .close-smd-accordin.btn-danger {
+  border-radius: 50% !important;
+}
+
+/**Searc Modifire Style Start */
+
+/*Main Traveler input style Start */
+
+.mntvlr-container {
+  padding: 10px;
+}
+
+.mntvlr-container .traveller-input-area {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 22px;
+  align-items: center;
+  margin: 2px 0px;
+  justify-content: space-around;
+}
+
+.mntvlr-container .traveller-input-area .tvr-icon {
+  width: 20px;
+  font-size: 1em;
+  cursor: pointer;
+  font-weight: bold;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.mntvlr-container .traveller-input-area .form-label {
+  font-size: 1em !important;
+  font-weight: bold;
+  margin-bottom: 0px !important;
+  width: 60px;
+}
+.mntvlr-container .traveller-input-area .tvr-input {
+  width: 32px !important;
+  height: 20px;
+  padding: 1px 5px;
+  font-size: 1.1em;
+  text-align: right;
+}
+
+.mntvlr-container .traveller-input-area input::-webkit-outer-spin-button,
+.mntvlr-container .traveller-input-area input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+.mntvlr-container .traveller-input-area input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+.fly-class-area {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  font-size: 0.9em;
+}
+
+.mntvlr-container .fly-trv-item {
+  margin: 2.5px 0px;
+}
+
+.mntvlr-container .fly-trv-item .form-check-label.fly-class-item {
+  margin-left: 5px !important;
+}
+
+.fly-class-item {
+  cursor: pointer;
+}
+
+/*Main Traveler input style End */
 
 /* Thumb Images Area  Start */
 .thumb-image-area {
@@ -906,7 +1319,7 @@ body {
 }
 
 .air-search {
-  height: 120px;
+  height: 100px;
   border-radius: 5px;
   border: 1px solid rgb(190, 190, 190);
   margin-bottom: 30px;
@@ -918,13 +1331,13 @@ body {
 }
 
 .air-search .dtp-ara {
-  height: 118px;
+  height: 98px;
   /* padding-left:10px;
   padding-right:10px; */
 }
 
 .air-search .in-area {
-  height: 118px;
+  height: 98px;
 }
 
 .search-text-area {
@@ -4112,8 +4525,7 @@ body {
 
 .content-modal .modal-content-dilog {
   width: 90%;
-  max-width: none!important;
-
+  max-width: none !important;
 }
 
 .agent-container {
@@ -4123,14 +4535,14 @@ body {
   justify-content: center;
 }
 
-.btn-spinner{
+.btn-spinner {
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: center;  
+  justify-content: center;
 }
 
-.btn-spinner .text{
+.btn-spinner .text {
   padding: 5px;
 }
 
@@ -4190,3 +4602,31 @@ body {
 }
 
 /** Agent Style Start*/
+
+/**User Sign up Start */
+.user-signup-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  padding-top: 100px;
+}
+.user-signup {
+  display: block;
+  width: 500px;
+  padding: 50px 10px;
+  background-color: #fff;
+  border-radius: 20px;
+}
+
+.user-signup .title {
+  font-size: 1.5em;
+  font-weight: 700;
+  text-align: center;
+}
+
+.user-signup .field-area {
+  padding: 10px;
+}
+
+/**User Sign up Start */

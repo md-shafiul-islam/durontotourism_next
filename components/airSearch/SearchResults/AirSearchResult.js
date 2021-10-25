@@ -13,6 +13,7 @@ import PopulerFilter from "./AirFiltersCards/populerFilter";
 import FlightCatelogFilter from "./AirFiltersCards/flightCatelogFilter";
 import AirLinesFilter from "./AirFiltersCards/airLinesFilter";
 import Sidebar from "../../layout/sidebare/sidebar";
+import SearchmodifierAccordion from "../../Accordion/SearchmodifierAccordion";
 
 class AirSearchResult extends Component {
   state = {
@@ -203,7 +204,7 @@ class AirSearchResult extends Component {
 
     return (
       <React.Fragment>
-        <Row>
+        <Row>          
           <Col md={3}>
             <Row>
               <Sidebar />
@@ -252,7 +253,6 @@ AirSearchResult.prototypes = {
 };
 
 const mapStateToProps = (state) => {
-
   return {
     errors: state.errors,
     airSearchResponse: state.airSearch.airSearchResponse,
@@ -260,7 +260,7 @@ const mapStateToProps = (state) => {
     airLinesList: state.airSearch.airLinesList,
     airPortsArr: state.airSearch.airPortsArr,
     airLinesList: state.airSearch.airLinesList,
-  }
+  };
 };
 
 export default connect(mapStateToProps, { getSearchResult })(AirSearchResult);

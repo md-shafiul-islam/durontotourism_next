@@ -65,19 +65,6 @@ class AirSearchForm extends Component {
     pStatus: true,
   };
 
-  setOneWayTripInf = (values, type, travelerInf) => {
-    if (type === 5 && travelerInf !== null) {
-      console.log(
-        "Treveler Info Change: ",
-        values,
-        "Traveler Info: ",
-        travelerInf
-      );
-    } else {
-      console.log("After Change One Way Form Field Value:, ", values);
-    }
-  };
-
   multiCityQueryAction = (queryData) => {
     let passengerCriteria = [];
     let flights = [];
@@ -278,7 +265,6 @@ class AirSearchForm extends Component {
             sugList={this.props.airPortsArr}
             selectedItemFrom={this.state.selectedItemFrom}
             selectedItemTo={this.state.selectedItemTo}
-            getOneWayTripData={this.setOneWayTripInf}
             setAllRangeData={this.setAllRangeData}
             setDataToRoundTrip={this.setDataToRoundTrip}
           />

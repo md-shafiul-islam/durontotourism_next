@@ -1,3 +1,4 @@
+/* eslint-disable import/no-anonymous-default-export */
 import { GET_ERRORS } from "../types";
 
 const initialState = {};

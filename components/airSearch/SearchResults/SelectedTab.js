@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { Tabs, Tab, Nav, Row, Col } from "react-bootstrap";
-import FlyDetailsCard from "./FlightCards/FlyDetailsCard";
+import { Tab, Nav, Row, Col } from "react-bootstrap";
 import ChargeCardDetails from "./FlightCards/ChargeCardDetails";
 import FareSummaryCard from "./FlightCards/FareSummaryCard";
-import SelectedAirDetails from "./SelectedAirDetails";
 import DetailBookingCard from "./FlightCards/DetailBookingCard";
-import { GET_DAYES, GET_MONTHS } from "../../../redux/types";
+import { GET_MONTHS } from "../../../redux/types";
+import { helperIsEmpty } from "../../../utils/helper/helperAction";
 
 const SelectedTab = (props) => {
   const [key, setKey] = useState("flightDetails");
@@ -20,8 +19,8 @@ const SelectedTab = (props) => {
   let prevArvTime = "";
 
   useEffect(() => {
-    setDateMonth(getDayAndMonth(props.segment&&props.segment.departureTime));
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    setDateMonth(getDayAndMonth(props.segment && props.segment.departureTime));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const getDayAndMonth = (dateTime) => {
@@ -97,58 +96,62 @@ const SelectedTab = (props) => {
                   {props.totalTravelTime}
                 </Col>
               </Row>
-              
-              {props.bookInfos&&props.bookInfos.map((bookInf, sIdx)=>{
-                  let segment = props.segments&&props.segments[bookInf.segmentRef];
-                  let fareInfo = props.fareInfos&&props.fareInfos[bookInf.fareInfoRef];
+
+              {props.bookInfos &&
+                props.bookInfos.map((bookInf, sIdx) => {
+                  let segment =
+                    props.segments && props.segments[bookInf.segmentRef];
+                  let fareInfo =
+                    props.fareInfos && props.fareInfos[bookInf.fareInfoRef];
                   let timeDeff = "";
-                  let { origin } = segment;
-                  if (prevArvTime !== undefined) {
-                    if (prevArvTime.length > 3) {
-                      timeDeff = setLauoverInf(
-                        prevArvTime,
-                        segment.departureTime
-                      );
+                  if (!helperIsEmpty(fareInfo) && !helperIsEmpty(segment)) {
+                    let { origin } = segment;
+                    if (prevArvTime !== undefined) {
+                      if (prevArvTime.length > 3) {
+                        timeDeff = setLauoverInf(
+                          prevArvTime,
+                          segment.departureTime
+                        );
+                      }
                     }
+                    prevArvTime = segment && segment.arrivalTime;
+
+                    return (
+                      <React.Fragment key={`layover-${sIdx}`}>
+                        {sIdx > 0 ? (
+                          <Row className="layover">
+                            <Col md={12} className="layover-position">
+                              <div className="border-center "></div>
+                              <div className="layover-overlay-conten">
+                                <Row>
+                                  <Col
+                                    md={{ span: 6, offset: 3 }}
+                                    className="layover-content "
+                                  >
+                                    <p>
+                                      Change of Planes | {timeDeff} Layover in{" "}
+                                      {origin}
+                                    </p>
+                                  </Col>
+                                </Row>
+                              </div>
+                            </Col>
+                          </Row>
+                        ) : (
+                          ""
+                        )}
+
+                        <DetailBookingCard
+                          //bookInf={segment}
+                          totalTravelTime={props.totalTravelTime}
+                          travelLocs={props.travelInf}
+                          segment={segment}
+                          fareInfo={fareInfo}
+                        />
+                      </React.Fragment>
+                    );
                   }
-                  prevArvTime = segment && segment.arrivalTime;
-
-                  return (
-                    <React.Fragment key={`layover-${sIdx}`}>
-                      {sIdx > 0 ? (
-                        <Row className="layover">
-                          <Col md={12} className="layover-position">
-                            <div className="border-center "></div>
-                            <div className="layover-overlay-conten">
-                              <Row>
-                                <Col
-                                  md={{ span: 6, offset: 3 }}
-                                  className="layover-content "
-                                >
-                                  <p>
-                                    Change of Planes | {timeDeff} Layover in{" "}
-                                    {origin}
-                                  </p>
-                                </Col>
-                              </Row>
-                            </div>
-                          </Col>
-                        </Row>
-                      ) : (
-                        ""
-                      )}
-
-                      <DetailBookingCard
-                        //bookInf={segment}
-                        totalTravelTime={props.totalTravelTime}
-                        travelLocs={props.travelInf}
-                        segment={segment}
-                        fareInfo={fareInfo}
-                      />
-                    </React.Fragment>
-                  );
-              })}
-              
+                })}
             </Tab.Pane>
 
             <Tab.Pane eventKey="fareSummary">

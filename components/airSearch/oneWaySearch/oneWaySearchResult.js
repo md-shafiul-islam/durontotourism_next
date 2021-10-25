@@ -13,21 +13,35 @@ class OneWaySearchResult extends Component {
     prePerdStatus: true,
   };
 
-  componentDidMount() {
-    this.getFlights();
+  componentDidMount() {    
 
     if (this.props.airSearchResponse) {
       if (this.props.airSearchResponse.response) {
         this.setState({ result: this.props.airSearchResponse.response });
       }
     }
+    this.getFlights(this.props.airSearchResponse, " Component Did Mount Props ");
   }
 
-  getFlights = () => {
-    if (helperIsEmpty(this.props.airSearchResponse)) {
+  UNSAFE_componentWillReceiveProps(nextProps){
+    this.getFlights(nextProps.airSearchResponse, " Via Next Props ");
+  }
+
+  getFlights = (airSearchResp, via) => {
+    console.log("One Way Search this.props.airSearchResponse, ", via, airSearchResp);
+
+    if (helperIsEmpty(airSearchResp)) {
       return;
     }
-    let { airPricePoints } = this.props.airSearchResponse.response;
+
+    if(helperIsEmpty(airSearchResp.response)){
+      return;
+    }
+    console.log("One Way Search airSearchResp.response Befor Preperd ..., ", airSearchResp.response);
+    if(airSearchResp.status){
+      this.setState({prePerdStatus:true});
+    }
+    let { airPricePoints } = airSearchResp.response;
 
     const localFlights = [];
     let changePenaltiesList = new Map();
@@ -142,10 +156,8 @@ class OneWaySearchResult extends Component {
 
       return item;
     });
-    // console.log("Local Flights, ", localFlights);
-    //console.log("After Prosses Flights, ", flights);
-    // console.log("cancelPenaltiesList, ", cancelPenaltiesList);
-    // console.log("changePenaltiesList, ", changePenaltiesList);
+    
+    console.log("changePenaltiesList, Before Preperd End ", changePenaltiesList);
     this.setState({ flights: flights, prePerdStatus: false });
   };
   render() {
