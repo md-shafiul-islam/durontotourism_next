@@ -1,3 +1,4 @@
+/* eslint-disable import/no-anonymous-default-export */
 import { GET_SEARCH_QUERY } from "../types";
 
 const initialState = {

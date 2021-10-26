@@ -1,14 +1,13 @@
 import React, { Component } from "react";
 import { PropTypes } from "prop-types";
 import { connect } from "react-redux";
-import HelperLoader from "../../../utils/helper/helperLoader";
 import LoaderSpiner from "../../../utils/helper/loaderSpiner";
 import OneWayFlightCard from "../SearchResults/GenericCard/oneWayFlightCard";
 import { helperIsEmpty } from "../../../utils/helper/helperAction";
 
 class OneWaySearchResult extends Component {
   state = {
-    result: {},
+    response: {},
     flights: [],
     prePerdStatus: true,
   };
@@ -41,7 +40,7 @@ class OneWaySearchResult extends Component {
     if(airSearchResp.status){
       this.setState({prePerdStatus:true});
     }
-    let { airPricePoints } = airSearchResp.response;
+    let { airPricePoints} = airSearchResp.response;
 
     const localFlights = [];
     let changePenaltiesList = new Map();
@@ -156,11 +155,12 @@ class OneWaySearchResult extends Component {
 
       return item;
     });
+        
+    this.setState({ flights: flights, prePerdStatus: false, response:airSearchResp.response });
     
-    console.log("changePenaltiesList, Before Preperd End ", changePenaltiesList);
-    this.setState({ flights: flights, prePerdStatus: false });
   };
   render() {
+    console.log("One Way Response in state, ", this.state.response);
     let {
       responseMessage,
       flightDetailsList,
@@ -170,11 +170,16 @@ class OneWaySearchResult extends Component {
       airPricePoints,
       traceId,
       currencyType,
-    } = this.state.result;
+    } = this.state.response;
 
     let { prePerdStatus, flights } = this.state;
+    
 
     console.log("One Response Loading Status: ", prePerdStatus);
+
+    if(false){
+      return<span>Data Prosseaing.....</span>
+    }
 
     return (
       <React.Fragment>

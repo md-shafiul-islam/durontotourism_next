@@ -2,6 +2,7 @@ body {
   font-family: "Times New Roman", Times, serif !important;
   background: #f1f1f1 !important;
   overflow-x: hidden;
+  font-size: 12px;
 }
 
 /* "Lato-Regular", Arial, Helvetica, sans-serif*/
@@ -4630,3 +4631,27 @@ body {
 }
 
 /**User Sign up Start */
+
+/* Air Search Itinerary Start */
+
+.air-itinerary-Wrapper {
+  position: relative;
+}
+
+.air-itinerary-Wrapper .switch-area {
+  position: absolute;
+  left: 50%;
+  top: 30px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid rgb(190, 190, 190);
+  text-align: center;
+  line-height: 40px;
+  transform: translateX(-50%);
+  z-index: 250;
+  background-color: #fff;
+  cursor: pointer;
+}
+
+/* Air Search Itinerary End */

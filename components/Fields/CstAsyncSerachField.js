@@ -46,6 +46,7 @@ class CstAsyncSerachField extends Component {
               this.props.onChangeHandler(item);
             }}
             components={this.getCommponetSets()}
+            value={this.props.value}
           />
         </div>
       </React.Fragment>

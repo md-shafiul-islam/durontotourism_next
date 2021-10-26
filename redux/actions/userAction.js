@@ -51,7 +51,7 @@ export const getUserLogin = (loginData) => async (dispatch) => {
   }
 };
 
-export const getUserSignUp = (userSignup) = async (dispatch) => {
+export const getUserSignUp = (userSignup) => async (dispatch) => {
   if (userSignup) {
     userSignup = JSON.stringify(userSignup);
 

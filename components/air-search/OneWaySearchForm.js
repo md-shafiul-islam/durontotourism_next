@@ -12,8 +12,8 @@ import {
 } from "../../redux/actions/airSearchAction";
 import { helperGetDateFormate } from "../../utils/helper/helperAction";
 import LoaderSpiner from "../../utils/helper/loaderSpiner";
-import CstAsyncSerachField from "../Fields/CstAsyncSerachField";
 import TravellerAndClassCard from "./traveller/TravellerAndClassCard";
+import SelectItinerary from "./traveller/SelectItinerary";
 
 const OneWaySearchForm = (params) => {
   const [lastDate, setLastDate] = useState(new Date());
@@ -22,7 +22,7 @@ const OneWaySearchForm = (params) => {
   const [resMsg, setResMsg] = useState(false);
   const router = useRouter();
 
-  console.log("Current Router, ", router);
+  console.log("OneWaySearchForm params, ", params);
 
   const {
     searchRespStatus,
@@ -127,20 +127,20 @@ const OneWaySearchForm = (params) => {
 
     params.setSearchQuery(queryType);
 
-    params.getOneWayAirSearchRequest(intQuery);
+    params.getOneWayAirSearchRequest(intQuery, params.modify);
     if (router.asPath !== "/flights/search") {
       setSearchingStatus(true);
     }
-
-    console.log(
-      "One Way Search Form Query Befor Send: ",
-      JSON.stringify(intQuery, null, 2)
-    );
   };
 
   return (
     <React.Fragment>
       <LoaderSpiner show={searchingStatus} />
+      <LoaderSpiner
+        show={params.modifySearchStatus}
+        loadingText="Geting Flight"
+      />
+
       <Formik
         initialValues={params.oneInitValue}
         onSubmit={(values, actions) => {
@@ -158,87 +158,15 @@ const OneWaySearchForm = (params) => {
                         {props.values.passDetails &&
                           props.values.passDetails.map((item, indx) => (
                             <Row className="air-search" key={`trip-${indx}`}>
-                              <Col
-                                md={6}
-                                className="no-margin-padding each-content"
-                              >
-                                <Row className="no-margin-padding in-area">
-                                  <Col
-                                    md={6}
-                                    className="no-margin-padding each-content "
-                                  >
-                                    {/* <AutoSearchSuggestionList
-                                      title="From"
-                                      suggestions={params.sugList}
-                                      name={`passDetails[${indx}].from`}
-                                      id={`passDetails[${indx}].from`}
-                                      getSelectedData={(value) => {
-                                        console.log("SLV ", value);
-                                        props.setFieldValue(
-                                          `passDetails[${indx}].from`,
-                                          value !== undefined ? {name:value.name, code:value.iataCode} : null
-                                        );
-                                        params.getOneWayTripData(props.values, 1, null);
-                                      }}
-                                    /> */}
-                                    {/* <AutoSuggestionInptTextField
-                                      change={(airPort) => {
-                                        props.setFieldValue(
-                                          `passDetails[${indx}].from`,
-                                          airPort !== undefined
-                                            ? {
-                                                name: airPort.name,
-                                                code: airPort.iataCode,
-                                              }
-                                            : { name: "", code: "" }
-                                        );
-                                        params.getOneWayTripData(
-                                          props.values,
-                                          1,
-                                          null
-                                        );
-                                      }}
-                                      name={`passDetails[${indx}].from`}
-                                      label="From"
-                                      id={`passDetails-${indx}-from`}
-                                    /> */}
-
-                                    <CstAsyncSerachField
-                                      label="From"
-                                      placeholder="Enter air port name, code or location"
-                                      fieldName={`passDetails-${indx}-from`}
-                                      onChangeHandler={(item) => {
-                                        props.setFieldValue(
-                                          `passDetails[${indx}].from`,
-                                          item !== undefined
-                                            ? {
-                                                name: item.name,
-                                                code: item.iataCode,
-                                              }
-                                            : { name: "", code: "" }
-                                        );
-                                      }}
-                                    />
-                                  </Col>
-                                  <Col md={6} className="no-margin-padding">
-                                    <CstAsyncSerachField
-                                      placeholder="Enter air port name, code or location"
-                                      label="To"
-                                      fieldName={`passDetails-${indx}-to`}
-                                      onChangeHandler={(item) => {
-                                        props.setFieldValue(
-                                          `passDetails[${indx}].to`,
-                                          item !== undefined
-                                            ? {
-                                                name: item.name,
-                                                code: item.iataCode,
-                                              }
-                                            : { name: "", code: "" }
-                                        );
-                                      }}
-                                    />
-                                  </Col>
-                                </Row>
+                              <Col md={6} className="each-content">
+                                <SelectItinerary
+                                  {...props}
+                                  idx={indx}
+                                  origin={null}
+                                  destination={null}
+                                  destinationFieldName={`passDetails[${indx}].to`}
+                                  originFieldName={`passDetails[${indx}].from`}
+                                />
                               </Col>
                               <Col
                                 md={3}
@@ -354,6 +282,7 @@ OneWaySearchForm.prototypes = {
   airSearchResponse: PropTypes.object.isRequired,
   searchRespStatus: PropTypes.object.isRequired,
   searchResErrorStatus: PropTypes.object.isRequired,
+  modifySearchStatus: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = (state) => {
@@ -361,6 +290,7 @@ const mapStateToProps = (state) => {
     searchRespStatus: state.airSearch.searcResStatus,
     searchResErrorStatus: state.airSearch.searchResErrorStatus,
     airSearchResponse: state.airSearch.airSearchResponse,
+    modifySearchStatus: state.airSearch.modifySearchStatus,
   };
 };
 

@@ -16,6 +16,7 @@ import { PropTypes } from "prop-types";
 import { connect } from "react-redux";
 import CstAsyncSerachField from "../Fields/CstAsyncSerachField";
 import TravellerAndClassCard from "./traveller/TravellerAndClassCard";
+import SelectItinerary from "./traveller/SelectItinerary";
 
 const RoundTripSearchForm = (params) => {
   const [startDate, setStartDate] = useState(null);
@@ -42,94 +43,68 @@ const RoundTripSearchForm = (params) => {
       let cabinClass = "Economy";
 
       if (passDetails !== undefined && passDetails !== null) {
+        
         let { depTime, from, to, returnTime } = passDetails[0];
-        console.log("Air Legs Details: ", from, " - ", to);
+        
         let departureDate = helperGetDateFormate(depTime);
         let reDate = helperGetDateFormate(returnTime);
 
         airLegDep = [
           {
-            orgCode: from && from.iataCode,
-            destCode: to && to.iataCode,
+            orgCode: from && from.code,
+            destCode: to && to.code,
             depTime: departureDate,
           },
         ];
 
         airLegRet = [
           {
-            orgCode: to && to.iataCode,
-            destCode: from && from.iataCode,
+            orgCode: to && to.code,
+            destCode: from && from.code,
             depTime: reDate,
           },
         ];
+
+        cabinClass = getTravelerCabinDetails(traveler, cabinClass, tPassengers);
+
+        let searchQueryCstDep = {
+          itemCount: 5,
+
+          airLegReqs: airLegDep,
+          airSearchModifiersReq: null,
+          passengers: tPassengers,
+          airPricingModifiersReq: null, //{ currencyType: "USD",},
+          cabinClass: cabinClass,
+        };
+
+        let searchQueryCstRet = {
+          itemCount: 5,
+
+          airLegReqs: airLegRet,
+          airSearchModifiersReq: null,
+          passengers: tPassengers,
+          airPricingModifiersReq: null, //{ currencyType: "USD",},
+          cabinClass: cabinClass,
+        };
+
+        let queryBoth = {
+          depQuery: searchQueryCstDep,
+          retQuery: searchQueryCstRet,
+        };
+        let queryType = { searchQuery: queryBoth, type: 2 };
+
+        params.setSearchQuery(queryType);
+        localDataStore.setSearchQuery(queryType);
+        let queryDep = JSON.stringify(searchQueryCstDep, null, 2);
+        let queryRet = JSON.stringify(searchQueryCstRet, null, 2);
+        console.log("searchQueryCst, Round Trip, ", queryBoth);
+
+        params.getAirSearchRequestType(queryDep, "departureFlights");
+        params.getAirSearchRequestType(queryRet, "returnFlights");
+
+        console.log("Before Redirect ...");
+        router.push("/flights/search");
       }
-
-      if (traveler !== undefined && traveler !== null) {
-        if (traveler.cabClass !== undefined && traveler.cabClass !== null) {
-          if (traveler.cabClass.length > 4) {
-            cabinClass = traveler.cabClass;
-          }
-        }
-
-        if (traveler.ADT !== undefined) {
-          for (let a = 0; a < traveler.ADT.value; a++) {
-            tPassengers.push({ code: "ADT" });
-          }
-        }
-        if (traveler.CNN !== undefined) {
-          for (let c = 0; c < traveler.CNN.value; c++) {
-            tPassengers.push({ code: "CNN" });
-          }
-        }
-
-        if (traveler.INF !== undefined) {
-          for (let i = 0; i < traveler.INF.value; i++) {
-            tPassengers.push({ code: "INF" });
-          }
-        }
-
-        if (tPassengers.length === 0) {
-          tPassengers.push({ code: "ADT" });
-        }
-      }
-
-      let searchQueryCstDep = {
-        itemCount: 5,
-
-        airLegReqs: airLegDep,
-        airSearchModifiersReq: null,
-        passengers: tPassengers,
-        airPricingModifiersReq: null, //{ currencyType: "USD",},
-        cabinClass: cabinClass,
-      };
-
-      let searchQueryCstRet = {
-        itemCount: 5,
-
-        airLegReqs: airLegRet,
-        airSearchModifiersReq: null,
-        passengers: tPassengers,
-        airPricingModifiersReq: null, //{ currencyType: "USD",},
-        cabinClass: cabinClass,
-      };
-
-      let queryBoth = {
-        depQuery: searchQueryCstDep,
-        retQuery: searchQueryCstRet,
-      };
-      let queryType = { searchQuery: queryBoth, type: 2 };
-
-      params.setSearchQuery(queryType);
-      localDataStore.setSearchQuery(queryType);
-      let queryDep = JSON.stringify(searchQueryCstDep, null, 2);
-      let queryRet = JSON.stringify(searchQueryCstRet, null, 2);
-      console.log("searchQueryCst, Round Trip, ", queryBoth);
-
-      params.getAirSearchRequestType(queryDep, "departureFlights");
-      params.getAirSearchRequestType(queryRet, "returnFlights");
-
-      console.log("Before Redirect ...");
-      router.push("/flights/search");
     }
   };
 
@@ -153,41 +128,15 @@ const RoundTripSearchForm = (params) => {
                         {props.values.passDetails &&
                           props.values.passDetails.map((item, indx) => (
                             <Row className="air-search" key={`trip-${indx}`}>
-                              <Col
-                                md={6}
-                                className="no-margin-padding each-content"
-                              >
-                                <Row className="no-margin-padding in-area">
-                                  <Col
-                                    md={6}
-                                    className="no-margin-padding each-content"
-                                  >
-                                    <CstAsyncSerachField
-                                      label="From"
-                                      placeholder="Enter air port name, code or location"
-                                      fieldName={`passDetails[${indx}].from`}
-                                      onChangeHandler={(airPort) => {
-                                        props.setFieldValue(
-                                          `passDetails[${indx}].from`,
-                                          airPort
-                                        );
-                                      }}
-                                    />
-                                  </Col>
-                                  <Col md={6} className="no-margin-padding">
-                                    <CstAsyncSerachField
-                                      label="To"
-                                      placeholder="Enter air port name, code or location"
-                                      fieldName={`passDetails[${indx}].to`}
-                                      onChangeHandler={(airPort) => {
-                                        props.setFieldValue(
-                                          `passDetails[${indx}].to`,
-                                          airPort
-                                        );
-                                      }}
-                                    />
-                                  </Col>
-                                </Row>
+                              <Col md={6} className="each-content">
+                                <SelectItinerary
+                                  {...props}
+                                  idx={indx}
+                                  origin={null}
+                                  destination={null}
+                                  destinationFieldName={`passDetails[${indx}].to`}
+                                  originFieldName={`passDetails[${indx}].from`}
+                                />
                               </Col>
                               <Col
                                 md={3}
@@ -274,3 +223,35 @@ export default connect(mapStateToProps, {
   setSearchQuery,
   getAirSearchRequestType,
 })(RoundTripSearchForm);
+
+export const getTravelerCabinDetails = (traveler, cabinClass, tPassengers) => {
+  if (traveler !== undefined && traveler !== null) {
+    if (traveler.cabClass !== undefined && traveler.cabClass !== null) {
+      if (traveler.cabClass.length > 4) {
+        cabinClass = traveler.cabClass;
+      }
+    }
+
+    if (traveler.ADT !== undefined) {
+      for (let a = 0; a < traveler.ADT.value; a++) {
+        tPassengers.push({ code: "ADT" });
+      }
+    }
+    if (traveler.CNN !== undefined) {
+      for (let c = 0; c < traveler.CNN.value; c++) {
+        tPassengers.push({ code: "CNN" });
+      }
+    }
+
+    if (traveler.INF !== undefined) {
+      for (let i = 0; i < traveler.INF.value; i++) {
+        tPassengers.push({ code: "INF" });
+      }
+    }
+
+    if (tPassengers.length === 0) {
+      tPassengers.push({ code: "ADT" });
+    }
+  }
+  return cabinClass;
+};

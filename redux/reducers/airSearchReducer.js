@@ -9,7 +9,8 @@ import {
   GET_RETURN_FLIGHTS,
   RET_RESP_DATA_STATUS,
   GET_AIR_SEARCH_RESPONSE_ERROR,
-  ONE_WAY_REDIRECT_STATUS
+  ONE_WAY_REDIRECT_STATUS,
+  SET_MODIFY_SEARCH,
 } from "../types";
 
 const initialState = {
@@ -22,8 +23,9 @@ const initialState = {
   searcResStatus: false,
   rndResSuccessStatus: { depStatus: false, retStatus: false },
   multyCityStatus: false,
-  searchResErrorStatus:false,
-  rndResErrorStatus:false,
+  searchResErrorStatus: false,
+  rndResErrorStatus: false,
+  modifySearchStatus: false,
 };
 
 export default function (state = initialState, action) {
@@ -31,14 +33,14 @@ export default function (state = initialState, action) {
     case GET_AIR_SEARCH_RESPONSE:
       return {
         ...state,
-        airSearchResponse:action.payload,
-        searcResStatus:true,
+        airSearchResponse: action.payload,
+        searcResStatus: true,
       };
-      case GET_AIR_SEARCH_RESPONSE_ERROR:
-        return {
-          ...state,
-          searchResErrorStatus: action.payload,
-        };  
+    case GET_AIR_SEARCH_RESPONSE_ERROR:
+      return {
+        ...state,
+        searchResErrorStatus: action.payload,
+      };
 
     case GET_AIRLINES:
       return {
@@ -80,6 +82,11 @@ export default function (state = initialState, action) {
         rndResSuccessStatus: { ...rndTripStatus, retStatus: true },
       };
 
+    case SET_MODIFY_SEARCH:
+      return {
+        ...state,
+        modifySearchStatus: action.payload,
+      };
     default:
       return state;
   }

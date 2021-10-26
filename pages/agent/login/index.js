@@ -1,5 +1,5 @@
 import React from "react";
-import { getSession, signIn } from "next-auth/react";
+import { getSession, signIn, userSignup } from "next-auth/react";
 import { Field, Form, Formik } from "formik";
 import { PropTypes } from "prop-types";
 import { connect } from "react-redux";
@@ -14,6 +14,7 @@ const GetLoginPage = (params) => {
   const route = useRouter();
   params.login && params.login.success ? route.push("/agent") : "";
   console.log("Next Router, ", route);
+  
   const loginAction = (loginData) => {
     signIn("credentials", {
       username: loginData.username,
@@ -128,7 +129,7 @@ export async function getServerSideProps(context) {
     };
   }
   return {
-    props: {userTypeL:"Agent"},
+    props: {userType:"Agent"},
   };
 }
 

@@ -267,6 +267,7 @@ class AirSearchForm extends Component {
             selectedItemTo={this.state.selectedItemTo}
             setAllRangeData={this.setAllRangeData}
             setDataToRoundTrip={this.setDataToRoundTrip}
+            modify={this.props.modStatus === 2 ? true : false}
           />
         ) : (
           ""
@@ -281,6 +282,7 @@ class AirSearchForm extends Component {
             setAllRangeData={this.setAllRangeData}
             preSetRoundTripForm={preSetRoundTripForm}
             preSetRoundTripTo={preSetRoundTripTo}
+            modify={this.props.modStatus === 2 ? true : false}
           />
         ) : (
           ""
@@ -293,6 +295,7 @@ class AirSearchForm extends Component {
             setLastDate={setLastDate}
             setAllRangeData={this.setAllRangeData}
             getSearchValueAndSubmit={this.multiCityQueryAction}
+            modify={this.props.modStatus === 2 ? true : false}
           />
         ) : (
           ""

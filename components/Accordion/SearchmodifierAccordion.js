@@ -36,7 +36,7 @@ const SearchmodifierAccordion = (params) => {
           </Card.Header>
           <Accordion.Collapse eventKey="searchModifire">
             <Card.Body>
-              <AirSearchForm />
+              <AirSearchForm modStatus={2} />
             </Card.Body>
           </Accordion.Collapse>
         </Card>

@@ -6,6 +6,7 @@ import AutoSearchSuggestionList from "./AutoSearchSuggestionList";
 import SingleDatePicker from "./SingleDatePicker";
 import { addDays } from "date-fns";
 import AutoSuggestionInptTextField from "../autosuggestion/autoSuggestionInptTextField";
+import SelectItinerary from "./traveller/SelectItinerary";
 
 const MultiCitySearchForm = (params) => {
   const [pDate, setPDate] = useState(new Date());
@@ -18,7 +19,6 @@ const MultiCitySearchForm = (params) => {
   });
 
   const getNextItem = (passDetails) => {
-    
     let lastIdx = passDetails.length > 0 ? passDetails.length - 1 : 0;
     let lastItem = passDetails[lastIdx];
     let item = {
@@ -27,14 +27,11 @@ const MultiCitySearchForm = (params) => {
       depTime: new Date(),
     };
 
-    
     let nDate = new Date(lastItem.depTime);
     nDate = addDays(nDate, 1);
 
     item.from = lastItem.to;
     item.depTime = nDate;
-
-   
 
     if (item === undefined || item === null) {
       return item;
@@ -61,70 +58,20 @@ const MultiCitySearchForm = (params) => {
                         {props.values.passDetails &&
                           props.values.passDetails.map((item, indx) => (
                             <Row className="air-search" key={`trip-${indx}`}>
-                              
-                              <Col md={6} className="no-margin-padding each-content">
-                                <Row className="no-margin-padding in-area">
-                                  <Col md={6} className="no-margin-padding each-content">
-                                    {/* <AutoSearchSuggestionList
-                                      preSetItem={item.from}
-                                      title="From"
-                                      suggestions={params.sugList}
-                                      name={`passDetails[${indx}].from`}
-                                      id={`passDetails[${indx}].from`}
-                                      getSelectedData={(value) => {
-                                        props.setFieldValue(
-                                          `passDetails[${indx}].from`,
-                                          value
-                                        );
-                                      }}
-                                    /> */}
-
-                                    <AutoSuggestionInptTextField
-                                      change={(airPort) => {
-                                        props.setFieldValue(
-                                          `passDetails[${indx}].from`,
-                                          airPort
-                                        );
-                                      }}
-                                      name={`passDetails[${indx}].from`}
-                                      label="From"
-                                      id={`passDetails-${indx}-from`}
-
-                                      // preSetItem={params.preSetRoundTripForm} not set yet
-                                    />
-
-                                  </Col>
-                                  <Col md={6} className="no-margin-padding">
-                                    {/* <AutoSearchSuggestionList
-                                      title="TO"
-                                      preSetItem={item.to}
-                                      suggestions={params.sugList}
-                                      name={`passDetails[${indx}].to`}
-                                      id={`passDetails[${indx}].to`}
-                                      getSelectedData={(value) => {
-                                        props.setFieldValue(
-                                          `passDetails[${indx}].to`,
-                                          value
-                                        );
-                                      }}
-                                    /> */}
-                                    <AutoSuggestionInptTextField
-                                      change={(airPort) => {
-                                        props.setFieldValue(
-                                          `passDetails[${indx}].from`,
-                                          airPort
-                                        );
-                                      }}
-                                      name={`passDetails[${indx}].from`}
-                                      label="From"
-                                      id={`passDetails-${indx}-from`}
-
-                                      // preSetItem={params.preSetRoundTripForm} not set yet
-                                    />
-                                  </Col>
-                                </Row>
+                              <Col md={6} className="each-content">
+                                <SelectItinerary
+                                  {...props}
+                                  idx={indx}
+                                  origin={null}
+                                  destination={null}
+                                  destinationFieldName={`passDetails[${indx}].to`}
+                                  originFieldName={`passDetails[${indx}].from`}
+                                />
                               </Col>
-                              <Col md={2} className="no-margin-padding each-content">
+                              <Col
+                                md={2}
+                                className="no-margin-padding each-content"
+                              >
                                 <SingleDatePicker
                                   preSetDate={item.depTime}
                                   getDate={(item) => {
@@ -147,8 +94,6 @@ const MultiCitySearchForm = (params) => {
                                       infants,
                                       cabinClass
                                     ) => {
-                                      
-
                                       props.setFieldValue(
                                         `traveler.ADT`,
                                         adults
