@@ -14,6 +14,7 @@ import loginReducer from "./loginReducer";
 import userReducer from "./userReducer";
 import customerReducer from "./customerReducer";
 import esSearchReducer from "./esSearchReducer";
+import veryfiReducer from "./verifyReducer";
 
 export default combineReducers({
   airSearch: airSearchReducer,
@@ -31,4 +32,5 @@ export default combineReducers({
   user:userReducer,
   customer:customerReducer,
   airPort:esSearchReducer,
+  verify:veryfiReducer,
 });

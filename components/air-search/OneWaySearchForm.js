@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Formik, Form, FieldArray } from "formik";
 import { Row, Col, Button } from "react-bootstrap";
 
@@ -10,16 +10,26 @@ import {
   getOneWayAirSearchRequest,
   setSearchQuery,
 } from "../../redux/actions/airSearchAction";
-import { helperGetDateFormate } from "../../utils/helper/helperAction";
+import {
+  helperGetDateFormate,
+  helperIsEmpty,
+} from "../../utils/helper/helperAction";
 import LoaderSpiner from "../../utils/helper/loaderSpiner";
 import TravellerAndClassCard from "./traveller/TravellerAndClassCard";
 import SelectItinerary from "./traveller/SelectItinerary";
+import { localDataStore } from "../../utils/helper/localDataStore";
+import { getPassengerCount } from "../../utils/ui/accordionEs";
 
 const OneWaySearchForm = (params) => {
   const [lastDate, setLastDate] = useState(new Date());
   const [oneWayDate, setOneWayDate] = useState(new Date());
   const [searchingStatus, setSearchingStatus] = useState(false);
   const [resMsg, setResMsg] = useState(false);
+
+  const [passengerCount, setPassengerCount] = useState(undefined);
+  const [flCabinClass, setFlcabinClass] = useState("");
+  const [airLegs, setAirLegs] = useState([]);
+
   const router = useRouter();
 
   console.log("OneWaySearchForm params, ", params);
@@ -31,40 +41,56 @@ const OneWaySearchForm = (params) => {
     redirectStatus,
   } = params;
 
-  if (searchingStatus) {
-    if (searchRespStatus) {
-      if (airSearchResponse) {
-        if (airSearchResponse.status) {
-          if (router.asPath !== "/flights/search") {
-            router.push("/flights/search");
+  const initEsData = () => {
+    if (searchingStatus) {
+      if (searchRespStatus) {
+        if (airSearchResponse) {
+          if (airSearchResponse.status) {
+            if (router.asPath !== "/flights/search") {
+              router.push("/flights/search");
+            } else {
+              setSearchingStatus(false);
+            }
           } else {
+            setResMsg(airSearchResponse.message);
             setSearchingStatus(false);
           }
         } else {
-          setResMsg(airSearchResponse.message);
+          setResMsg("Flight not found, Please Try another date");
           setSearchingStatus(false);
         }
-      } else {
-        setResMsg("Flight not found, Please Try another date");
+      }
+
+      if (searchResErrorStatus) {
+        setResMsg("Netwaork error, Please Try again later");
         setSearchingStatus(false);
       }
     }
+  };
+  initEsData();
 
-    if (searchResErrorStatus) {
-      setResMsg("Netwaork error, Please Try again later");
-      setSearchingStatus(false);
+  useEffect(() => {
+    const sQuery = localDataStore.getSearchQuery();
+    console.log("SelectItinerary Air Search Query ", sQuery);
+    if (!helperIsEmpty(sQuery.searchQuery)) {
+      if (!helperIsEmpty(sQuery.searchQuery)) {
+        const { airLegReqs, cabinClass, passengers } = sQuery.searchQuery;
+        setAirLegs(airLegReqs);
+        setPassengerCount(getPassengerCount(passengers));
+        setFlcabinClass(cabinClass);
+      }
     }
-  }
+  }, []);
 
   const searchOneWayTrip = (queryData) => {
     console.log("One Way Search Query: ", queryData);
     const airLegs = [];
     // const permittedCarriers = ["QR", "TK", "AI", "H1", "UK"];
     const passengers = [];
-    //const currencyType = "USD";
-    let cabinClass = "Economy";
+    const currencyType = "BDT";
 
     if (queryData !== undefined) {
+      console.log("searchOneWayTrip Query Data :) ");
       queryData.passDetails &&
         queryData.passDetails.forEach((item, idx) => {
           let origin = item.from && item.from.code;
@@ -105,32 +131,43 @@ const OneWaySearchForm = (params) => {
             passengers.push({ code: "INF" });
           }
         }
+      }
 
-        cabinClass = queryData.traveler.cabClass.value;
+      let cabinClass = "Economy";
+      if (!helperIsEmpty(queryData.traveler.cabClass)) {
+        console.log(
+          "Cabin class Selected value, ",
+          queryData.traveler.cabClass.value
+        );
+        cabinClass = queryData.traveler.cabClass.value
+          ? queryData.traveler.cabClass.value
+          : cabinClass;
+      }
+      let intQuery = {
+        itemCount: 5,
+        airLegReqs: airLegs,
+        airSearchModifiersReq: {
+          permittedCarriers: null,
+        },
+        passengers: passengers,
+        airPricingModifiersReq: {
+          currencyType: currencyType,
+        },
+        cabinClass: cabinClass,
+      };
+
+      console.log("Current One Way Query, ", intQuery);
+      let queryType = { searchQuery: intQuery, type: 1 };
+
+      params.setSearchQuery(queryType);
+      localDataStore.setSearchQuery(queryType);
+
+      params.getOneWayAirSearchRequest(intQuery, params.modify);
+      if (router.asPath !== "/flights/search") {
+        setSearchingStatus(true);
       }
     }
-
-    let intQuery = {
-      itemCount: 5,
-      airLegReqs: airLegs,
-      airSearchModifiersReq: {
-        permittedCarriers: null,
-      },
-      passengers: passengers,
-      airPricingModifiersReq: {
-        //currencyType: currencyType,
-      },
-      cabinClass: cabinClass,
-    };
-
-    let queryType = { searchQuery: intQuery, type: 1 };
-
-    params.setSearchQuery(queryType);
-
-    params.getOneWayAirSearchRequest(intQuery, params.modify);
-    if (router.asPath !== "/flights/search") {
-      setSearchingStatus(true);
-    }
+    console.log("searchOneWayTrip End :) ");
   };
 
   return (
@@ -162,23 +199,32 @@ const OneWaySearchForm = (params) => {
                                 <SelectItinerary
                                   {...props}
                                   idx={indx}
-                                  origin={null}
-                                  destination={null}
+                                  origin={
+                                    airLegs&&airLegs.length > indx
+                                      ? airLegs[indx].orgCode
+                                      : null
+                                  }
+                                  destination={
+                                    airLegs&&airLegs.length > indx
+                                      ? airLegs[indx].destCode
+                                      : null
+                                  }
                                   destinationFieldName={`passDetails[${indx}].to`}
                                   originFieldName={`passDetails[${indx}].from`}
                                 />
                               </Col>
-                              <Col
-                                md={3}
-                                className="no-margin-padding each-content"
-                              >
+                              <Col md={3} className="each-content">
                                 <Row className="mp-0">
                                   <Col
                                     md={6}
-                                    className="no-margin-padding each-content dtp-ara"
+                                    className="no-margin-padding dtp-ara"
                                   >
                                     <SingleDatePicker
-                                      preSetDate={params.setLastDate}
+                                      preSetDate={
+                                        airLegs&&airLegs.length > indx
+                                          ? airLegs[indx].depTime
+                                          : undefined
+                                      }
                                       getDate={(item) => {
                                         props.setFieldValue(
                                           `passDetails[${indx}].depTime`,
@@ -210,6 +256,10 @@ const OneWaySearchForm = (params) => {
 
                               <Col md={3} className="no-margin-padding">
                                 <TravellerAndClassCard
+                                  preSetTraveler={{
+                                    cabinClass: flCabinClass,
+                                    passengers: passengerCount,
+                                  }}
                                   setAdtTraveler={(item) => {
                                     props.setFieldValue(`traveler.ADT`, item);
                                   }}

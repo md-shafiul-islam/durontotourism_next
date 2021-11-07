@@ -16,11 +16,12 @@ const getDeta = (resp) => {
 };
 
 export const getAddSignUpAction = (signup) => async (dispatch) => {
-  const resp = axios.post(`${GET_BACK_END_URL}/signup`, signup, {
+  signup = JSON.stringify(signup, null, 2);
+
+  const resp = await axios.post(`${GET_BACK_END_URL}/customers/signup`, signup, {
     headers: REQUEST_HEADER,
   });
-
-  console.log("Add Sign Up Resp, ", resp);
+  console.log("Current Signup Resp, ", resp)
   try {
     dispatch({
       type: SET_SIGNUP_RESP,

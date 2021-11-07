@@ -36,6 +36,7 @@ export default NextAuth({
           username: credentials.username,
           password: credentials.password,
         };
+        console.log("Curent URL ", actionUrl);
         const user = await axios.post(
           actionUrl,
           loginData,

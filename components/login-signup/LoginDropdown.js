@@ -19,7 +19,7 @@ const LoginDropdown = ({ name }) => {
         <div className={`loing-menu-area ${display ? " active" : ""}`}>
           <span className="msg-text">you are viewing personal profile: </span>
           <LoginMenuItem
-            action="/my-profile"
+            action="/user"
             iconClassName="fas fa-user"
             title="My Profile"
             content="Manage your profile, traveller details, login details and

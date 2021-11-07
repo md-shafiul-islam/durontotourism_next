@@ -22,6 +22,192 @@ body {
 }
 /** Sign Out End*/
 
+/*Verifycation Style Start */
+.phone-verify-container {
+  padding-top: 75px;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  flex-direction: column;
+}
+
+.phone-verify-container .phone-verify-content {
+  width: 500px;
+  padding: 15px 0px;
+  margin-bottom: 100px;
+}
+
+.phone-verify-container .phone-verify-content .text {
+  text-align: left;
+  font-size: 1.5em;
+  text-decoration: none;
+  font-weight: 700;
+}
+
+.phone-verify-container .verify-item {
+  margin: 15px 0px;
+}
+
+.phone-verify-container .verify-item .resend-container {
+  padding-left: 2px !important;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.phone-verify-container .verify-item .resend-text {
+  font-size: 1.5em;
+  cursor: pointer;
+  font-weight: 700;
+  color: #0b5ed7;
+}
+
+.phone-verify-container .verify-item-title {
+  padding: 10px 0px;
+  font-size: 2em;
+}
+
+.phone-verify-container .phone-verify-content .p2 {
+  padding: 0px 0px !important;
+}
+
+.phone-verify-content .input-area-row .field-label {
+  text-align: left;
+  font-size: 1.5em;
+  font-weight: 700;
+  display: flex;
+  padding: 10px 0px;
+}
+
+.phone-verify-content .input-area-row .code-label {
+  font-size: 1.5em;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  height: 100%;
+  font-weight: bold;
+}
+
+/* verify-status-container Start */
+
+.verify-status-container .verify-contetnt {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.verify-status-container .verify-contetnt .icon {
+  font-size: 2.5em;
+}
+
+.verify-contetnt .rsend-verify-content {
+  display: none;
+  flex-direction: row;
+  align-items: center;
+}
+
+.verify-contetnt .rsend-verify-content .resend-text,
+.verify-contetnt .rsend-verify-content .action-text {
+  color: #070707;
+  margin: 0px 5px;
+  font-size: 1.25em;
+}
+.verify-contetnt .rsend-verify-content .action-text {
+  color: #0d6efd;
+  cursor: pointer;
+}
+
+.verify-contetnt .rsend-verify-content.active {
+  display: flex;
+}
+
+.verify-action-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.verify-action-container .verify-action-content {
+  font-size: 1.25em;
+  padding: 5px 15px;
+}
+
+.verify-item.card .action-btn-area {
+  padding: 5px 0px;
+}
+
+.verify-item.card .action-btn-area .verify-action-btn {
+  padding: 5px 10px !important;
+}
+
+/* verify-status-container Start */
+
+/*Verifycation Style Start */
+
+/*watch-container start */
+.clock-container {
+}
+.clock-wrapper {
+  height: 100%;
+  width: 100%;
+  position: relative;
+  background: linear-gradient(135deg, #14ffe9, #ffeb3b, #ff00e0);
+  border-radius: 10px;
+  cursor: default;
+  animation: animate 1.5s linear infinite;
+}
+.clock-wrapper .clock-display,
+.clock-wrapper span {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.clock-wrapper .clock-display {
+  z-index: 999;
+  height: 90%;
+  width: 98%;
+  background: #1b1b1b;
+  border-radius: 6px;
+  text-align: center;
+}
+.clock-display .time {
+  color: #fff;
+  font-size: 2em;
+  font-weight: 600;
+  letter-spacing: 1px;
+  background: linear-gradient(135deg, #14ffe9, #ffeb3b, #ff00e0);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -moz-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: clockanimate 1.5s linear infinite;
+}
+@keyframes clockanimate {
+  100% {
+    filter: hue-rotate(360deg);
+  }
+}
+.clock-wrapper span {
+  height: 100%;
+  width: 100%;
+  border-radius: 10px;
+  background: inherit;
+}
+.clock-wrapper span:first-child {
+  filter: blur(7px);
+}
+.clock-wrapper span:last-child {
+  filter: blur(20px);
+}
+
+.verify-timer .text {
+  font-size: 2em;
+  font-weight: bold;
+}
+
+/*watch-container start */
+
 /** React Select option validet style Start */
 
 .vselect-item.is-invalid > div {
@@ -390,21 +576,47 @@ body {
 .search-modify-accordion .card .card-header {
   display: flex;
   flex-direction: row;
-  justify-content: flex-end;
   align-items: center;
+  background-color: #0066ff;
 }
 .search-modify-accordion .card .card-header .success .action-btn {
   width: 150px;
   height: 35px;
 }
 
-.search-modify-accordion .card .card-header .danger .action-btn {
-  width: 35px;
-  height: 35px;
+.search-modify-accordion .card .card-header .active {
+  background-color: #fff;
+  font-weight: bold;
+  color: #0066ff;
 }
 
 .search-modify-accordion .card .card-header .close-smd-accordin.btn-danger {
-  border-radius: 50% !important;
+}
+
+.search-modify-accordion .modify-accordion-header {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modify-accordion-header .header-content {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.modify-accordion-header .header-content .flight-itinerary,
+.modify-accordion-header .header-content .flight-passenger,
+.modify-accordion-header .header-content .flight-cab-class {
+  margin-right: 15px;
+  font-size: 1.5em;
+  color: #fff;
+  font-weight: 700;
+}
+
+.modify-accordion-header .header-content .flight-itinerary {
 }
 
 /**Searc Modifire Style Start */

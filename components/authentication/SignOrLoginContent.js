@@ -82,7 +82,7 @@ const SignOrLoginContent = (params) => {
                               >
                                 <BasicActionLink
                                   label="Register/Sign Up"
-                                  action={`/user/signup`}
+                                  action={`/signup`}
                                 />
                               </Col>
                             </Row>

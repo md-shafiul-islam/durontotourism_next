@@ -230,12 +230,12 @@ class TravellerAndClassCard extends Component {
                 <span className="fly-trv-item">
                   <input
                     type="radio"
-                    value="Premium Economy"
+                    value="PremiumEconomy"
                     className="form-check-input fly-class-item"
                     id="flyClassPec"
                     name="flyClass"
                     onChange={this.flyClassAction}
-                    checked={flyClass === "Premium Economy" ? true : false}
+                    checked={flyClass === "PremiumEconomy" ? true : false}
                   />
                   <label
                     htmlFor="flyClassPec"

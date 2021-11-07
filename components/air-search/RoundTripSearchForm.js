@@ -1,12 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Formik, Form, FieldArray } from "formik";
 import { Row, Col, Button } from "react-bootstrap";
 import DatePickerRange from "./datePickerRange";
-import TravellersAndClass from "./travellersAndClass";
-// import AutoSearchSuggestionList from "./AutoSearchSuggestionList";
-import AutoSuggestionInptTextField from "../autosuggestion/autoSuggestionInptTextField";
 import { useRouter } from "next/router";
-import { helperGetDateFormate } from "../../utils/helper/helperAction";
+import {
+  helperGetDateFormate,
+  helperIsEmpty,
+} from "../../utils/helper/helperAction";
 import { localDataStore } from "../../utils/helper/localDataStore";
 import {
   getAirSearchRequestType,
@@ -14,14 +14,42 @@ import {
 } from "../../redux/actions/airSearchAction";
 import { PropTypes } from "prop-types";
 import { connect } from "react-redux";
-import CstAsyncSerachField from "../Fields/CstAsyncSerachField";
 import TravellerAndClassCard from "./traveller/TravellerAndClassCard";
 import SelectItinerary from "./traveller/SelectItinerary";
+import { getPassengerCount } from "../../utils/ui/accordionEs";
 
 const RoundTripSearchForm = (params) => {
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
   const router = useRouter();
+
+  const [passengerCount, setPassengerCount] = useState(undefined);
+  const [flCabinClass, setFlcabinClass] = useState("");
+  const [airLegs, setAirLegs] = useState([]);
+  const [depDate, setDepDate] = useState(undefined);
+  const [retDate, setRetDate] = useState(undefined);
+
+  useEffect(() => {
+    const sQuery = localDataStore.getSearchQuery();
+    console.log("RoundTripSearchForm -> Round Trip Search Query ", sQuery);
+    if (sQuery) {
+      if (sQuery.type === 2) {
+        if (!helperIsEmpty(sQuery.searchQuery.depQuery)) {
+          const { cabinClass, passengers, airLegReqs } =
+            sQuery.searchQuery.depQuery;
+          console.log("Before Set Air Legs RND ", airLegReqs);
+          setFlcabinClass(cabinClass);
+          setAirLegs(airLegReqs);
+          setPassengerCount(getPassengerCount(passengers));
+          setDepDate(airLegReqs[0].depTime);
+        }
+
+        if (!helperIsEmpty(sQuery.searchQuery.retQuery)) {
+          setDepDate(sQuery.searchQuery.retQuery.airLegReqs[0].depTime);
+        }
+      }
+    }
+  }, []);
 
   const submitRoundTripAction = (queryData) => {
     console.log("submitRoundTripAction, ", queryData);
@@ -43,9 +71,8 @@ const RoundTripSearchForm = (params) => {
       let cabinClass = "Economy";
 
       if (passDetails !== undefined && passDetails !== null) {
-        
         let { depTime, from, to, returnTime } = passDetails[0];
-        
+
         let departureDate = helperGetDateFormate(depTime);
         let reDate = helperGetDateFormate(returnTime);
 
@@ -110,6 +137,12 @@ const RoundTripSearchForm = (params) => {
 
   return (
     <React.Fragment>
+      {console.log(
+        "RoundTripSearchForm Dep Date, ",
+        depDate,
+        " return Date, ",
+        retDate
+      )}
       <Formik
         enableReinitialize={true}
         initialValues={params.roundInitValue}
@@ -129,11 +162,23 @@ const RoundTripSearchForm = (params) => {
                           props.values.passDetails.map((item, indx) => (
                             <Row className="air-search" key={`trip-${indx}`}>
                               <Col md={6} className="each-content">
+                                {console.log(
+                                  "Air Leges In Render M ->, ",
+                                  airLegs
+                                )}
                                 <SelectItinerary
                                   {...props}
                                   idx={indx}
-                                  origin={null}
-                                  destination={null}
+                                  origin={
+                                    airLegs && airLegs && airLegs.length > indx
+                                      ? airLegs[indx].orgCode
+                                      : null
+                                  }
+                                  destination={
+                                    airLegs && airLegs.length > indx
+                                      ? airLegs[indx].destCode
+                                      : null
+                                  }
                                   destinationFieldName={`passDetails[${indx}].to`}
                                   originFieldName={`passDetails[${indx}].from`}
                                 />
@@ -144,6 +189,11 @@ const RoundTripSearchForm = (params) => {
                               >
                                 <DatePickerRange
                                   preSetDepDate={
+                                    airLegs && airLegs.length > indx
+                                      ? airLegs[indx].depTime
+                                      : props.values.passDetails[indx].depTime
+                                  }
+                                  preSetRetDate={
                                     props.values.passDetails[indx].depTime
                                   }
                                   getStartDate={(sdate) => {
@@ -165,6 +215,10 @@ const RoundTripSearchForm = (params) => {
 
                               <Col md={3} className="no-margin-padding">
                                 <TravellerAndClassCard
+                                  preSetTraveler={{
+                                    cabinClass: flCabinClass,
+                                    passengers: passengerCount,
+                                  }}
                                   setAdtTraveler={(item) => {
                                     props.setFieldValue(`traveler.ADT`, item);
                                   }}
@@ -214,10 +268,13 @@ const RoundTripSearchForm = (params) => {
 RoundTripSearchForm.prototypes = {
   getAirSearchRequestType: PropTypes.func.isRequired,
   setSearchQuery: PropTypes.func.isRequired,
+  searchQuery: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = (state) => {
-  return {};
+  return {
+    searchQuery: state.searchQuery.searchQuery,
+  };
 };
 export default connect(mapStateToProps, {
   setSearchQuery,

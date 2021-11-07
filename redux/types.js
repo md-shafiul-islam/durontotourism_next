@@ -19,13 +19,13 @@ export const REQUEST_HEADER = {
   "Content-Type": "application/json",
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers": "Origin, Content-Type, Accept",
-  Authorization: "",
+  "Authorization":""
 };
 
 export const REQUEST_HEADER_GET = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers": "Origin, Content-Type, Accept",
-  Authorization: "",
+  "Authorization":""
 };
 
 export const SET_CURRENT_USER = "SET_CURRENT_USER";
@@ -41,16 +41,15 @@ export const SET_TOKEN = "SET_TOKEN";
 console.log(process.env.REACT_APP_API_URL);
 
 /** URLS */
-
+//http://localhost:6060/api/enu/v1
 export const GET_BACK_END_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
 
-export const AGENT_LOGIN_END_URL = process.env.NEXT_PUBLIC_BACKEND_AGENT_LOGIN_URL;
+export const AGENT_LOGIN_END_URL =
+  process.env.NEXT_PUBLIC_BACKEND_AGENT_LOGIN_URL;
 
 export const AIR_SEARCH_URL = process.env.NEXT_PUBLIC_SEARCH_URL;
 
 export const AIR_BOOK_URL = process.env.NEXT_PUBLIC_BOOK_URL;
-
-
 
 export const EXT_PRICE_URL = process.env.NEXT_PUBLIC_PRICE_URL;
 export const BASE_BOOKING_URL = process.env.NEXT_PUBLIC_BOOK_URL;
@@ -69,7 +68,6 @@ export const GET_AIR_SEARCH_RESPONSE = "GET_AIR_SEARCH_RESPONSE";
 export const GET_AIR_SEARCH_RESPONSE_ERROR = "GET_AIR_SEARCH_RESPONSE_ERROR";
 
 export const SET_MODIFY_SEARCH = "SET_MODIFY_SEARCH";
-
 
 export const GET_SEARCH_QUERY = "GET_SEARCH_QUERY";
 
@@ -178,12 +176,30 @@ export const SET_CUSTOMER_UPDATE_ERROR = "SET_CUSTOMER_UPDATE_ERROR";
 export const SET_USER_SIGNUP = "SET_USER_SIGNUP";
 export const SET_USER_SIGNUP_ERROR = "SET_USER_SIGNUP_ERROR";
 
+export const REST_USER_SIGNUP = "REST_USER_SIGNUP";
+
 //Flight Response Status
 export const DEP_RESP_DATA_STATUS = "DEP_RESP_DATA_STATUS";
 export const RET_RESP_DATA_STATUS = "RET_RESP_DATA_STATUS";
 
-
-//ES Search 
+//ES Search
 
 export const SET_AIRPORT_SEARCH_OPTIONS = "SET_AIRPORT_SEARCH_OPTIONS";
-export const SET_AIRPORT_SEARCH_OPTIONS_ERROR = "SET_AIRPORT_SEARCH_OPTIONS_ERROR";
+export const SET_AIRPORT_SEARCH_OPTIONS_ERROR =
+  "SET_AIRPORT_SEARCH_OPTIONS_ERROR";
+export const SET_AIRPORT_SEARCH_IATA = "SET_AIRPORT_SEARCH_IATA";
+export const SET_AIRPORT_SEARCH_IATA_ERROR = "SET_AIRPORT_SEARCH_IATA_ERROR";
+
+//Verify
+
+export const SMS_VERIFY_ERROR = "SMS_VERIFY_ERROR";
+export const SMS_VERIFY = "SMS_VERIFY";
+export const RESEND_SMS_VERIFY = "RESEND_SMS_VERIFY";
+export const RESEND_SMS_VERIFY_ERROR = "RESEND_SMS_VERIFY_ERROR";
+
+export const MAIL_VERIFY = "MAIL_VERIFY";
+export const MAIL_VERIFY_ERROR = "MAIL_VERIFY_ERROR";
+export const RESEND_MAIL_VERIFY = "RESEND_MAIL_VERIFY";
+export const RESEND_MAIL_VERIFY_ERROR = "RESEND_MAIL_VERIFY_ERROR";
+export const MAIL_VERIFY_TOKE = "MAIL_VERIFY_TOKE";
+export const MAIL_VERIFY_TOKE_ERROR = "MAIL_VERIFY_TOKE_ERROR";

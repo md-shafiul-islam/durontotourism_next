@@ -28,16 +28,22 @@ const months = [
 ];
 
 const SingleDatePicker = (props) => {
+  console.log("Single Date Picker, ", props);
+
   const [date, setDate] = useState(new Date());
   const [display, setDisplay] = useState(true);
 
   const refDate = useRef(undefined);
 
   useEffect(() => {
-    props.getDate(props.preSetDate);
-    setDate(props.preSetDate);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    if (props.preSetDate) {
+      let pDate = new Date(props.preSetDate);
+      console.log("After Date Single Date picker, ", pDate);
+      props.getDate(pDate);
+      setDate(pDate);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [props.preSetDate]);
 
   const getStringMonth = (month, lenght) => {
     let stMonth =
@@ -70,13 +76,13 @@ const SingleDatePicker = (props) => {
       // Unbind the event listener on clean up
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [refDate]);
 
   useEffect(() => {
     setDisplay(!display);
     return;
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

@@ -1,5 +1,5 @@
 import React from "react";
-import { getSession, signIn, userSignup } from "next-auth/react";
+import { getSession, signIn } from "next-auth/react";
 import { Field, Form, Formik } from "formik";
 import { PropTypes } from "prop-types";
 import { connect } from "react-redux";

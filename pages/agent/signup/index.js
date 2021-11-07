@@ -15,7 +15,7 @@ import { getAddSignUpAction } from "../../../redux/actions/signUpAction";
 class GetSignUpPage extends Component {
   submitAction = (signUp) => {
     console.log("Sign Up Values, ", signUp);
-    this.props.getAddSignUpAction(JSON.stringify(signUp));
+    this.props.getAddSignUpAction(signUp);
   };
 
   validateSchema = () => {

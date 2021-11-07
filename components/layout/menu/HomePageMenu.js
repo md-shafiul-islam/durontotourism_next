@@ -7,11 +7,13 @@ import LoginDropdown from "../../login-signup/LoginDropdown";
 import { useSession } from "next-auth/react";
 import ContentModal from "../../Modals/ContentModal";
 import SignOrLoginContent from "../../authentication/SignOrLoginContent";
+import { setAxiosHeaderToken } from "../../../redux/esRequestAction";
 
 const HomePageMenu = (params) => {
   const { status, data } = useSession();
+  setAxiosHeaderToken(data)
   const [loginModaDisplay, setLoginModaDisplay] = useState(false);
-  console.log("User Login Session, ", useSession());
+  // console.log("User Login Session, ", useSession());
   useEffect(() => {
     //Check DB is login or Not
   }, []);
