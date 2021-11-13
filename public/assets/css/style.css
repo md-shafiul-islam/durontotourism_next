@@ -3979,6 +3979,12 @@ body {
 
 /* Cst Radio Buttion End */
 
+/**Submit Action Start */
+.single-phone-action{
+  padding: 0px !important;
+}
+/**Submit Action End */
+
 /*Traveler fields Start */
 
 .input-area-row {

@@ -13,11 +13,8 @@ const CstValidatePhoneNoField = (props) => {
     codeName,
     clazzName,
     fileldName,
-    codePlaceholder,
     filedPlaceholder,
     handleChange,
-    setFieldTouched,
-    setFieldValue,
     options,
     values,
     checkIsValid,
@@ -29,16 +26,20 @@ const CstValidatePhoneNoField = (props) => {
 
   const getIsValided = (name) => {
     let valid = { status: false, msg: "", cls: "" };
-    if (checkIsValid) {
-      valid = esIsFieldError(errors, touched, name);
-    } else {
-      if (!isEmptyString(values[name])) {
+    if (name) {
+      if (checkIsValid) {
         valid = esIsFieldError(errors, touched, name);
+      } else {
+        if (values) {
+          if (!isEmptyString(values[name])) {
+            valid = esIsFieldError(errors, touched, name);
+          }
+        }
       }
-    }
-    if (!helperIsEmpty(errors)) {
-      if (errors[name] !== undefined && errors[name] !== null) {
-        valid = { status: true, msg: errors[name], cls: "is-invalid" };
+      if (!helperIsEmpty(errors)) {
+        if (errors[name] !== undefined && errors[name] !== null) {
+          valid = { status: true, msg: errors[name], cls: "is-invalid" };
+        }
       }
     }
     return valid;
@@ -79,11 +80,11 @@ const CstValidatePhoneNoField = (props) => {
 
               <CstSelectPhoneValidateField
                 onChange={(item) => {
-                  setFieldValue(codeName, item && item.dialCode);
+                  props.setFieldValue(codeName, item ? item.dialCode : null);
                   setSelectedItem(item);
                 }}
                 blurHandler={() => {
-                  setFieldTouched(codeName, true);
+                  props.setFieldTouched(codeName, true);
                 }}
                 options={props.options}
                 placeholder={"Dial Code"}
@@ -97,7 +98,7 @@ const CstValidatePhoneNoField = (props) => {
             name={fileldName}
             onChange={handleChange}
             onBlur={() => {
-              setFieldTouched(fileldName, true);
+              props.setFieldTouched(fileldName, true);
             }}
             id={fileldName}
             className={`form-control ${getIsValided(fileldName).cls}`}

@@ -1,8 +1,23 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, {useEffect}from "react";
 import { Field, Form, Formik } from "formik";
-import React from "react";
 import { Button, Col, Modal, Row } from "react-bootstrap";
+import { connect } from "react-redux";
+import { PropTypes } from "prop-types";
+import CstValidatePhoneNoField from "../../Fields/CstValidatePhoneNoField";
+import { helperIsEmpty } from "../../../utils/helper/helperAction";
+import { getCountryOptions } from "../../../redux/actions/countriyAction";
 
 const BasiInfoInputModal = (params) => {
+  
+  useEffect(() => {
+    if(!helperIsEmpty(params.countryOptions)){
+      if(params.countryOptions.length === 0){
+        params.getCountryOptions();
+      }
+    }
+  }, [])
+  
   return (
     <React.Fragment>
       <Modal show={params.show} onHide={params.hideAction}>
@@ -17,19 +32,11 @@ const BasiInfoInputModal = (params) => {
             maritals_status: "",
           }}
         >
-          {({
-            setFieldTouched,
-            setFieldValue,
-            handleChange,
-            validateOnBlur,
-            values,
-            errors,
-            touched,
-          }) => (
+          {(props) => (
             <React.Fragment>
               <Modal.Body>
                 <Form>
-                  <Row>
+                  <Row className="input-area-row">
                     <Col md={6}>
                       <label className="form-label" htmlFor="name">
                         First Name.
@@ -52,19 +59,9 @@ const BasiInfoInputModal = (params) => {
                         id="lastName"
                       />
                     </Col>
-                    <Col md={6}>
-                      <label className="form-label" htmlFor="phoneNo">
-                        Phone Number.
-                      </label>
-                      <Field
-                        className="form-control"
-                        type="text"
-                        name="phoneNo"
-                        id="phoneNo"
-                      />
-                    </Col>
-
-                    <Col md={6}>
+                  </Row>
+                  <Row className="input-area-row">
+                    <Col md={12}>
                       <label className="form-label" htmlFor="email">
                         Email
                       </label>
@@ -73,6 +70,22 @@ const BasiInfoInputModal = (params) => {
                         type="email"
                         name="email"
                         id="email"
+                      />
+                    </Col>
+                  </Row>
+                  <Row className="input-area-row">
+                    <Col md={12}>
+                      <label className="form-label" htmlFor="phoneNo">
+                        Phone Number.
+                      </label>
+                      <CstValidatePhoneNoField
+                        {...props}
+                        fileldName="phoneNo"
+                        codeName="code"
+                        filedPlaceholder="Phone"
+                        codePlaceholder="Code"
+                        options={params.countryOptions}
+                        clazzName="country-w-phone"
                       />
                     </Col>
                   </Row>
@@ -98,4 +111,15 @@ const BasiInfoInputModal = (params) => {
   );
 };
 
-export default BasiInfoInputModal;
+BasiInfoInputModal.prototype = {
+  getCountryOptions: PropTypes.func.isRequired,  
+  countryOptions: PropTypes.object.isRequired,
+};
+
+const mapStateToProps = (state)=>{
+  return {
+    countryOptions: state.country.countryOptions,
+  }
+}
+
+export default connect(mapStateToProps, {getCountryOptions})(BasiInfoInputModal);

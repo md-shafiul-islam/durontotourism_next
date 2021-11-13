@@ -303,7 +303,9 @@ export const helperIsEmpty = (obj) => {
   if (obj === null || obj === undefined || typeof obj === "undefined" || obj === "") {
     return true;
   }
-
+  if(!obj){
+    return true;
+  }
   if (Object.keys(obj).length === 0 && obj.constructor === Object) {
     return true;
   }
@@ -316,17 +318,10 @@ export const esIsFieldError = (errors, touched, fieldName) => {
 
   if (!helperIsEmpty(errors)) {
     if (!helperIsEmpty(errors[fieldName])) {
-      console.log(
-        "esIsFieldError Field Name, ",
-        fieldName,
-        " Error, ",
-        errors[fieldName]
-      );
-      msg = errors[fieldName];
+           msg = errors[fieldName];
     }
   }
 
-  console.log(fieldName, " Field Have Error, ", msg);
   if (!helperIsEmpty(touched)) {
     if (touched[fieldName] !== undefined) {
       if (touched[fieldName]) {

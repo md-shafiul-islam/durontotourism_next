@@ -3,8 +3,10 @@ import { Button, Card, Col, Row } from "react-bootstrap";
 import ContentModal from "../Modals/ContentModal";
 import ProfileBookingInfForm from "./ProfileBookingInfForm";
 import CstValidateField from "../Fields/CstValidateField";
+import SinglePhoneForm from "../CstForm/SinglePhoneForm";
 const ProfileBookingInformation = (props) => {
   const [displayModal, setDisplayModal] = useState(false);
+  const [phoneModal, setPhoneModal] = useState(false);
 
   return (
     <React.Fragment>
@@ -80,7 +82,7 @@ const ProfileBookingInformation = (props) => {
                     <button
                       className="prf-add-btn"
                       onClick={() => {
-                        setPhoneStatus(true);
+                        setPhoneModal(true);
                       }}
                     >
                       +Add your mobile number
@@ -116,6 +118,17 @@ const ProfileBookingInformation = (props) => {
             isExtendedField={false}
             isInternational={false}
           />
+        </ContentModal>
+
+        <ContentModal
+          show={phoneModal}
+          actionClose={(isClose) => {
+            setPhoneModal(isClose);
+          }}
+          name="phone-add-change"
+          title="Phone No"
+        >
+          <SinglePhoneForm />
         </ContentModal>
       </Card>
     </React.Fragment>

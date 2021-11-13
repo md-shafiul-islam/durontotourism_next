@@ -1,4 +1,5 @@
-import React from "react";
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useState, useEffect } from "react";
 import Select, { components, SingleValueProps } from "react-select";
 import { Col, Row } from "react-bootstrap";
 
@@ -41,6 +42,12 @@ const CstSelectPhoneValidateField = ({
   value,
   ...props
 }) => {
+  const [selectedItem, setSelectedItem] = useState(null);
+
+  useEffect(() => {
+    getDefaultValue();
+  }, [options]);
+
   const cstFilterOption = (option, inputData) => {
     let { dialCode, isoCode, isoCode3, label } = option.data;
 
@@ -88,12 +95,26 @@ const CstSelectPhoneValidateField = ({
             <span className="dial-code">&nbsp;{props.name}</span>
             <span className="code">&nbsp;{props.isoCode}</span>
             <span className="dial-code">&nbsp;{props.dialCode}</span>
-            
           </span>
         </div>
       </React.Fragment>
     );
   };
+
+  const getDefaultValue = () => {
+    let idx = 0;
+    if (options) {
+      options.find((item, i) => {
+        console.log("Each Item, ", item);
+        if (item.isoCode === "BD") {
+          setSelectedItem(item);
+          return true;
+        }
+      });
+    }
+    return idx;
+  };
+
   return (
     <React.Fragment>
       {label ? (
@@ -112,9 +133,10 @@ const CstSelectPhoneValidateField = ({
         options={options}
         onChange={(item) => {
           onChange(item);
+          setSelectedItem(item);
         }}
         components={getCommponetSets()}
-        value={value}
+        value={selectedItem}
         // filterOption={cstFilterOption}
       />
 
