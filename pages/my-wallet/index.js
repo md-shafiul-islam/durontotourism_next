@@ -8,6 +8,7 @@ import WithDrawContent from "../../components/wallet/WithDrawContent";
 import { getSession } from "next-auth/react";
 
 class WalletPage extends Component {
+
   render() {
     let { currency, amount } = this.props;
     return (
@@ -46,7 +47,7 @@ class WalletPage extends Component {
                         )}
                       </div>
                       <div className="badge-area">
-                        <div className="title">My Cash</div>
+                        <div className="title">My Wallet</div>
                         <div className="badge">use unrestrictions</div>
                       </div>
                     </div>
@@ -94,7 +95,7 @@ class WalletPage extends Component {
           <Col md={8}>
             <Card>
               <Card.Body>
-                <Tab.Container id="wallet" defaultActiveKey="myCash">
+                <Tab.Container id="wallet" defaultActiveKey="transection">
                   <Row>
                     <Col sm={12} className="wallet-main-container">
                       <Nav variant="pills" className="flex-row">
@@ -105,7 +106,7 @@ class WalletPage extends Component {
                         </Nav.Item>
 
                         <Nav.Item>
-                          <Nav.Link eventKey="myCash">Top Up My cash</Nav.Link>
+                          <Nav.Link eventKey="myCash">Top Up My Wallet</Nav.Link>
                         </Nav.Item>
 
                         <Nav.Item>

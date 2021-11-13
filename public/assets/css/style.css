@@ -22,6 +22,53 @@ body {
 }
 /** Sign Out End*/
 
+/*Counter Start */
+
+.countdown-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.countdown-item {
+  color: #111;
+  font-size: 1em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  line-height: 1em;
+  margin: 2px;
+  position: relative;
+  width: 70px;
+  height: 40px;
+}
+
+.countdown-item span {
+  color: #333;
+  font-size: 1em;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.countdown-svg {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 40px;
+  height: 40px;
+  transform: translate(-50%, 0);
+}
+
+.verify-timer .countdown-wrapper .countdown-item .text {
+  font-size: 1em;
+  text-align: center;
+  color: #dc3545;
+}
+
+/*Counter End */
+
 /*Verifycation Style Start */
 .phone-verify-container {
   padding-top: 75px;
@@ -309,18 +356,6 @@ body {
   padding-right: 10px;
 }
 
-.option-item-content .location {
-}
-
-.option-item-content .option-content .text {
-}
-
-.option-item-content .option-content .code {
-}
-
-.search-type-container {
-}
-
 .search-type-container .form-label {
   color: #fff;
 }
@@ -430,6 +465,70 @@ body {
   font-size: 1.15 !important;
   color: #fff !important;
 }
+
+/** Country Select With Flag Start */
+.phone-code-selcet__control {
+}
+
+.phone-code-selcet__control.phone-code-selcet__control--is-focused {
+}
+
+.phone-code-selcet__value-container .phone-code-selcet__input {
+}
+
+.phone-code-selcet__value-container .phone-code-selcet__input > input {
+}
+
+.phone-code-selcet__control .country-option-container {
+  list-style: none !important;
+  margin: 3px 0px;
+}
+.phone-code-selcet__control .country-option-container .option-content{
+  font-size: 1.5em;  
+}
+.phone-code-selcet__control .country-option-container .option-content .flag {
+  padding: 5px 4px;
+}
+
+.phone-code-selcet__control .country-option-container .option-content .flag{
+  font-size: 1.5em;
+  padding: 7px 2px;
+}
+
+.phone-code-selcet__control .country-option-container .option-content .dial-code,
+.phone-code-selcet__control .country-option-container .option-content .code {
+  border-radius: 4px;
+  border: 1px solid #dee2e6;
+  padding: 7px 4px;
+}
+
+.phone-code-selcet__control .single-country-option-container .option-content{
+  display: flex;
+  align-items: center;
+}
+
+.phone-code-selcet__control .single-country-option-container .option-content .flag{
+  font-size: 1.25em;
+  padding: 4px 5px;
+  margin: 0px !important;
+}
+
+.phone-code-selcet__control .single-country-option-container .option-content .dial-code,
+.phone-code-selcet__control .single-country-option-container .option-content .code{
+  border-radius: 4px;
+  border: 1px solid #dee2e6;
+  padding: 7px 6px;
+  font-weight: bold;
+}
+
+.phone-code-selcet__menu{
+  width: 250px !important;
+}
+
+.cstf-phone.country-w-phone .cstf-select-opt{  
+  padding-right: 20px !important;
+}
+/** Country Select With Flag End */
 
 /** React Select option validet style End */
 
@@ -777,6 +876,7 @@ body {
   margin-right: 10px;
   font-size: larger;
   font-weight: bold;
+  align-items: center;
 }
 
 .main-container .top-brand-area {
@@ -1008,6 +1108,26 @@ body {
 
 .home-top-menu .top-nav-right .currency-type-lang {
   width: 20vw;
+}
+
+.home-top-menu .top-nav-right .text_rcnt {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.home-top-menu .top-nav-right .nav-item .nav-item {
+  border: none;
+}
+
+.home-top-menu .top-nav-right .text_rcnt .text_r {
+  padding-right: 10px;
+  font-size: 1.15em;
+  font-weight: 700 !important;
+}
+
+.sticky-top .es-info-area .top-menu-profile-area .text_rcnt .text_r {
+  color: #212529;
 }
 
 .main-container {
@@ -3374,10 +3494,6 @@ body {
 
 .menu-icon {
   font-size: 2.4em;
-}
-
-.menu-text {
-  padding-top: 5px;
 }
 
 .common-card .card,

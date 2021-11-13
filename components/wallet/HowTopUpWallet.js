@@ -47,7 +47,8 @@ const HowTopUpWallet = (params) => {
 
                   <Nav.Item>
                     <Nav.Link eventKey="mobileBank">Mobile Bank</Nav.Link>
-                  </Nav.Item>
+                  </Nav.Item>                 
+
                 </Nav>
               </Col>
             </Row>

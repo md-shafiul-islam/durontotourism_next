@@ -1,16 +1,17 @@
+import React, { useState } from "react";
 import { Field } from "formik";
-import React from "react";
 import { Col, Row } from "react-bootstrap";
 import {
   esIsFieldError,
   helperIsEmpty,
   isEmptyString,
 } from "../../utils/helper/helperAction";
-import CstSelectValidateField from "./CstSelectValidateField";
+import CstSelectPhoneValidateField from "./CstSelectPhoneValidateField";
 
 const CstValidatePhoneNoField = (props) => {
   const {
     codeName,
+    clazzName,
     fileldName,
     codePlaceholder,
     filedPlaceholder,
@@ -19,10 +20,12 @@ const CstValidatePhoneNoField = (props) => {
     setFieldValue,
     options,
     values,
-    checkIsValid = true,
+    checkIsValid,
     errors,
     touched,
   } = props;
+
+  const [selectedItem, setSelectedItem] = useState(null);
 
   const getIsValided = (name) => {
     let valid = { status: false, msg: "", cls: "" };
@@ -45,49 +48,52 @@ const CstValidatePhoneNoField = (props) => {
     let pValid = getIsValided(name);
     let cValid = getIsValided(code);
 
-    let msg = {msg:"", cls:""};
+    let msg = { msg: "", cls: "" };
     if (cValid.status) {
-      msg = {msg:cValid.msg, cls:" active "};
+      msg = { msg: cValid.msg, cls: " active " };
     }
 
     if (pValid.status) {
-      msg = {msg:pValid.msg, cls:" active "};
+      msg = { msg: pValid.msg, cls: " active " };
     }
     return msg;
   };
+
+  const getPlaceholder = () => {
+    if (selectedItem !== null) {
+      if (selectedItem.isoCode === "BD") {
+        return "e.g. 01700000000, 018xxxxxxx";
+      }
+    }
+
+    return filedPlaceholder;
+  };
+
   return (
     <React.Fragment>
-      <Row className="cstf-phone">
-        <Col md={3} className="cstf-select-opt">
+      <Row className={`cstf-phone ${clazzName}`}>
+        <Col md={4} className={`cstf-select-opt`}>
           <Row>
             <Col md={12}>
               {console.log("Phone Code Class, ", getIsValided(codeName))}
-              <CstSelectValidateField
-                arrowStatus={false}
-                isSmall={true}
+
+              <CstSelectPhoneValidateField
+                onChange={(item) => {
+                  setFieldValue(codeName, item && item.dialCode);
+                  setSelectedItem(item);
+                }}
                 blurHandler={() => {
                   setFieldTouched(codeName, true);
                 }}
-                clazzName={getIsValided(codeName).cls}
-                name={codeName}
-                placeholder={codePlaceholder}
-                options={options}
-                onChange={(item) => {
-                  let value = !helperIsEmpty(item)
-                    ? !helperIsEmpty(item.value)
-                      ? item.value
-                      : ""
-                    : "";
-                  setFieldValue(codeName, value);
-                }}
-                defaultStringVal={values && values[codeName]}
+                options={props.options}
+                placeholder={"Dial Code"}
               />
             </Col>
           </Row>
         </Col>
-        <Col md={9} className="cstf-text">
+        <Col md={8} className="cstf-text">
           <Field
-            placeholder={filedPlaceholder}
+            placeholder={getPlaceholder()}
             name={fileldName}
             onChange={handleChange}
             onBlur={() => {
@@ -97,7 +103,11 @@ const CstValidatePhoneNoField = (props) => {
             className={`form-control ${getIsValided(fileldName).cls}`}
             value={values && values[fileldName]}
           />
-          <div className={`invalid-feedback ${getIsValidedMsg(fileldName, codeName).cls}`}>
+          <div
+            className={`invalid-feedback ${
+              getIsValidedMsg(fileldName, codeName).cls
+            }`}
+          >
             {getIsValidedMsg(fileldName, codeName).msg}
           </div>
         </Col>

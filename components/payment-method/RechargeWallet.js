@@ -157,6 +157,12 @@ class RechargeWallet extends Component {
                     <Nav.Item>
                       <Nav.Link eventKey="mobileBank">Mobile Bank</Nav.Link>
                     </Nav.Item>
+
+                    <Nav.Item>
+                      <Nav.Link eventKey="mobileBank">
+                        TopUp my wallet request list
+                      </Nav.Link>
+                    </Nav.Item>
                   </Nav>
                 </Col>
               </Row>

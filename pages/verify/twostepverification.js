@@ -1,8 +1,9 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Form, Formik } from "formik";
 import { Button, Card, Col, Row } from "react-bootstrap";
 import { PropTypes } from "prop-types";
 import { connect, useDispatch } from "react-redux";
+import moment from "moment";
 import { setAxiosHeaderToken } from "../../redux/esRequestAction";
 import { getSession, useSession } from "next-auth/react";
 import * as Yup from "yup";
@@ -24,12 +25,12 @@ import {
 
 const TwoStepVerification = (params) => {
   console.log("TwoStepVerification params, ", params);
+
+  const [isControlled, setIsControlled] = useState(false);
   const { status, data } = useSession();
 
   console.log("Session Loding Status, ", status, " Data, ", data);
   status === "authenticated" ? setAxiosHeaderToken(data) : "";
-
-  useEffect(() => {}, [status]);
 
   const createVerify = (code) => {
     console.log("Create Verify Data, ", data);
@@ -55,17 +56,24 @@ const TwoStepVerification = (params) => {
     params.getSmsVerifyAction(createVerify(props));
   };
 
+  const getRequestData = () => {
+    if (!helperIsEmpty(data)) {
+      if (data.user) {
+        return { id: data.user.id, token: data.user.accessToken };
+      }
+    }
+    return null;
+  };
   const reSendMailVerification = () => {
     //Create Request Data
     console.log("Resend Action ...");
-
-    params.getSmsVerifyResendAction();
+    params.getMailVerifyResendAction(getRequestData());
   };
 
   const reSendSmsVerification = () => {
     //Create Request Data
     console.log("Resend Action ...");
-    params.getMailVerifyResendAction();
+    params.getSmsVerifyResendAction();
   };
 
   const getPhoneStatus = () => {
@@ -103,6 +111,7 @@ const TwoStepVerification = (params) => {
     if (!helperIsEmpty(params.customer)) {
       return `${params.customer.email}`;
     }
+    return "";
   };
 
   return (
@@ -165,10 +174,10 @@ const TwoStepVerification = (params) => {
                             mailVerifyAction(props.values.mailOtp);
                           }}
                           getReSendAction={reSendMailVerification}
-                          remTime={120}
                           verify={getVerifiedObj(getMailStatus(), "mail")}
                           verifyStatus={getMailStatus()}
                           statusTitle="Mail Verified"
+                          remTime={120}
                         />
                       </Form>
                     </React.Fragment>

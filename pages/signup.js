@@ -1,4 +1,5 @@
-import React from "react";
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useState, useEffect} from "react";
 import { useRouter } from "next/router";
 import { Form, Formik } from "formik";
 import { Col, Row } from "react-bootstrap";
@@ -10,10 +11,25 @@ import { PropTypes } from "prop-types";
 import { connect, useDispatch } from "react-redux";
 import { getAddSignUpAction } from "../redux/actions/signUpAction";
 import { REST_USER_SIGNUP } from "../redux/types";
+import { getSession, signIn } from "next-auth/react";
+import { helperIsEmpty } from "../utils/helper/helperAction";
+import { getCountryOptions } from "../redux/actions/countriyAction";
 
 const GetSignupPage = (params) => {
+  console.log("SignUp Page Params, ", params);
   const router = useRouter();
   const dispatch = useDispatch();
+  const [loginData, setLoginData] = useState({});
+
+  useEffect(() => {
+    if (helperIsEmpty(params.countryOptions)) {
+      params.getCountryOptions();
+    } else {
+      if (params.countryOptions.length === 0) {
+        params.getCountryOptions();
+      }
+    }
+  }, []);
 
   const validationScema = () => {
     return Yup.object().shape({
@@ -41,8 +57,21 @@ const GetSignupPage = (params) => {
       type: REST_USER_SIGNUP,
       payload: true,
     });
-    router.push("/verify/twostepverification");
+    signIn("credentials", {
+      username: loginData.userName,
+      password: loginData.pwd,
+      callbackUrl: `${window.origin}/verify/twostepverification`,
+      userStatus: "customer",
+    });
+    // router.push("/verify/twostepverification");
   }
+
+  const initLogin = (login) => {
+    setLoginData(login);
+  };
+  const siginUpAction = () => {
+    router.push("/verify/twostepverification");
+  };
 
   return (
     <div className="user-signup-container">
@@ -62,6 +91,8 @@ const GetSignupPage = (params) => {
               validationSchema={validationScema}
               onSubmit={(values, action) => {
                 action.setSubmitting(true);
+                initLogin({ userName: values.email, pwd: values.password });
+                // siginUpAction();
                 params.getAddSignUpAction(values);
               }}
             >
@@ -99,7 +130,9 @@ const GetSignupPage = (params) => {
                         codeName="code"
                         filedPlaceholder="Phone"
                         codePlaceholder="Code"
-                        options={[{ label: "BD", value: "bd" }]}
+                        options={params.countryOptions}
+                        clazzName="country-w-phone"
+                        
                       />
                     </Col>
 
@@ -132,12 +165,35 @@ const GetSignupPage = (params) => {
 const mapStateToProps = (state) => {
   return {
     userSignUp: state.signup.addSignUp,
+    countryOptions: state.country.countryOptions,
   };
 };
 
 GetSignupPage.prototype = {
   getAddSignUpAction: PropTypes.func.isRequired,
   userSignUp: PropTypes.object.isRequired,
+  countryOptions: PropTypes.object.isRequired,
 };
 
-export default connect(mapStateToProps, { getAddSignUpAction })(GetSignupPage);
+export async function getServerSideProps(context) {
+  let session = await getSession({ req: context.req });
+
+  if (session) {
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+  }
+  return {
+    props: {
+      refLink: context.req.headers.referer ? context.req.headers.referer : "/",
+    },
+  };
+}
+
+export default connect(mapStateToProps, {
+  getAddSignUpAction,
+  getCountryOptions,
+})(GetSignupPage);

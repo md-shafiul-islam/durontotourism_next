@@ -9,6 +9,7 @@ import {
   RESEND_SMS_VERIFY_ERROR,
   SMS_VERIFY,
   SMS_VERIFY_ERROR,
+  VERIFY_MAIL_SEND,
 } from "../types";
 
 const initState = {
@@ -22,6 +23,7 @@ const initState = {
   mailTokenError: undefined,
   smsResendError: undefined,
   mailResendError: undefined,
+  verifyMailSend:{status:false, message:""}
 };
 
 export default function veryfiReducer(state = initState, action) {
@@ -49,6 +51,13 @@ export default function veryfiReducer(state = initState, action) {
         ...state,
         smsResendError: action.payload,
       };
+    
+      case VERIFY_MAIL_SEND:
+      return {
+        ...state,
+        verifyMailSend: action.payload,
+      };
+
 
     case MAIL_VERIFY:
       return {

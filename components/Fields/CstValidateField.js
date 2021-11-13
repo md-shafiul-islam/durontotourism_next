@@ -14,6 +14,7 @@ const CstValidateField = ({
   placeholder,
   label = undefined,
   name,
+  clazzName,
   errors,
   touched,
   handleChange,
@@ -60,7 +61,7 @@ const CstValidateField = ({
         onChange={handleChange}
         onBlur={handleBlur}
         id={name}
-        className={`form-control ${getIsValided().cls}`}
+        className={`form-control ${clazzName} ${getIsValided().cls}`}
       />
       <div className="invalid-feedback">
         {getIsValided() && getIsValided().msg}

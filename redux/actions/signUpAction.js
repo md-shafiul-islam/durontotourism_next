@@ -18,6 +18,7 @@ const getDeta = (resp) => {
 export const getAddSignUpAction = (signup) => async (dispatch) => {
   signup = JSON.stringify(signup, null, 2);
 
+  console.log("Current Signup User, ", signup);
   const resp = await axios.post(`${GET_BACK_END_URL}/customers/signup`, signup, {
     headers: REQUEST_HEADER,
   });

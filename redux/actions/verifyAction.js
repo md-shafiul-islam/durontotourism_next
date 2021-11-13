@@ -14,7 +14,19 @@ import {
   RESEND_SMS_VERIFY_ERROR,
   SMS_VERIFY,
   SMS_VERIFY_ERROR,
+  VERIFY_MAIL_SEND,
 } from "../types";
+
+const getMailSendResp = (mailSend) => {
+  if (mailSend) {
+    return mailSend;
+  } else {
+    return {
+      status: false,
+      message: "Mail send failed. Please try again later",
+    };
+  }
+};
 
 export const getSmsVerifyAction = (smsRequest) => async (dispatch) => {
   smsRequest = JSON.stringify(smsRequest);
@@ -58,8 +70,7 @@ export const getMailVerifyAction = (code) => async (dispatch) => {
       type: MAIL_VERIFY_ERROR,
       payload: {
         status: true,
-        message: "Connection Error SMS verification failed",
-        error,
+        message: "Connection Error Please try your netwark connection or proxy",
       },
     });
   }
@@ -89,14 +100,15 @@ export const getMailVerifyUsingTokenAction = (token) => async (dispatch) => {
   }
 };
 
-export const getSmsVerifyResendAction = (resendData) => async (dispatch) => {
+export const getSmsVerifyResendAction = (reqData) => async (dispatch) => {
   dispatch({
     type: SMS_VERIFY,
     payload: {},
   });
+  const reSendData = { id: reqData.id, type: 2 };
   const resp = await axios.post(
     `${BASE_BOOKING_URL}/verify/resend`,
-    resendData,
+    reSendData,
     { headers: REQUEST_HEADER }
   );
 
@@ -117,14 +129,15 @@ export const getSmsVerifyResendAction = (resendData) => async (dispatch) => {
   }
 };
 
-export const getMailVerifyResendAction = (resendData) => async (dispatch) => {
+export const getMailVerifyResendAction = (reqData) => async (dispatch) => {
   dispatch({
     type: MAIL_VERIFY,
     payload: {},
   });
-  const resp = await axios.post(
-    `${BASE_BOOKING_URL}/verify/resend`,
-    resendData,
+  const reSendData = { id: reqData.id, type: 1 };
+  const resp = await axios.put(
+    `${GET_BACK_END_URL}/verify/resend`,
+    reSendData,
     { headers: REQUEST_HEADER }
   );
 
@@ -140,6 +153,39 @@ export const getMailVerifyResendAction = (resendData) => async (dispatch) => {
         status: true,
         message: "Connection Error Can't Resend veryfication code",
         error,
+      },
+    });
+  }
+};
+
+export const getMailVerifySendAction = (token, user) => async (dispatch) => {
+  REQUEST_HEADER.Authorization = token;
+  let mailReq = { id: user.id };
+  if (user) {
+    mailReq = { id: user.id };
+  }
+
+  const resp = await axios.post(
+    `${GET_BACK_END_URL}/customers/verify/mail`,
+    JSON.stringify(mailReq),
+    { headers: REQUEST_HEADER }
+  );
+
+  console.log("Cutomer Mail Send Resp, ", resp);
+  const mailSend = getMailSendResp(resp.data);
+  console.log("Befor Set Response Data, ", mailSend);
+  try {
+    dispatch({
+      type: VERIFY_MAIL_SEND,
+      payload: mailSend,
+    });
+  } catch (error) {
+    dispatch({
+      type: VERIFY_MAIL_SEND,
+      payload: {
+        status: false,
+        message:
+          "Connection Error Please check your network connection or proxy",
       },
     });
   }

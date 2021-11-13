@@ -4,8 +4,10 @@ import React from "react";
 const BasicActionLink = (props) => {
   return (
     <React.Fragment>
-      <Link href={props.action} >
-        <a className="basic-link">{props.label}</a>
+      <Link href={props.action}>
+        <a className="basic-link" onClick={props.actionClick}>
+          {props.label}
+        </a>
       </Link>
     </React.Fragment>
   );

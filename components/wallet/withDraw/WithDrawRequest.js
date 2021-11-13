@@ -6,7 +6,10 @@ import { Button, Card, Col, Row } from "react-bootstrap";
 import Select from "react-select";
 import BankDetailsFields from "./BankDetailsFields";
 import ShippingAddressFields from "./ShippingAddressFields";
-import { esIsFieldError } from "../../../utils/helper/helperAction";
+import {
+  esIsFieldError,
+  helperIsEmpty,
+} from "../../../utils/helper/helperAction";
 import { PropTypes } from "prop-types";
 import { connect } from "react-redux";
 import { getAddWithDarawAction } from "../../../redux/actions/withDarawAction";
@@ -188,46 +191,20 @@ const WithDrawRequest = (params) => {
                   </Col>
                 </Row>
                 <Card>
-                  <Card.Body>
-                    <Row className="withdraw-row">
-                      <Col md={6}>
-                        <label className="form-label">Amount:</label>
-                        <Field
-                          name="amount"
-                          placeholder="Amount"
-                          id="amount"
-                          className={`form-control ${
-                            esIsFieldError(
-                              props.errors,
-                              props.touched,
-                              "amount"
-                            ).cls
-                          }`}
-                        />
-
-                        <div className="invalid-feedback">
-                          {
-                            esIsFieldError(
-                              props.errors,
-                              props.touched,
-                              "amount"
-                            ).msg
-                          }
-                        </div>
-                      </Col>
-
-                      {withDrawType === "cheque" ? (
+                  {!helperIsEmpty(withDrawType) ? (
+                    <Card.Body>
+                      <Row className="withdraw-row">
                         <Col md={6}>
-                          <label className="form-label">Cheque Name:</label>
+                          <label className="form-label">Amount:</label>
                           <Field
-                            name="chequeName"
-                            placeholder="Cheque Name"
-                            id="chequeName"
+                            name="amount"
+                            placeholder="Amount"
+                            id="amount"
                             className={`form-control ${
                               esIsFieldError(
                                 props.errors,
                                 props.touched,
-                                "chequeName"
+                                "amount"
                               ).cls
                             }`}
                           />
@@ -237,20 +214,50 @@ const WithDrawRequest = (params) => {
                               esIsFieldError(
                                 props.errors,
                                 props.touched,
-                                "chequeName"
+                                "amount"
                               ).msg
                             }
                           </div>
                         </Col>
-                      ) : (
-                        ""
-                      )}
-                    </Row>
-                  </Card.Body>
+
+                        {withDrawType === "cheque" ? (
+                          <Col md={6}>
+                            <label className="form-label">Cheque Name:</label>
+                            <Field
+                              name="chequeName"
+                              placeholder="Cheque Name"
+                              id="chequeName"
+                              className={`form-control ${
+                                esIsFieldError(
+                                  props.errors,
+                                  props.touched,
+                                  "chequeName"
+                                ).cls
+                              }`}
+                            />
+
+                            <div className="invalid-feedback">
+                              {
+                                esIsFieldError(
+                                  props.errors,
+                                  props.touched,
+                                  "chequeName"
+                                ).msg
+                              }
+                            </div>
+                          </Col>
+                        ) : (
+                          ""
+                        )}
+                      </Row>
+                    </Card.Body>
+                  ) : (
+                    ""
+                  )}
                 </Card>
                 {withDrawType === "cheque" ? (
                   <Row className="withdraw-row">
-                    <label className="form-label">Receive By:</label>
+                    <label className="form-label">Received By:</label>
                     <Col md={6}>
                       <Select
                         aria-label="Select Receive Option"
@@ -297,12 +304,16 @@ const WithDrawRequest = (params) => {
                   ""
                 )}
 
-                <BankDetailsFields
-                  errors={props.errors}
-                  touched={props.touched}
-                  setFieldValue={props.setFieldValue}
-                  bankStatus={withDrawType}
-                />
+                {!helperIsEmpty(withDrawType) ? (
+                  <BankDetailsFields
+                    errors={props.errors}
+                    touched={props.touched}
+                    setFieldValue={props.setFieldValue}
+                    bankStatus={withDrawType}
+                  />
+                ) : (
+                  ""
+                )}
                 <Row className="withdraw-row">
                   <Col md={6}>
                     <Button type="submit">Save</Button>

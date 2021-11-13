@@ -11,7 +11,8 @@ import { setAxiosHeaderToken } from "../../../redux/esRequestAction";
 
 const HomePageMenu = (params) => {
   const { status, data } = useSession();
-  setAxiosHeaderToken(data)
+  console.log("User Session Status, ", status, " Data, ", data);
+  setAxiosHeaderToken(data);
   const [loginModaDisplay, setLoginModaDisplay] = useState(false);
   // console.log("User Login Session, ", useSession());
   useEffect(() => {
@@ -42,16 +43,21 @@ const HomePageMenu = (params) => {
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="me-auto">&nbsp;</Nav>
           <Nav className="top-nav-right">
-            <Nav.Item>
+            <Nav.Item className="text_rcnt">
               {status === "authenticated" ? (
                 <LoginDropdown
                   name={`Hi, ${data && data.user && data.user.fullName}`}
                 />
               ) : (
-                <span className="signin-item" onClick={loginDisplayAction}>LogIn</span>
+                <span className="signin-item text_r" onClick={loginDisplayAction}>
+                  LogIn
+                </span>
               )}
             </Nav.Item>
-            <Nav.Item> &nbsp; BD | ENG | BDT</Nav.Item>
+            <Nav.Item className="text_rcnt">
+              {" "}
+              <span className="text_r">BD | ENG | BDT</span> &nbsp;{" "}
+            </Nav.Item>
           </Nav>
         </Navbar.Collapse>
       </Navbar>
@@ -63,7 +69,9 @@ const HomePageMenu = (params) => {
           setLoginModaDisplay(isClose);
         }}
       >
-        <SignOrLoginContent />
+        <SignOrLoginContent closeAction={(isClose)=>{
+          setLoginModaDisplay(isClose);
+        }} />
       </ContentModal>
     </React.Fragment>
   );

@@ -1,6 +1,5 @@
-
 import React, { useState } from "react";
-import { Nav} from "react-bootstrap";
+import { Nav } from "react-bootstrap";
 import LogOutActionItem from "../authentication/LogOutActionItem";
 import LoginMenuItem from "./LoginMenuItem";
 
@@ -15,7 +14,10 @@ const LoginDropdown = ({ name }) => {
   return (
     <React.Fragment>
       <div className="top-menu-profile-area">
-        <Nav.Item onClick={clickHandeler}> {name}</Nav.Item>
+        <Nav.Item onClick={clickHandeler} className="text_rcnt">
+          {" "}
+          <span className="text_r">{name}</span>{" "}
+        </Nav.Item>
         <div className={`loing-menu-area ${display ? " active" : ""}`}>
           <span className="msg-text">you are viewing personal profile: </span>
           <LoginMenuItem

@@ -47,6 +47,8 @@ class MyDocument extends Document {
             crossOrigin="anonymous"
           />
           */}
+          
+          <link href="../assets/css/flag-icons.css" rel="stylesheet" />
 
           <link rel="stylesheet" href="../assets/css/style.css" />
         </Head>
@@ -58,6 +60,7 @@ class MyDocument extends Document {
             integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
             crossOrigin="anonymous"
           ></script>
+          
         </body>
       </Html>
     );

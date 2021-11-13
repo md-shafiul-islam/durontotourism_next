@@ -1,5 +1,6 @@
 import React from "react";
-import { getSession, signIn } from "next-auth/react";
+import { getSession, signIn} from "next-auth/react";
+
 import { Field, Form, Formik } from "formik";
 import { PropTypes } from "prop-types";
 import { connect } from "react-redux";
@@ -8,7 +9,6 @@ import { Card, Col, Container, Row } from "react-bootstrap";
 
 import BasicActionLink from "../../../components/agent/BasicActionLink";
 import SubmitActionButtion from "../../../components/Fields/SubmitActionButtion";
-import { getUserLogin } from "../../../redux/actions/userAction";
 
 const GetLoginPage = (params) => {
   const route = useRouter();
@@ -16,10 +16,12 @@ const GetLoginPage = (params) => {
   console.log("Next Router, ", route);
   
   const loginAction = (loginData) => {
+    // console.log("Agent Login action, ", loginData);
+
     signIn("credentials", {
       username: loginData.username,
       password: loginData.password,
-      callbackUrl: `${window.origin}${router.pathname}/agent`,
+      callbackUrl: `${window.origin}/agent`,
       userStatus: "agent",
     });
   };
@@ -107,7 +109,8 @@ const GetLoginPage = (params) => {
 };
 
 GetLoginPage.prototype = {
-  getUserLogin: PropTypes.func.isRequired,
+  login: PropTypes.object.isRequired,
+  loginError: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = (state) => {
@@ -118,6 +121,7 @@ const mapStateToProps = (state) => {
 };
 
 export async function getServerSideProps(context) {
+
   let session = await getSession({ req: context.req });
 
   if (session) {
@@ -133,4 +137,4 @@ export async function getServerSideProps(context) {
   };
 }
 
-export default connect(mapStateToProps, { getUserLogin })(GetLoginPage);
+export default connect(mapStateToProps, null)(GetLoginPage);
