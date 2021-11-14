@@ -108,6 +108,7 @@ const CstSelectPhoneValidateField = ({
         console.log("Each Item, ", item);
         if (item.isoCode === "BD") {
           setSelectedItem(item);
+          onChange(item);
           return true;
         }
       });

@@ -11,7 +11,7 @@ import { PropTypes } from "prop-types";
 import { connect, useDispatch } from "react-redux";
 import { getAddSignUpAction } from "../redux/actions/signUpAction";
 import { REST_USER_SIGNUP } from "../redux/types";
-import { getSession, signIn } from "next-auth/react";
+import { getSession, signIn, useSession } from "next-auth/react";
 import { helperIsEmpty } from "../utils/helper/helperAction";
 import { getCountryOptions } from "../redux/actions/countriyAction";
 
@@ -20,6 +20,15 @@ const GetSignupPage = (params) => {
   const router = useRouter();
   const dispatch = useDispatch();
   const [loginData, setLoginData] = useState({});
+
+  const {status, data}= useSession(); 
+
+  useEffect(() => {    
+    if(status === "authenticated"){
+      router.push("/verify/twostepverification");
+    }
+
+  }, [status])
 
   useEffect(() => {
     if (helperIsEmpty(params.countryOptions)) {
@@ -57,13 +66,15 @@ const GetSignupPage = (params) => {
       type: REST_USER_SIGNUP,
       payload: true,
     });
+    const origin = window.origin;
+    console.log("SignUp Origin, ", origin);
     signIn("credentials", {
       username: loginData.userName,
       password: loginData.pwd,
-      callbackUrl: `${window.origin}/verify/twostepverification`,
+      redirect:false,
       userStatus: "customer",
     });
-    // router.push("/verify/twostepverification");
+    //router.push("/verify/twostepverification");
   }
 
   const initLogin = (login) => {

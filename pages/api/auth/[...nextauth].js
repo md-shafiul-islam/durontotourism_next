@@ -73,5 +73,10 @@ export default NextAuth({
       session.user = getCurrentUserBySessionOrToken(token.accessToken);
       return session;
     },
+
+    async redirect({ url, baseUrl }) {
+      console.log("Current Url, ", url, " Base Url, ", baseUrl);
+      return baseUrl
+    },
   },
 });
