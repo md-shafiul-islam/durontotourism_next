@@ -5,14 +5,13 @@ import { Col, Row } from "react-bootstrap";
 import { PropTypes } from "prop-types";
 import { connect } from "react-redux";
 import CstValidatePhoneNoField from "../Fields/CstValidatePhoneNoField";
-import { getCountryOptions } from "../../redux/actions/countriyAction";
-import { initCountryOptions } from "../../utils/ui/esFuncs";
-import CstSelectPhoneValidateField from "../Fields/CstSelectPhoneValidateField";
+import { getCountryPhonCodeOptions } from "../../redux/actions/countriyAction";
+import { iniPhoneCountryOptions } from "../../utils/ui/esFuncs";
 import SubmitActionButtion from "../Fields/SubmitActionButtion";
 
 const SinglePhoneForm = (params) => {
   useEffect(() => {
-    initCountryOptions(params);
+    iniPhoneCountryOptions(params);
   }, []);
 
   return (
@@ -36,7 +35,7 @@ const SinglePhoneForm = (params) => {
                   codeName="code"
                   filedPlaceholder="Phone"
                   codePlaceholder="Code"
-                  options={params.countryOptions}
+                  options={params.countryPhoneOptions}
                   clazzName="country-w-phone"
                 />
               </Col>
@@ -58,13 +57,13 @@ const SinglePhoneForm = (params) => {
 
 const mapStateToProps = (state) => {
   return {
-    countryOptions: state.country.countryOptions,
+    countryPhoneOptions: state.country.countryPhoneOptions,
   };
 };
 
 SinglePhoneForm.prototype = {
-  getCountryOptions: PropTypes.func.isRequired,
-  countryOptions: PropTypes.object.isRequired,
+  getCountryPhonCodeOptions: PropTypes.func.isRequired,
+  countryPhoneOptions: PropTypes.object.isRequired,
 };
 
-export default connect(mapStateToProps, { getCountryOptions })(SinglePhoneForm);
+export default connect(mapStateToProps, { getCountryPhonCodeOptions })(SinglePhoneForm);

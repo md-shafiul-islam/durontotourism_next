@@ -15,7 +15,6 @@ const CstValidatePhoneNoField = (props) => {
     fileldName,
     filedPlaceholder,
     handleChange,
-    options,
     values,
     checkIsValid,
     errors,

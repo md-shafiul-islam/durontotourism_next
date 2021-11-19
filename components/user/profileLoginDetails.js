@@ -1,18 +1,31 @@
 import React, { useState } from "react";
 import { Button, Card, Col, Row } from "react-bootstrap";
+import { connect } from "react-redux";
+import { esGetDateByAdding } from "../../utils/helper/esDateFunc";
+import { esHelperOnlyDate } from "../../utils/ui/esFuncs";
 import AddPhoneNoModal from "../Modals/Profile/addPhoneNoModal";
 import ChangePasswordModal from "../Modals/Profile/changePasswordModal";
 
-const ProfileLoginDetails = () => {
+const ProfileLoginDetails = (props) => {
   const [phoneStatus, setPhoneStatus] = useState(false);
   const [passwordStatus, setPasswordStatus] = useState(false);
+  console.log("ProfileLoginDetails Customer ", props);
+  const { customer } = props;
+
+  const getVerifideIcon = (status) => {
+    if (status) {
+      return <i className="fas fa-check-square text-success"></i>;
+    }
+
+    return <i className="fas fa-check-square text-success"></i>;
+  };
 
   return (
     <React.Fragment>
       <Card>
         <Card.Body>
           <div className="pfl-header">
-            <span className="strip-left bg-secondary"></span>
+            <span className="strip-left bg-primary"></span>
             <Row>
               <Col md={12}>
                 <div className="heading-area">
@@ -30,34 +43,31 @@ const ProfileLoginDetails = () => {
               <tbody>
                 <tr>
                   <th scope="row">Since</th>
-                  <td colSpan="3">17/08/2018</td>
+                  <td colSpan="3">
+                    {esHelperOnlyDate(customer && customer.date)}
+                  </td>
                 </tr>
                 <tr>
                   <th scope="row">User ID</th>
-                  <td colSpan="3">US-284894985</td>
+                  <td colSpan="3">{customer && customer.id}</td>
                 </tr>
                 <tr>
                   <th scope="row">Mobile Number</th>
-                  <td colSpan="3">
-                    <button
-                      className="prf-add-btn"
-                      onClick={() => {
-                        setPhoneStatus(true);
-                      }}
-                    >
-                      +Add your mobile number
-                    </button>
+                  <td colSpan="2">{customer && customer.phoneNo}</td>
+                  <td>
+                    {" "}
+                    {getVerifideIcon(customer && customer.phoneVerified)}
                   </td>
                 </tr>
                 <tr>
                   <th scope="row">Email ID</th>
                   <td colSpan="2" className="email-text">
-                    md.shafiul2014bd@gmail.com
+                    {customer && customer.email}
                   </td>
 
                   <td>
                     <span className="sts-icon">
-                      <i className="fas fa-check-square text-success"></i>
+                      {getVerifideIcon(customer && customer.mailVerified)}
                     </span>
                     <span>Verified</span>
                   </td>
@@ -97,4 +107,13 @@ const ProfileLoginDetails = () => {
   );
 };
 
-export default ProfileLoginDetails;
+const mapStateToProps = (state) => {
+  return {
+    customer:
+      state.customer &&
+      state.customer.customerInf &&
+      state.customer.customerInf.customer,
+  };
+};
+
+export default connect(mapStateToProps, null)(ProfileLoginDetails);

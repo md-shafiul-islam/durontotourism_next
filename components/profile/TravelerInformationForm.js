@@ -10,11 +10,16 @@ import { esIsFieldError, helperIsEmpty } from "../../utils/helper/helperAction";
 import { PropTypes } from "prop-types";
 import { connect } from "react-redux";
 import { getPesonalInformationUpdate } from "../../redux/actions/userAction";
-import { getCountryOptions } from "../../redux/actions/countriyAction";
+import {
+  getCountryOptions,
+  getCountryPhonCodeOptions,
+} from "../../redux/actions/countriyAction";
 import { getMaxFileSizeValidation } from "../../utils/helper/helperValidateSchema";
+import CstValidatePhoneNoField from "../Fields/CstValidatePhoneNoField";
 
-class ProfileBookingInfForm extends Component {
+class TravelerInformationForm extends Component {
   state = {};
+
   initForm = {
     firstName: "",
     lastName: "",
@@ -31,8 +36,23 @@ class ProfileBookingInfForm extends Component {
     isInternational: this.props.isInternational,
   };
   componentDidMount() {
+    console.log("TravelerInformationForm props, ", this.props);
     this.initCountyOption();
+    this.initPhoneFieldOptions();
   }
+
+  initPhoneFieldOptions = () => {
+    let { phoneCodeOptions, isExtendedField } = this.props;
+    if (isExtendedField) {
+      if (!helperIsEmpty(phoneCodeOptions)) {
+        if (phoneCodeOptions.length === 0) {
+          this.props.getCountryPhonCodeOptions();
+        }
+      } else {
+        this.props.getCountryPhonCodeOptions();
+      }
+    }
+  };
 
   initCountyOption = () => {
     let { countryOptions } = this.props;
@@ -81,11 +101,15 @@ class ProfileBookingInfForm extends Component {
 
       email: Yup.string().when("isExtend", {
         is: true,
-        then: Yup.string().email().required("You Must Enter you email"),
+        then: Yup.string().email("Please, Enter valid email"),
       }),
       phoneNo: Yup.string().when("isExtend", {
         is: true,
-        then: Yup.string().min(3).required("You Must enter phone"),
+        then: Yup.string().min(3),
+      }),
+      phoneCode: Yup.string().when("isExtend", {
+        is: true,
+        then: Yup.string().min(3),
       }),
       passportAttach: Yup.mixed().when("passportNo", (value) => {
         if (value) {
@@ -97,9 +121,9 @@ class ProfileBookingInfForm extends Component {
     });
   };
 
-  submitUpdateAction = (travelerData) => {
-    const traveler = travelerData;
-    this.props.getAddTraveler(traveler);
+  submitUpdateAction = (updateInf) => {
+    const requestUpdateDate = updateInf;
+    this.props.formSubmitAction(requestUpdateDate);
   };
 
   render() {
@@ -267,7 +291,7 @@ class ProfileBookingInfForm extends Component {
                 {this.props.isExtendedField ? (
                   <React.Fragment>
                     <Row className="card-pay-row">
-                      <Col md={6}>
+                      <Col md={12}>
                         <CstValidateField
                           label="Email"
                           placeholder="Email"
@@ -278,15 +302,17 @@ class ProfileBookingInfForm extends Component {
                           touched={props.touched}
                         />
                       </Col>
-                      <Col md={6}>
-                        <CstValidateField
-                          label="Phone No."
-                          placeholder="Phone Number"
-                          name="phoneNo"
-                          handleChange={props.handleChange}
-                          handleBlur={props.handleBlur}
-                          errors={props.errors}
-                          touched={props.touched}
+                    </Row>
+                    <Row className="card-pay-row">
+                      <Col md={12}>
+                        <CstValidatePhoneNoField
+                          {...props}
+                          fileldName="phoneNo"
+                          codeName="phoneCode"
+                          filedPlaceholder="Phone"
+                          codePlaceholder="Code"
+                          options={this.props.phoneCodeOptions}
+                          clazzName="country-w-phone"
                         />
                       </Col>
                     </Row>
@@ -308,20 +334,24 @@ class ProfileBookingInfForm extends Component {
   }
 }
 
-ProfileBookingInfForm.prototypes = {
+TravelerInformationForm.prototypes = {
   getCountryOptions: PropTypes.func.isRequired,
+  getCountryPhonCodeOptions: PropTypes.func.isRequired,
   userSignUp: PropTypes.object.isRequired,
   countryOptions: PropTypes.object.isRequired,
+  phoneCodeOptions: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = (state) => {
   return {
     updateStatus: state.user.customerPersonalInfoUpdate,
     countryOptions: state.country.countryOptions,
+    phoneCodeOptions: state.country.countryPhoneOptions,
   };
 };
 
 export default connect(mapStateToProps, {
   getPesonalInformationUpdate,
   getCountryOptions,
-})(ProfileBookingInfForm);
+  getCountryPhonCodeOptions,
+})(TravelerInformationForm);

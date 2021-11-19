@@ -13,7 +13,7 @@ import { getAddSignUpAction } from "../redux/actions/signUpAction";
 import { REST_USER_SIGNUP } from "../redux/types";
 import { getSession, signIn, useSession } from "next-auth/react";
 import { helperIsEmpty } from "../utils/helper/helperAction";
-import { getCountryOptions } from "../redux/actions/countriyAction";
+import { getCountryPhonCodeOptions } from "../redux/actions/countriyAction";
 
 const GetSignupPage = (params) => {
   console.log("SignUp Page Params, ", params);
@@ -31,11 +31,11 @@ const GetSignupPage = (params) => {
   }, [status])
 
   useEffect(() => {
-    if (helperIsEmpty(params.countryOptions)) {
-      params.getCountryOptions();
+    if (helperIsEmpty(params.phoneCodeOptions)) {
+      params.getCountryPhonCodeOptions();
     } else {
-      if (params.countryOptions.length === 0) {
-        params.getCountryOptions();
+      if (params.phoneCodeOptions.length === 0) {
+        params.getCountryPhonCodeOptions();
       }
     }
   }, []);
@@ -141,7 +141,7 @@ const GetSignupPage = (params) => {
                         codeName="code"
                         filedPlaceholder="Phone"
                         codePlaceholder="Code"
-                        options={params.countryOptions}
+                        options={params.phoneCodeOptions}
                         clazzName="country-w-phone"
                       />
                     </Col>
@@ -175,14 +175,15 @@ const GetSignupPage = (params) => {
 const mapStateToProps = (state) => {
   return {
     userSignUp: state.signup.addSignUp,
-    countryOptions: state.country.countryOptions,
+    phoneCodeOptions: state.country.countryPhoneOptions,
   };
 };
 
 GetSignupPage.prototype = {
   getAddSignUpAction: PropTypes.func.isRequired,
+  getCountryPhonCodeOptions:PropTypes.func.isRequired,
   userSignUp: PropTypes.object.isRequired,
-  countryOptions: PropTypes.object.isRequired,
+  phoneCodeOptions: PropTypes.object.isRequired,
 };
 
 export async function getServerSideProps(context) {
@@ -205,5 +206,5 @@ export async function getServerSideProps(context) {
 
 export default connect(mapStateToProps, {
   getAddSignUpAction,
-  getCountryOptions,
+  getCountryPhonCodeOptions,
 })(GetSignupPage);

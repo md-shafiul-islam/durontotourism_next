@@ -2,6 +2,7 @@
 
 import { helperIsEmpty } from "../../utils/helper/helperAction";
 import {
+  GET_CUSTOMER_INF,
   SET_CUSTOMER,
   SET_CUSTOMER_ERROR,
   SET_CUSTOMER_UPDATE,
@@ -13,6 +14,7 @@ const initialState = {
   upStatus: {},
   upCustomerError: {},
   customerError: {},
+  customerInf:{}
 };
 
 export default function (state = initialState, action) {
@@ -37,6 +39,12 @@ export default function (state = initialState, action) {
         ...state,
         upCustomerError: action.payload,
       };
+    
+      case GET_CUSTOMER_INF:
+        return {
+          ...state,
+          customerInf:action.payload,
+        }
 
     default:
       return state;

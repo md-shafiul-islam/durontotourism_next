@@ -483,49 +483,61 @@ body {
   list-style: none !important;
   margin: 3px 0px;
 }
-.phone-code-selcet__control .country-option-container .option-content{
-  font-size: 1.5em;  
+.phone-code-selcet__control .country-option-container .option-content {
+  font-size: 1.5em;
 }
 .phone-code-selcet__control .country-option-container .option-content .flag {
   padding: 5px 4px;
 }
 
-.phone-code-selcet__control .country-option-container .option-content .flag{
+.phone-code-selcet__control .country-option-container .option-content .flag {
   font-size: 1.5em;
   padding: 7px 2px;
 }
 
-.phone-code-selcet__control .country-option-container .option-content .dial-code,
+.phone-code-selcet__control
+  .country-option-container
+  .option-content
+  .dial-code,
 .phone-code-selcet__control .country-option-container .option-content .code {
   border-radius: 4px;
   border: 1px solid #dee2e6;
   padding: 7px 4px;
 }
 
-.phone-code-selcet__control .single-country-option-container .option-content{
+.phone-code-selcet__control .single-country-option-container .option-content {
   display: flex;
   align-items: center;
 }
 
-.phone-code-selcet__control .single-country-option-container .option-content .flag{
+.phone-code-selcet__control
+  .single-country-option-container
+  .option-content
+  .flag {
   font-size: 1.25em;
   padding: 4px 5px;
   margin: 0px !important;
 }
 
-.phone-code-selcet__control .single-country-option-container .option-content .dial-code,
-.phone-code-selcet__control .single-country-option-container .option-content .code{
+.phone-code-selcet__control
+  .single-country-option-container
+  .option-content
+  .dial-code,
+.phone-code-selcet__control
+  .single-country-option-container
+  .option-content
+  .code {
   border-radius: 4px;
   border: 1px solid #dee2e6;
   padding: 7px 6px;
   font-weight: bold;
 }
 
-.phone-code-selcet__menu{
+.phone-code-selcet__menu {
   width: 250px !important;
 }
 
-.cstf-phone.country-w-phone .cstf-select-opt{  
+.cstf-phone.country-w-phone .cstf-select-opt {
   padding-right: 20px !important;
 }
 /** Country Select With Flag End */
@@ -803,6 +815,11 @@ body {
 .profile-content .profile-card-area {
   margin-top: 15px !important;
   margin-bottom: 15px !important;
+  
+}
+
+.profile-card-area .prof-card{
+  min-height: 500px !important;
 }
 
 .wallet-main-container {
@@ -3979,8 +3996,65 @@ body {
 
 /* Cst Radio Buttion End */
 
+/*CSt Upload file */
+.cst-uplod-file {
+  position: relative;
+}
+
+.cst-uplod-file [type="file"]:focus-visible,
+.cst-uplod-file [type="file"]:focus{
+  outline: none;
+  background-color: transparent;
+  border: none;  
+  box-shadow: none;
+}
+.cst-uplod-file [type="file"] {
+  height: 0px !important;
+  overflow: hidden;
+  width: 0px !important;
+  position: absolute;
+  top: 10px;
+  left: 12px;  
+  outline: none;
+  background-color: none;
+  border: none;  
+}
+
+.cst-uplod-file [type="file"] + label {
+  border: none;
+  cursor: pointer;
+  display: flex;
+  font-size: inherit;
+  align-items: center;
+  font-weight: 500;
+  outline: none;
+  position: relative;
+  transition: all 0.3s;
+  vertical-align: middle;
+}
+
+.cst-uplod-file [type="file"] + label.file-label .icon {
+  border-radius: 50px;
+  font-size: 1.5em;
+  background-color: #497f42;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px 12px;
+  margin-right: 15px;
+}
+
+.cst-uplod-file [type="file"] + label.file-label:hover .icon {
+  background-color: #64c558;
+}
+
+.cst-uplod-file [type="file"] + label.file-label {
+  border-radius: 50px;
+  overflow: hidden;
+}
+
 /**Submit Action Start */
-.single-phone-action{
+.single-phone-action {
   padding: 0px !important;
 }
 /**Submit Action End */
@@ -4321,6 +4395,22 @@ body {
   width: 100%;
   height: 35px;
 }
+
+
+/*Personal Information View Start */
+.pesonalinfo tr td .country-row{
+  display: flex;
+  flex-direction: row;
+  align-items: center;  
+}
+
+.pesonalinfo tr td .country-row span{
+  margin: 0px 5px 0px 0px;
+}
+
+
+/*Personal Information View End */
+
 
 /* Profile -> Traveler Modal Start */
 

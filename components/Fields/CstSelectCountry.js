@@ -1,8 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from "react";
 import Select, { components, SingleValueProps } from "react-select";
-import { Col, Row } from "react-bootstrap";
-import { helperIsEmpty } from "../../utils/helper/helperAction";
 
 const SingleValueItem = (props) => {
   const { data } = props;
@@ -14,12 +12,12 @@ const SingleValueItem = (props) => {
             <span className="flag">
               <span
                 className={`flag-icon flag-icon-${
-                  data.isoCode && data.isoCode.toLowerCase()
+                  data.value && data.value.toLowerCase()
                 }`}
               ></span>
             </span>
-            <span className="code">&nbsp;{data.isoCode}</span>
-            <span className="dial-code">&nbsp;{data.dialCode}</span>
+
+            <span>&nbsp;{data.label}</span>
           </span>
         </div>
       </React.Fragment>
@@ -27,7 +25,7 @@ const SingleValueItem = (props) => {
   );
 };
 
-const CstSelectPhoneValidateField = ({
+const CstSelectCountry = ({
   arrowStatus = true,
   name,
   label = undefined,
@@ -49,34 +47,16 @@ const CstSelectPhoneValidateField = ({
     getDefaultValue();
   }, [options]);
 
-  const cstFilterOption = (option, inputData) => {
-    let { dialCode, isoCode, isoCode3, label } = option.data;
-
-    const regEx = new RegExp(`${inputData}`, "i");
-
-    if (regEx.test(isoCode)) {
-      return true;
-    }
-
-    if (regEx.test(label)) {
-      return true;
-    }
-
-    if (regEx.test(dialCode)) {
-      return true;
-    }
-
-    if (regEx.test(isoCode3)) {
-      return true;
-    }
-    return false;
-  };
-
   const getCommponetSets = () => {
     // IndicatorSeparator: () => null,
+    if (isSmall) {
+      return {
+        DropdownIndicator: () => null,
+        IndicatorSeparator: () => null,
+        SingleValue: SingleValueItem,
+      };
+    }
     return {
-      DropdownIndicator: () => null,
-      IndicatorSeparator: () => null,
       SingleValue: SingleValueItem,
     };
   };
@@ -89,13 +69,12 @@ const CstSelectPhoneValidateField = ({
             <span className="flag">
               <span
                 className={`flag-icon flag-icon-${
-                  props.isoCode && props.isoCode.toLowerCase()
+                  props.value && props.value.toLowerCase()
                 } `}
               ></span>
             </span>
-            <span className="dial-code">&nbsp;{props.name}</span>
-            <span className="code">&nbsp;{props.isoCode}</span>
-            <span className="dial-code">&nbsp;{props.dialCode}</span>
+
+            <span className="code">&nbsp;{props.label}</span>
           </span>
         </div>
       </React.Fragment>
@@ -104,18 +83,15 @@ const CstSelectPhoneValidateField = ({
 
   const getDefaultValue = () => {
     let idx = 0;
-    if (!helperIsEmpty(options)) {
-      if (Array.isArray(options)) {
-        options.forEach((item, i) => {
-          console.log("Each Item, ", item);
-          if (item.isoCode === "BD") {
-            setSelectedItem(item);
-            onChange(item);
-            return true;
-          }
-          return false;
-        });
-      }
+    if (options) {
+      options.find((item, i) => {
+        console.log("Each Item, ", item);
+        if (item.isoCode === "BD") {
+          setSelectedItem(item);
+          onChange(item);
+          return true;
+        }
+      });
     }
     return idx;
   };
@@ -150,4 +126,4 @@ const CstSelectPhoneValidateField = ({
   );
 };
 
-export default CstSelectPhoneValidateField;
+export default CstSelectCountry;

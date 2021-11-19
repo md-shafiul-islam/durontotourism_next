@@ -64,7 +64,7 @@ const AgentCompanyInfo = (params) => {
                   <td colSpan="3">+880 1725686029</td>
                 </tr>
                 <tr>
-                  <th scope="row">DIN Certificate No</th>
+                  <th scope="row">BIN Certificate No</th>
                   <td colSpan="3">+880 1725686029</td>
                 </tr>
               </tbody>

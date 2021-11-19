@@ -139,9 +139,8 @@ const mapStateToProps = (state) => {
 
 export async function getServerSideProps(context) {
   let session = await getSession({ req: context.req });
-  
-  if (!session) {
-    console.log("Current Agent Session, ", session);
+
+  if (!session) {    
     return {
       redirect: {
         destination: "/",
@@ -151,6 +150,22 @@ export async function getServerSideProps(context) {
   }
   return {
     props: session,
+  };
+
+  if (session.data) {
+    if (session.data.user) {
+      if (session.data.user.role === "agent") {
+        return {
+          props: session,
+        };
+      }
+    }
+  }
+  return {
+    redirect: {
+      destination: "/",
+      permanent: false,
+    },
   };
 }
 

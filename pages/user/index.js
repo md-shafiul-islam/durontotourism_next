@@ -13,54 +13,18 @@ import { PropTypes } from "prop-types";
 import { connect } from "react-redux";
 import { getCustomerAction } from "../../redux/actions/customerAction";
 import { initialJwTokenToAuth } from "../../redux/actions/initialAction";
+import { getPesonalInformationUpdate } from "../../redux/actions/userAction";
+import CstProfilePageTab from "../../components/CstTabs/CstProfilePageTab";
 
 class ProfilePage extends Component {
-  
   componentDidMount() {
-    this.scrollSpyActive();
-    
     initialJwTokenToAuth(this.props.accessToken);
     this.props.getCustomerAction();
   }
 
-  scrollSpyActive = () => {
-    let items = document.querySelectorAll(".prf_item");
-
-    window.onscroll = () => {
-      const scrollPosition =
-        document.documentElement.scrollTop || document.body.scrollTop;
-
-      items &&
-        items.forEach((item, idx) => {
-          if (item.offsetTop <= scrollPosition) {
-            console.log("CT item, ", item.id);
-
-            let ctActive = document.querySelector(`.list-group-item.active`);
-
-            if (ctActive) {
-              if (
-                ctActive.classList !== undefined &&
-                ctActive.classList !== null
-              ) {
-                ctActive.classList.remove("active");
-              }
-            }
-            let ctitem = document.querySelector(
-              `.list-group-item[data-id="${item.id}"]`
-            );
-
-            console.log("Curent Selected Item Profile ", ctitem);
-            if (ctitem !== undefined && ctitem !== null) {
-              ctitem.classList.add("active");
-            }
-
-            //this.changeActiveStatus(element.id);
-          }
-        });
-    };
+  updatePersonalInformationAction = (requestUpdateDate) => {
+    this.props.getPesonalInformationUpdate(requestUpdateDate);
   };
-
-  valida;
 
   render() {
     return (
@@ -76,66 +40,8 @@ class ProfilePage extends Component {
             </Col>
           </Row>
           <Row className="gx-5">
-            <Col md={3}>
-              <ProfileSideBar />
-            </Col>
-            <Col md={9}>
-              <div
-                data-bs-spy="scroll"
-                data-bs-target="#profile"
-                data-bs-offset="0"
-                className="scrollspy-example profile-content"
-                tabIndex="0"
-              >
-                <Row className="profile-card-area">
-                  <Card>
-                    <Card.Body>
-                      <Col md={12}>
-                        <ProfileStatus />
-                      </Col>
-                      <Col md={12} id="profile" className="prf_item">
-                        <ProfileBasicInfo
-                          title="Genarel Info"
-                          tagLine="Basic info, for faster booking experience"
-                        />
-                      </Col>
-                    </Card.Body>
-                  </Card>
-                </Row>
-
-                <Row className="profile-card-area">
-                  <Card>
-                    <Card.Body>
-                      <Col md={12} id="saveTravellers" className="prf_item">
-                        <ProfileBookingInformation title="Personal Infomation" />
-                      </Col>
-                    </Card.Body>
-                  </Card>
-                </Row>
-
-                <Row className="profile-card-area">
-                  <Card>
-                    <Card.Body>
-                      <Col md={12} id="loginDetails" className="prf_item">
-                        <ProfileLoginDetails />
-                      </Col>
-                    </Card.Body>
-                  </Card>
-                </Row>
-
-                <Row className="profile-card-area">
-                  <Card>
-                    <Card.Body>
-                      <Col md={12} id="saveTravellers" className="prf_item">
-                        <ProfileSaveTraveller />
-                      </Col>
-                    </Card.Body>
-                  </Card>
-                </Row>
-              </div>
-            </Col>
+            <CstProfilePageTab />
           </Row>
-          <EmptyCont height="400px" />
         </div>
       </React.Fragment>
     );
@@ -143,21 +49,20 @@ class ProfilePage extends Component {
 }
 
 export async function getServerSideProps(context) {
-  let session = await getSession({req:context.req});
+  let session = await getSession({ req: context.req });
 
-  if(!session){
-    
+  if (!session) {
     return {
-      redirect:{
-        destination:"/",
-        permanent:false,
-      }
-    }
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
   }
-  
+
   return {
-    props:session,
-  }
+    props: session,
+  };
 }
 
 ProfilePage.prototypes = {
@@ -165,10 +70,13 @@ ProfilePage.prototypes = {
   customer: PropTypes.object.isRequired,
 };
 
-const mapStateToProps = (state)=>{
+const mapStateToProps = (state) => {
   return {
-    customer: state.customer&&state.customer.customer,
-  }
-}
+    customer: state.customer && state.customer.customer,
+  };
+};
 
-export default connect(mapStateToProps, {getCustomerAction})(ProfilePage);
+export default connect(mapStateToProps, {
+  getCustomerAction,
+  getPesonalInformationUpdate,
+})(ProfilePage);

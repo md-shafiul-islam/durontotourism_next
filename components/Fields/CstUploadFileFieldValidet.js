@@ -40,6 +40,7 @@ const CstUploadFileFieldValidet = (params) => {
   } = params;
 
   const changeImageAction = (e) => {
+    e.preventDefault();
     if (e.currentTarget.files !== undefined) {
       setAttachFile(e.currentTarget.files[0]);
     }
@@ -68,14 +69,7 @@ const CstUploadFileFieldValidet = (params) => {
   return (
     <React.Fragment>
       <Row>
-        <Col md={8}>
-          {label ? (
-            <label className="form-label" htmlFor={name}>
-              {label}
-            </label>
-          ) : (
-            ""
-          )}
+        <Col md={8} className="cst-uplod-file">
           <input
             className={`form-control ${getError() && getError().cls} `} //esIsFieldError()
             placeholder={placeholder}
@@ -84,14 +78,21 @@ const CstUploadFileFieldValidet = (params) => {
             name={name}
             id={name}
             onBlur={() => {
-              setFieldTouched(name, true);
+              setFieldTouched && setFieldTouched(name, true);
             }}
             onChange={(e) => {
               changeImageAction(e);
-              uploadFile(e.currentTarget.files[0]);
-              setFieldValue(name, e.currentTarget.files[0]);
+              uploadFile && uploadFile(e.currentTarget.files[0]);
+              setFieldValue && setFieldValue(name, e.currentTarget.files[0]);
             }}
           />
+          <label className="form-label file-label" htmlFor={name}>
+            <span className="icon">
+              {" "}
+              <i className="fas fa-cloud-upload-alt"></i>
+            </span>
+            <span className="text">{label}</span>
+          </label>
           <div className="invalid-feedback">{getError() && getError().msg}</div>
         </Col>
         <Col md={4}>
