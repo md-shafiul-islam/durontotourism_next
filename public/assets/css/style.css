@@ -815,10 +815,9 @@ body {
 .profile-content .profile-card-area {
   margin-top: 15px !important;
   margin-bottom: 15px !important;
-  
 }
 
-.profile-card-area .prof-card{
+.profile-card-area .prof-card {
   min-height: 500px !important;
 }
 
@@ -4002,10 +4001,10 @@ body {
 }
 
 .cst-uplod-file [type="file"]:focus-visible,
-.cst-uplod-file [type="file"]:focus{
+.cst-uplod-file [type="file"]:focus {
   outline: none;
   background-color: transparent;
-  border: none;  
+  border: none;
   box-shadow: none;
 }
 .cst-uplod-file [type="file"] {
@@ -4014,10 +4013,10 @@ body {
   width: 0px !important;
   position: absolute;
   top: 10px;
-  left: 12px;  
+  left: 12px;
   outline: none;
   background-color: none;
-  border: none;  
+  border: none;
 }
 
 .cst-uplod-file [type="file"] + label {
@@ -4396,21 +4395,26 @@ body {
   height: 35px;
 }
 
+/*User Login detals Start */
+.change-action {
+  color: #008cff;
+  cursor: pointer;
+  font-weight: bold;
+}
+/*User Login detals End */
 
 /*Personal Information View Start */
-.pesonalinfo tr td .country-row{
+.pesonalinfo tr td .country-row {
   display: flex;
   flex-direction: row;
-  align-items: center;  
+  align-items: center;
 }
 
-.pesonalinfo tr td .country-row span{
+.pesonalinfo tr td .country-row span {
   margin: 0px 5px 0px 0px;
 }
 
-
 /*Personal Information View End */
-
 
 /* Profile -> Traveler Modal Start */
 

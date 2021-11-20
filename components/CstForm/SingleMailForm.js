@@ -8,16 +8,23 @@ import CstValidatePhoneNoField from "../Fields/CstValidatePhoneNoField";
 import { getCountryPhonCodeOptions } from "../../redux/actions/countriyAction";
 import { iniPhoneCountryOptions } from "../../utils/ui/esFuncs";
 import SubmitActionButtion from "../Fields/SubmitActionButtion";
+import CstValidateField from "../Fields/CstValidateField";
+import * as Yup from "yup";
 
-const SinglePhoneForm = (params) => {
-  useEffect(() => {
-    iniPhoneCountryOptions(params);
-  }, []);
+const SingleMailForm = (params) => {
+  const validationSchema = () => {
+    return Yup.object().shape({
+      email: Yup.string()
+        .email("Please, Enter valid Email")
+        .required("You nust enter mail"),
+    });
+  };
 
   return (
     <React.Fragment>
       <Formik
-        initialValues={{ phoneNo: "", code: "" }}
+        validationSchema={validationSchema}
+        initialValues={{ email: "" }}
         onSubmit={(values, actions) => {
           params.submitAction(values);
           setTimeout(() => {
@@ -30,20 +37,13 @@ const SinglePhoneForm = (params) => {
           <Form>
             <Row className="input-area-row">
               <Col md={12}>
-                <CstValidatePhoneNoField
-                  {...props}
-                  fileldName="phoneNo"
-                  codeName="code"
-                  filedPlaceholder="Phone"
-                  codePlaceholder="Code"
-                  options={params.countryPhoneOptions}
-                  clazzName="country-w-phone"
-                />
+                <CstValidateField name="email" placeholder="Email" {...props} />
               </Col>
             </Row>
             <Row className="input-area-row">
               <Col md={{ span: 4, offset: 8 }} className="d-grid">
-                <SubmitActionButtion className="single-phone-action"
+                <SubmitActionButtion
+                  className="single-phone-action"
                   label="Submit"
                   isSubmitting={props.isSubmitting}
                 />
@@ -62,9 +62,11 @@ const mapStateToProps = (state) => {
   };
 };
 
-SinglePhoneForm.prototype = {
+SingleMailForm.prototype = {
   getCountryPhonCodeOptions: PropTypes.func.isRequired,
   countryPhoneOptions: PropTypes.object.isRequired,
 };
 
-export default connect(mapStateToProps, { getCountryPhonCodeOptions })(SinglePhoneForm);
+export default connect(mapStateToProps, { getCountryPhonCodeOptions })(
+  SingleMailForm
+);

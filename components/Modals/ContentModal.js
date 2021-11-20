@@ -2,14 +2,12 @@ import React from "react";
 import { Button, Col, Modal, ModalFooter, Row } from "react-bootstrap";
 
 /**
- * 
- * @param { show, name, contentClass, dialogClassName, title, children, actionClose} params 
- * @returns 
+ *
+ * @param { show, name, contentClass, dialogClassName, title, children, actionClose} params
+ * @returns
  */
 
 const ContentModal = (params) => {
-  console.log("Content Modal Params, ", params);
-
   return (
     <React.Fragment>
       <Modal
@@ -29,15 +27,19 @@ const ContentModal = (params) => {
         </Modal.Header>
         <Modal.Body>{params.children}</Modal.Body>
         <Modal.Footer>
-          <Col md={{ offset: 10, span: 2 }} className="d-grid">
-            <Button
-              onClick={() => {
-                params.actionClose(false);
-              }}
-            >
-              Close
-            </Button>
-          </Col>
+          {params.actionCloseStatus ? (
+            <Col md={{ offset: 10, span: 2 }} className="d-grid">
+              <Button
+                onClick={() => {
+                  params.actionClose(false);
+                }}
+              >
+                Close
+              </Button>
+            </Col>
+          ) : (
+            ""
+          )}
         </Modal.Footer>
       </Modal>
     </React.Fragment>

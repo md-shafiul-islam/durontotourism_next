@@ -10,10 +10,13 @@ import {
   GET_BACK_END_URL,
   GET_TRAVELERS,
   REQUEST_HEADER,
+  SET_USER_MAIL_CHANGE,
+  SET_USER_PHONE_NO_CHANGE,
+  SET_USER_PROFILE_CHANGE,
   SET_USER_SIGNUP,
   SET_USER_SIGNUP_ERROR,
 } from "../types";
-import { esUploadFile } from "./esAction";
+import { esUploadFile, esUploadProfileImage } from "./esAction";
 
 const getPesonalInfoRes = (resp) => {
   if (resp) {
@@ -169,4 +172,57 @@ export const getUserTravelers = ()=>async (dispatch)=>{
   }
 
 
+}
+
+export const getUserPhoneChaneAction = (phone)=>async (dispatch) =>{
+  phone = JSON.stringify(phone);
+  const resp = await axios.put(`${GET_BACK_END_URL}/changes/phone`, phone, {headers:REQUEST_HEADER});
+  try {
+    dispatch({
+      type:SET_USER_PHONE_NO_CHANGE,
+      payload:resp.data,
+    })
+  } catch (error) {
+    dispatch({
+      type:SET_USER_PHONE_NO_CHANGE,
+      payload:{status:false, message:error.message},
+    })
+  }
+}
+
+export const getUserMailChaneAction = (mail)=>async (dispatch) =>{
+  mail = JSON.stringify(mail);
+  const resp = await axios.put(`${GET_BACK_END_URL}/changes/mail`, mail, {headers:REQUEST_HEADER});
+
+  try {
+    dispatch({
+      type:SET_USER_MAIL_CHANGE,
+      payload:resp.data,
+    })
+  } catch (error) {
+    dispatch({
+      type:SET_USER_MAIL_CHANGE,
+      payload:{status:false, message:error.message},
+    })
+  }
+  
+}
+
+export const getUserProfileImageAddUpdateAction = (image)=>async (dispatch) =>{
+  const url = await esUploadProfileImage(image);
+  image = JSON.stringify({url:url});
+  const resp = await axios.put(`${GET_BACK_END_URL}/changes/profile-image`, image, {headers:REQUEST_HEADER});
+
+  try {
+    dispatch({
+      type:SET_USER_PROFILE_CHANGE,
+      payload:resp.data,
+    })
+  } catch (error) {
+    dispatch({
+      type:SET_USER_PROFILE_CHANGE,
+      payload:{status:false, message:error.message},
+    })
+  }
+  
 }
