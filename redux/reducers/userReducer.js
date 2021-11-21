@@ -10,6 +10,8 @@ import {
   REST_CUSTOMER_TRAVEL_UPDATE,
   SET_CURRENT_USER,
   SET_CURRENT_USER_ERROR,
+  SET_USER_PROFILE_CHANGE,
+  USER_IMAGE_UPLOAD_STATUS,
 } from "../types";
 
 const initialState = {
@@ -20,6 +22,8 @@ const initialState = {
   travelerAddSendingStatus: false,
   travelerAdded: {},
   travelers: {},
+  profileImageChange: {},
+  imgUpStartStatus: false,
 };
 
 const getTravelers = (resp, state) => {
@@ -83,6 +87,18 @@ export default function (state = initialState, action) {
       };
     case GET_TRAVELERS:
       return getTravelers(action.payload);
+
+    case USER_IMAGE_UPLOAD_STATUS:
+      return {
+        imgUpStartStatus: action.payload,
+      };
+
+    case SET_USER_PROFILE_CHANGE:
+      return {
+        ...state,
+        imgUpStartStatus: false,
+        profileImageChange: action.payload,
+      };
     default:
       return state;
   }

@@ -1,19 +1,51 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
-import React from "react";
 import { Card, Col, Nav, Row } from "react-bootstrap";
+import CstImageUploadForm from "../../CstForm/CstImageUploadForm";
+import ContentModal from "../../Modals/ContentModal";
 import ProfileImage from "../../user/profileImage";
+import { PropTypes } from "prop-types";
+import { connect } from "react-redux";
+import { getUserProfileImageAddUpdateAction } from "../../../redux/actions/userAction";
+import LoaderSpiner from "../../../utils/helper/loaderSpiner";
+import { getCustomerInformationAction } from "../../../redux/actions/customerAction";
 
 const CstTavNavMenu = (props) => {
+  const [editActionStatus, setEditActionStatus] = useState(false);
+  const { data, status } = useSession();
 
-   const {data, status} = useSession();
+  const profileImageUploadAction = (image) => {
+    props.getUserProfileImageAddUpdateAction(image);
+  };
+
+  useEffect(() => {
+    if (editActionStatus) {
+      setEditActionStatus(false);
+      props.getCustomerInformationAction();
+      console.log("Customer Info refreshing ... ", )
+    }
+  }, [props.uploadStatus]);
+
+  const { customer, uploadStatus } = props;
   return (
     <React.Fragment>
+      {console.log("Customer Profile information, ", customer)}
+      <LoaderSpiner
+        show={props.uploadStatus}
+        loadingText="Image Uploading..."
+      />
       <Card>
         <Card.Body>
           <Row>
             <Col md={12} className="sidbar-image-area">
-              <ProfileImage />
-              <div className="prfile-img-editarea">
+              <ProfileImage imgUrl={customer && customer.imageUrl} />
+              <div
+                className="prfile-img-editarea"
+                onClick={() => {
+                  setEditActionStatus(true);
+                }}
+              >
                 <i className="fas fa-pencil-alt"></i>
               </div>
             </Col>
@@ -21,7 +53,7 @@ const CstTavNavMenu = (props) => {
 
           <Row>
             <Col md={12} className="prof-name-tag">
-              <h5>{data&&data.user && data.user.fullName}</h5>
+              <h5>{data && data.user && data.user.fullName}</h5>
               <span>personal profile</span>
             </Col>
           </Row>
@@ -44,8 +76,37 @@ const CstTavNavMenu = (props) => {
           </Row>
         </Card.Body>
       </Card>
+      <ContentModal
+        show={editActionStatus}
+        actionClose={(isClose) => {
+          setEditActionStatus(isClose);
+        }}
+      >
+        <CstImageUploadForm submitAction={profileImageUploadAction} />
+      </ContentModal>
     </React.Fragment>
   );
 };
 
-export default CstTavNavMenu;
+CstTavNavMenu.prototype = {
+  getUserProfileImageAddUpdateAction: PropTypes.func.isRequired,
+  getCustomerInformationAction: PropTypes.func.isRequired,
+  uploadStatus: PropTypes.object.isRequired,
+  profileImageChange: PropTypes.object.isRequired,
+};
+
+const mapStateToProps = (state) => {
+  return {
+    uploadStatus: state.user.imgUpStartStatus,
+    profileImageChange: state.user.profileImageChange,
+    customer:
+      state.customer &&
+      state.customer.customerInf &&
+      state.customer.customerInf.customer,
+  };
+};
+
+export default connect(mapStateToProps, {
+  getUserProfileImageAddUpdateAction,
+  getCustomerInformationAction,
+})(CstTavNavMenu);

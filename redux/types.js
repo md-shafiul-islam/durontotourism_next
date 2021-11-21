@@ -35,6 +35,8 @@ export const SET_USER_PHONE_NO_CHANGE = "SET_USER_PHONE_NO_CHANGE";
 export const SET_USER_MAIL_CHANGE = "SET_USER_MAIL_CHANGE";
 export const SET_USER_PROFILE_CHANGE = "SET_USER_PROFILE_CHANGE";
 
+export const USER_IMAGE_UPLOAD_STATUS = "USER_IMAGE_UPLOAD_STATUS";
+
 export const GET_ACCESSES = "GET_ACCESSES";
 export const GET_ACCESS = "GET_ACCESS";
 
@@ -47,6 +49,7 @@ console.log(process.env.REACT_APP_API_URL);
 /** URLS */
 //http://localhost:6060/api/enu/v1
 export const GET_BACK_END_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
+export const GET_BACK_END_DOMAIN_NAME = process.env.NEXT_PUBLIC_EXA_BACKEND_DOMAIN_URL;
 
 export const AGENT_LOGIN_END_URL =
   process.env.NEXT_PUBLIC_BACKEND_AGENT_LOGIN_URL;

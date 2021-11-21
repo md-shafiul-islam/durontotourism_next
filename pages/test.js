@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect } from "react";
+import React, { useEffect, useState} from "react";
 import { Col, Nav, Row, Tab } from "react-bootstrap";
 import { connect, useSelector } from "react-redux";
 import SearchmodifierAccordion from "../components/Accordion/SearchmodifierAccordion";
@@ -15,9 +15,16 @@ import CstTavNavMenu from "../components/CstTabs/CstProfileTabComp/CstTavNavMenu
 import CstProfilePageTab from "../components/CstTabs/CstProfilePageTab";
 
 const TestPage = (props) => {
+  
+  
   useEffect(() => {
     props.getCountryOptions();
+    
   }, []);
+
+  
+  
+
 
   return (
     <React.Fragment>

@@ -6,6 +6,9 @@ const ViewSession = (params) =>{
     return (
         <div>
             <pre>{JSON.stringify(session, null, 2)}</pre>
+            <br />
+            <br />
+            <br />
         </div>
     )
 }

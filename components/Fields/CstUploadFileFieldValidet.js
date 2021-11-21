@@ -37,6 +37,7 @@ const CstUploadFileFieldValidet = (params) => {
     isError = undefined,
     isValidCheck = true,
     values,
+    accept,
   } = params;
 
   const changeImageAction = (e) => {
@@ -75,12 +76,14 @@ const CstUploadFileFieldValidet = (params) => {
             placeholder={placeholder}
             title={placeholder}
             type="file"
+            accept={accept}
             name={name}
             id={name}
             onBlur={() => {
               setFieldTouched && setFieldTouched(name, true);
             }}
             onChange={(e) => {
+              e.preventDefault();
               changeImageAction(e);
               uploadFile && uploadFile(e.currentTarget.files[0]);
               setFieldValue && setFieldValue(name, e.currentTarget.files[0]);

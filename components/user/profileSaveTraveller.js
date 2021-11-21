@@ -64,8 +64,8 @@ const ProfileSaveTraveller = ({
                 <div className="heading-area">
                   <div className="title">Guest Traveller(s)</div>
                   <p className="pfl-basi-tag">
-                    You have {travelers.length} Traveller
-                    {travelers.length > 1 ? `s` : ""}
+                    You have {travelers&&travelers.length} Traveller
+                    {travelers&&travelers.length > 1 ? `s` : ""}
                   </p>
                 </div>
 

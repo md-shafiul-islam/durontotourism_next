@@ -15,6 +15,7 @@ import {
   SET_USER_PROFILE_CHANGE,
   SET_USER_SIGNUP,
   SET_USER_SIGNUP_ERROR,
+  USER_IMAGE_UPLOAD_STATUS,
 } from "../types";
 import { esUploadFile, esUploadProfileImage } from "./esAction";
 
@@ -97,9 +98,10 @@ export const getUserSignUp = (userSignup) => async (dispatch) => {
 export const getPesonalInformationUpdate = (inf) => async (dispatch) => {
   if (inf) {
     dispatch({
-      type:CUSTOMER_UPDATE_INFO_SEND,
-      payload:true,
-    })
+      type: CUSTOMER_UPDATE_INFO_SEND,
+      payload: true,
+    });
+    console.log("Profile Info ", inf.passportAttach);
     const pasthUrl = await esUploadFile(inf.passportAttach, "passport");
     inf.passportAttach = pasthUrl;
     inf = JSON.stringify(inf, null, 2);
@@ -114,7 +116,6 @@ export const getPesonalInformationUpdate = (inf) => async (dispatch) => {
         type: CUSTOMER_TRAVEL_UPDATE,
         payload: getPesonalInfoRes(resp),
       });
-
     } catch (error) {
       dispatch({
         payload: { status: false, message: `Failed, ${error.message}` },
@@ -127,9 +128,9 @@ export const getPesonalInformationUpdate = (inf) => async (dispatch) => {
 export const addGuestTraveler = (inf) => async (dispatch) => {
   if (inf) {
     dispatch({
-      type:CUSTOMER_ADD_TRAVELER_INFO_SEND,
-      payload:true,
-    })
+      type: CUSTOMER_ADD_TRAVELER_INFO_SEND,
+      payload: true,
+    });
     const pasthUrl = await esUploadFile(inf.passportAttach, "passport");
     inf.passportAttach = pasthUrl;
     inf = JSON.stringify(inf, null, 2);
@@ -145,7 +146,6 @@ export const addGuestTraveler = (inf) => async (dispatch) => {
         type: ADD_CUSTOMER_TRAVEL,
         payload: getPesonalInfoRes(resp),
       });
-
     } catch (error) {
       dispatch({
         payload: { status: false, message: `Failed, ${error.message}` },
@@ -155,74 +155,87 @@ export const addGuestTraveler = (inf) => async (dispatch) => {
   }
 };
 
-export const getUserTravelers = ()=>async (dispatch)=>{
-
-  const resp = await axios.get(`${GET_BACK_END_URL}/customers/travelers`, {headers:REQUEST_HEADER});
+export const getUserTravelers = () => async (dispatch) => {
+  const resp = await axios.get(`${GET_BACK_END_URL}/customers/travelers`, {
+    headers: REQUEST_HEADER,
+  });
   console.log("getUserTravelers, Response ", resp);
   try {
     dispatch({
-      type:GET_TRAVELERS,
-      payload:resp.data,
-    })
+      type: GET_TRAVELERS,
+      payload: resp.data,
+    });
   } catch (error) {
     dispatch({
-      type:GET_TRAVELERS,
-      payload:{status:false, message:error.message, travelers:null}
-    })
+      type: GET_TRAVELERS,
+      payload: { status: false, message: error.message, travelers: null },
+    });
   }
+};
 
-
-}
-
-export const getUserPhoneChaneAction = (phone)=>async (dispatch) =>{
+export const getUserPhoneChaneAction = (phone) => async (dispatch) => {
   phone = JSON.stringify(phone);
-  const resp = await axios.put(`${GET_BACK_END_URL}/changes/phone`, phone, {headers:REQUEST_HEADER});
+  const resp = await axios.put(`${GET_BACK_END_URL}/changes/phone`, phone, {
+    headers: REQUEST_HEADER,
+  });
   try {
     dispatch({
-      type:SET_USER_PHONE_NO_CHANGE,
-      payload:resp.data,
-    })
+      type: SET_USER_PHONE_NO_CHANGE,
+      payload: resp.data,
+    });
   } catch (error) {
     dispatch({
-      type:SET_USER_PHONE_NO_CHANGE,
-      payload:{status:false, message:error.message},
-    })
+      type: SET_USER_PHONE_NO_CHANGE,
+      payload: { status: false, message: error.message },
+    });
   }
-}
+};
 
-export const getUserMailChaneAction = (mail)=>async (dispatch) =>{
+export const getUserMailChaneAction = (mail) => async (dispatch) => {
   mail = JSON.stringify(mail);
-  const resp = await axios.put(`${GET_BACK_END_URL}/changes/mail`, mail, {headers:REQUEST_HEADER});
+  const resp = await axios.put(`${GET_BACK_END_URL}/changes/mail`, mail, {
+    headers: REQUEST_HEADER,
+  });
 
   try {
     dispatch({
-      type:SET_USER_MAIL_CHANGE,
-      payload:resp.data,
-    })
+      type: SET_USER_MAIL_CHANGE,
+      payload: resp.data,
+    });
   } catch (error) {
     dispatch({
-      type:SET_USER_MAIL_CHANGE,
-      payload:{status:false, message:error.message},
-    })
+      type: SET_USER_MAIL_CHANGE,
+      payload: { status: false, message: error.message },
+    });
   }
-  
-}
+};
 
-export const getUserProfileImageAddUpdateAction = (image)=>async (dispatch) =>{
-  const url = await esUploadProfileImage(image);
-  image = JSON.stringify({url:url});
-  const resp = await axios.put(`${GET_BACK_END_URL}/changes/profile-image`, image, {headers:REQUEST_HEADER});
+export const getUserProfileImageAddUpdateAction =
+  (updateRquest) => async (dispatch) => {
+    dispatch({
+      type: USER_IMAGE_UPLOAD_STATUS,
+      payload: true,
+    });
+    console.log("Current Profile Image ", updateRquest);
 
-  try {
-    dispatch({
-      type:SET_USER_PROFILE_CHANGE,
-      payload:resp.data,
-    })
-  } catch (error) {
-    dispatch({
-      type:SET_USER_PROFILE_CHANGE,
-      payload:{status:false, message:error.message},
-    })
-  }
-  
-}
+    const url = await esUploadProfileImage(updateRquest.image);
+    console.log("Current Profile Image Url, ", url);
+    let image = JSON.stringify({ url: url });
+    const resp = await axios.put(
+      `${GET_BACK_END_URL}/customers/profile-image`,
+      image,
+      { headers: REQUEST_HEADER }
+    );
+
+    try {
+      dispatch({
+        type: SET_USER_PROFILE_CHANGE,
+        payload: resp.data,
+      });
+    } catch (error) {
+      dispatch({
+        type: SET_USER_PROFILE_CHANGE,
+        payload: { status: false, message: error.message },
+      });
+    }
+  };
