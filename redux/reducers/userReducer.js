@@ -8,6 +8,7 @@ import {
   CUSTOMER_UPDATE_INFO_SEND,
   GET_TRAVELERS,
   REST_CUSTOMER_TRAVEL_UPDATE,
+  REST_PROFILE_IMG_UPLOAD,
   SET_CURRENT_USER,
   SET_CURRENT_USER_ERROR,
   SET_USER_PROFILE_CHANGE,
@@ -46,6 +47,18 @@ const getRestCustomerUpdate = (state, status) => {
       customerPersonalInfoUpdate: {},
     };
   }
+};
+
+const getUploadRest = (status, state) => {
+  if (status) {
+    return {
+      ...state,
+      profileImageChange: {},
+      imgUpStartStatus: false,
+    };
+  }
+
+  return state;
 };
 
 export default function (state = initialState, action) {
@@ -99,6 +112,9 @@ export default function (state = initialState, action) {
         imgUpStartStatus: false,
         profileImageChange: action.payload,
       };
+
+    case REST_PROFILE_IMG_UPLOAD:
+      return getUploadRest(action.payload, state);
     default:
       return state;
   }

@@ -36,7 +36,7 @@ export const esUploadProfileImage = async (fileData, dirPath) => {
       dateFile,
       { headers: REQUEST_HEADER }
     );
-
+    console.log("Image Upload Response, ", resp);
     try {
       if (resp) {
         if (resp.data) {
@@ -45,8 +45,8 @@ export const esUploadProfileImage = async (fileData, dirPath) => {
       }
     } catch (error) {
       console.log("ES File Upload Action Error ", error);
-      return null;
+      return {status:false, message:error.message, path:null};
     }
   }
-  return null;
+  return {status:false, message:"File Not added", path:null};
 };

@@ -101,8 +101,9 @@ export const getPesonalInformationUpdate = (inf) => async (dispatch) => {
       type: CUSTOMER_UPDATE_INFO_SEND,
       payload: true,
     });
-    console.log("Profile Info ", inf.passportAttach);
+    console.log("Profile Info ", inf.passportAttach);   
     const pasthUrl = await esUploadFile(inf.passportAttach, "passport");
+   
     inf.passportAttach = pasthUrl;
     inf = JSON.stringify(inf, null, 2);
     const resp = await axios.put(
@@ -218,15 +219,23 @@ export const getUserProfileImageAddUpdateAction =
     });
     console.log("Current Profile Image ", updateRquest);
 
-    const url = await esUploadProfileImage(updateRquest.image);
-    console.log("Current Profile Image Url, ", url);
+    let url = null;
+    const upResponse  = await esUploadProfileImage(updateRquest.image);
+    console.log("Up Profile Image Response, ", upResponse);
+    if(upResponse.status){
+      url = upResponse.path;
+
+    }else{
+      console.log("Profile image upload message, ", upResponse.message)
+    }
+    console.log("Profile ulpoded image Url, ", url);
     let image = JSON.stringify({ url: url });
     const resp = await axios.put(
       `${GET_BACK_END_URL}/customers/profile-image`,
       image,
       { headers: REQUEST_HEADER }
     );
-
+    console.log("After Update Profile Image, resp ", resp);
     try {
       dispatch({
         type: SET_USER_PROFILE_CHANGE,

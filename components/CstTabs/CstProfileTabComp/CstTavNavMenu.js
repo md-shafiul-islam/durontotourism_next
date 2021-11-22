@@ -6,24 +6,37 @@ import CstImageUploadForm from "../../CstForm/CstImageUploadForm";
 import ContentModal from "../../Modals/ContentModal";
 import ProfileImage from "../../user/profileImage";
 import { PropTypes } from "prop-types";
-import { connect } from "react-redux";
+import { connect, useDispatch } from "react-redux";
 import { getUserProfileImageAddUpdateAction } from "../../../redux/actions/userAction";
 import LoaderSpiner from "../../../utils/helper/loaderSpiner";
 import { getCustomerInformationAction } from "../../../redux/actions/customerAction";
+import { REST_PROFILE_IMG_UPLOAD } from "../../../redux/types";
 
 const CstTavNavMenu = (props) => {
   const [editActionStatus, setEditActionStatus] = useState(false);
+  const [submitActionStatus, setSubmitActionStatus] = useState(false);
   const { data, status } = useSession();
+  const dispatch = useDispatch();
 
   const profileImageUploadAction = (image) => {
+    console.log("Selected Profile Image before Sending, ", image);
     props.getUserProfileImageAddUpdateAction(image);
+    setSubmitActionStatus(true);
   };
 
   useEffect(() => {
     if (editActionStatus) {
       setEditActionStatus(false);
+      console.log("Customer Info refreshing ... ");
+    }
+
+    if (submitActionStatus) {
       props.getCustomerInformationAction();
-      console.log("Customer Info refreshing ... ", )
+      dispatch({
+        payload: true,
+        type: REST_PROFILE_IMG_UPLOAD,
+      });
+      setSubmitActionStatus(false);
     }
   }, [props.uploadStatus]);
 

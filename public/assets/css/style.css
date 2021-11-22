@@ -4358,6 +4358,9 @@ body {
   text-align: center;
   color: #fff;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center
 }
 
 .prof-name-tag {
