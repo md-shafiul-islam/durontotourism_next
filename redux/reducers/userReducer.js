@@ -8,9 +8,13 @@ import {
   CUSTOMER_UPDATE_INFO_SEND,
   GET_TRAVELERS,
   REST_CUSTOMER_TRAVEL_UPDATE,
+  REST_MAIL_CHANGE,
+  REST_PHONE_CHANGE,
   REST_PROFILE_IMG_UPLOAD,
   SET_CURRENT_USER,
   SET_CURRENT_USER_ERROR,
+  SET_USER_MAIL_CHANGE,
+  SET_USER_PHONE_NO_CHANGE,
   SET_USER_PROFILE_CHANGE,
   USER_IMAGE_UPLOAD_STATUS,
 } from "../types";
@@ -25,6 +29,8 @@ const initialState = {
   travelers: {},
   profileImageChange: {},
   imgUpStartStatus: false,
+  phoneChangeStatus: undefined,
+  mailChangeStatus: undefined,
 };
 
 const getTravelers = (resp, state) => {
@@ -58,6 +64,27 @@ const getUploadRest = (status, state) => {
     };
   }
 
+  return state;
+};
+
+const getRestMailChange = (state, payload) => {
+  if (payload) {
+    return {
+      ...state,
+      mailChangeStatus: undefined,
+    };
+  }
+
+  return state;
+};
+
+const getRestPhoneChange = (state, payload) => {
+  if (payload) {
+    return {
+      ...state,
+      phoneChangeStatus: undefined,
+    };
+  }
   return state;
 };
 
@@ -115,6 +142,23 @@ export default function (state = initialState, action) {
 
     case REST_PROFILE_IMG_UPLOAD:
       return getUploadRest(action.payload, state);
+
+    case SET_USER_PHONE_NO_CHANGE:
+      return {
+        ...state,
+        phoneChangeStatus: action.payload,
+      };
+
+    case SET_USER_MAIL_CHANGE:
+      return {
+        ...state,
+        mailChangeStatus: action.payload,
+      };
+    case REST_MAIL_CHANGE:
+      return getRestMailChange(state, action.payload);
+
+    case REST_PHONE_CHANGE:
+      return getRestPhoneChange(state, action.payload);
     default:
       return state;
   }

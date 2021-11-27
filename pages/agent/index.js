@@ -143,7 +143,7 @@ export async function getServerSideProps(context) {
   if (!session) {    
     return {
       redirect: {
-        destination: "/",
+        destination: "/agent/login",
         permanent: false,
       },
     };
@@ -151,22 +151,7 @@ export async function getServerSideProps(context) {
   return {
     props: session,
   };
-
-  if (session.data) {
-    if (session.data.user) {
-      if (session.data.user.role === "agent") {
-        return {
-          props: session,
-        };
-      }
-    }
-  }
-  return {
-    redirect: {
-      destination: "/",
-      permanent: false,
-    },
-  };
+  
 }
 
 export default connect(mapStateToProps, { getCurrentAgentAction })(

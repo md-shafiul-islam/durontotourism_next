@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import { Col, Nav, Row, Tab } from "react-bootstrap";
 import { connect, useSelector } from "react-redux";
 import SearchmodifierAccordion from "../components/Accordion/SearchmodifierAccordion";
@@ -13,25 +13,22 @@ import { PropTypes } from "prop-types";
 import CstUploadFileFieldValidet from "../components/Fields/CstUploadFileFieldValidet";
 import CstTavNavMenu from "../components/CstTabs/CstProfileTabComp/CstTavNavMenu";
 import CstProfilePageTab from "../components/CstTabs/CstProfilePageTab";
+import CstSingleDatePicker from "../components/Fields/CstSingleDatePicker";
 
 const TestPage = (props) => {
-  
-  
   useEffect(() => {
     props.getCountryOptions();
-    
   }, []);
-
-  
-  
-
 
   return (
     <React.Fragment>
       <Row style={{ padding: "25px 0px" }}></Row>
-      <Row>
-        <CstProfilePageTab />
+      <Row style={{ padding: "25px 0px" }}>
+        <Col md={3}>
+          <CstSingleDatePicker />
+        </Col>
       </Row>
+
       <EmptyCont height="1200px" />
     </React.Fragment>
   );

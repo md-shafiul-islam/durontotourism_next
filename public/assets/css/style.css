@@ -1510,6 +1510,55 @@ body {
 
 /*** Range List Start */
 
+/**Singel Date Picker Start */
+.cst-date-container .cst-single-dtpk{
+  z-index: 150;
+}
+
+.cst-single-dtpk-parent {
+  position: relative;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  width: 100%;
+}
+
+.cst-single-dtpk-parent .content {
+  width: 100%; 
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.cst-single-dtpk-parent .content .label{
+  
+}
+
+.cst-single-dtpk {
+  width: 300px;
+  background-color: #fff;
+  border-radius: 5px;
+  position: absolute;
+  left: 0px;
+  top: 60px;
+  border-top: 1px solid #ced4da;
+}
+
+.cst-single-dtpk .rdrCalendarWrapper {
+  width: 100%;
+}
+.cst-single-dtpk .rdrDateDisplayWrapper,
+.cst-single-dtpk .rdrMonthAndYearWrapper,
+.cst-single-dtpk .rdrMonths.rdrMonthsVertical {
+  width: 100%;
+}
+
+.cst-single-dtpk .rdrMonths.rdrMonthsVertical .rdrMonth {
+  width: 100%;
+}
+
+/**Singel Date Picker End */
+
 .range {
   padding: 10px;
 }
@@ -2070,6 +2119,19 @@ body {
   position: relative;
   left: 200px;
   top: 100px;
+}
+
+.loding-back-drop {
+  color: #fff;
+}
+
+.loding-back-drop + .modal.show {
+  background-color: rgba(0, 0, 0, 0.4);
+  z-index: 1500;
+}
+
+.modal-content.loading-modal {
+  background-color: cadetblue;
 }
 
 /***************** Air Flight Selected Cards Start ************/
@@ -4360,7 +4422,7 @@ body {
   cursor: pointer;
   display: flex;
   align-items: center;
-  justify-content: center
+  justify-content: center;
 }
 
 .prof-name-tag {

@@ -38,7 +38,9 @@ const SingleMailForm = (params) => {
             <Row className="input-area-row">
               <Col md={12}>
                 <CstValidateField name="email" placeholder="Email" {...props} />
+                <span>{params.message}</span>
               </Col>
+
             </Row>
             <Row className="input-area-row">
               <Col md={{ span: 4, offset: 8 }} className="d-grid">

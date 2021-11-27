@@ -57,6 +57,8 @@ export const helperGetDateFormate = (date) => {
   }
 };
 
+
+
 export const helperGoBookingOption = (priceBooking) => {
   this.props.setPriceDetails(priceBooking);
 

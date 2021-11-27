@@ -179,6 +179,7 @@ export const getUserPhoneChaneAction = (phone) => async (dispatch) => {
   const resp = await axios.put(`${GET_BACK_END_URL}/changes/phone`, phone, {
     headers: REQUEST_HEADER,
   });
+  console.log("Phone No Change Response ", resp.data);
   try {
     dispatch({
       type: SET_USER_PHONE_NO_CHANGE,
@@ -197,7 +198,7 @@ export const getUserMailChaneAction = (mail) => async (dispatch) => {
   const resp = await axios.put(`${GET_BACK_END_URL}/changes/mail`, mail, {
     headers: REQUEST_HEADER,
   });
-
+  console.log("Mail Change Response ", resp);
   try {
     dispatch({
       type: SET_USER_MAIL_CHANGE,

@@ -39,11 +39,13 @@ const SinglePhoneForm = (params) => {
                   options={params.countryPhoneOptions}
                   clazzName="country-w-phone"
                 />
+                <span>{params.message}</span>
               </Col>
             </Row>
             <Row className="input-area-row">
               <Col md={{ span: 4, offset: 8 }} className="d-grid">
-                <SubmitActionButtion className="single-phone-action"
+                <SubmitActionButtion
+                  className="single-phone-action"
                   label="Submit"
                   isSubmitting={props.isSubmitting}
                 />
@@ -67,4 +69,6 @@ SinglePhoneForm.prototype = {
   countryPhoneOptions: PropTypes.object.isRequired,
 };
 
-export default connect(mapStateToProps, { getCountryPhonCodeOptions })(SinglePhoneForm);
+export default connect(mapStateToProps, { getCountryPhonCodeOptions })(
+  SinglePhoneForm
+);

@@ -16,9 +16,13 @@ import {
 } from "../../redux/actions/countriyAction";
 import { getMaxFileSizeValidation } from "../../utils/helper/helperValidateSchema";
 import CstValidatePhoneNoField from "../Fields/CstValidatePhoneNoField";
+import LoaderSpiner from "../../utils/helper/loaderSpiner";
+import CstSingleDatePicker from "../Fields/CstSingleDatePicker";
 
 class TravelerInformationForm extends Component {
-  state = {};
+  state = {
+    submitingStatus: false,
+  };
 
   initForm = {
     firstName: "",
@@ -123,12 +127,19 @@ class TravelerInformationForm extends Component {
 
   submitUpdateAction = (updateInf) => {
     const requestUpdateDate = updateInf;
+    this.setState({ submitingStatus: true });
     this.props.formSubmitAction(requestUpdateDate);
+    console.log("Form Submiting ..", updateInf);
   };
 
   render() {
     return (
       <React.Fragment>
+        <LoaderSpiner
+          show={this.state.submitingStatus}
+          loadingText="Submiting..."
+          name="add-traveler"
+        />
         <Formik
           validationSchema={this.validationSchema}
           initialValues={this.initForm}
@@ -139,7 +150,7 @@ class TravelerInformationForm extends Component {
         >
           {(props) => {
             return (
-              <Form>
+              <form onSubmit={props.handleSubmit}>
                 <Row className="card-pay-row">
                   <Col md={6}>
                     <CstValidateField
@@ -212,15 +223,13 @@ class TravelerInformationForm extends Component {
 
                 <Row className="card-pay-row">
                   <Col md={6}>
-                    <CstValidateField
-                      type="date"
+                    <CstSingleDatePicker
                       label="Date Of Birth."
-                      placeholder="Date Of Birth."
                       name="dateOfBirth"
-                      handleChange={props.handleChange}
-                      handleBlur={props.handleBlur}
-                      errors={props.errors}
-                      touched={props.touched}
+                      placeholder="Date Of Birth."
+                      getSelectedDate={(date) => {
+                        props.setFieldValue(`dateOfBirth`, date);
+                      }}
                     />
                   </Col>
                   <Col md={6}>
@@ -266,15 +275,13 @@ class TravelerInformationForm extends Component {
                     </div>
                   </Col>
                   <Col md={6}>
-                    <CstValidateField
-                      type="date"
+                    <CstSingleDatePicker
+                      name="passportExpiry"
                       label="Passport Expiry"
                       placeholder="Passport Expiry"
-                      name="passportExpiry"
-                      handleChange={props.handleChange}
-                      handleBlur={props.handleBlur}
-                      errors={props.errors}
-                      touched={props.touched}
+                      getSelectedDate={(date) => {
+                        props.setFieldValue(`passportExpiry`, date);
+                      }}
                     />
                   </Col>
                 </Row>
@@ -325,7 +332,7 @@ class TravelerInformationForm extends Component {
                     <Button type="submit">Submit </Button>
                   </Col>
                 </Row>
-              </Form>
+              </form>
             );
           }}
         </Formik>

@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useState, useEffect } from "react";
 import { Card, Col, Row } from "react-bootstrap";
 import { PropTypes } from "prop-types";
-import { connect } from "react-redux";
+import { connect, useDispatch } from "react-redux";
 import {
   getUserMailChaneAction,
   getUserPhoneChaneAction,
@@ -11,42 +12,66 @@ import SingleMailForm from "../CstForm/SingleMailForm";
 import SinglePhoneForm from "../CstForm/SinglePhoneForm";
 import ContentModal from "../Modals/ContentModal";
 import ChangePasswordModal from "../Modals/Profile/changePasswordModal";
+import { REST_MAIL_CHANGE, REST_PHONE_CHANGE } from "../../redux/types";
 
 const ProfileLoginDetails = (props) => {
+  const dispatch = useDispatch();
+
   const [passwordStatus, setPasswordStatus] = useState(false);
-  const [mailChangeStatus, setMailChangeStatus] = useState(false);
-  const [phoneChangeStatus, setPhoneChangeStatus] = useState(false);
-  console.log("ProfileLoginDetails Customer ", props);
+  const [mailChangeModalStatus, setMailChangeModalStatus] = useState(false);
+  const [phoneChangeModalStatus, setPhoneChangeModalStatus] = useState(false);
+  const [phoneChangeMessage, setPhoneChangeMessage] = useState("");
+  const [mailChangeMessage, setMailChangeMessage] = useState("");
+
   const { customer } = props;
 
-  const getVerifideIcon = (status) => {
-    if (status) {
-      return (
-        <React.Fragment>
-          <span className="sts-icon">
-            <i className="fas fa-check-square text-success"></i>
-          </span>
-          <span>Verified</span>
-        </React.Fragment>
-      );
-    }
-
-    return (
-      <React.Fragment>
-        <span className="sts-icon">
-          <i className="far fa-window-close text-danger"></i>
-        </span>
-        <span>Not Verified</span>
-      </React.Fragment>
-    );
-  };
-
+  //mailChangeModalStatus phoneChangeModalStatus
   const changeMailAction = (values) => {
     props.getUserMailChaneAction(values);
   };
   const changePhoneNoAction = (values) => {
     props.getUserPhoneChaneAction(values);
   };
+
+  const refreshCustomerInfo = (type) => {
+    console.log("Rferesh Customer Via, ", type);
+  };
+
+  useEffect(() => {
+    if (props.phoneChangeStatus && phoneChangeModalStatus) {
+      if (props.phoneChangeStatus.status) {
+        setPhoneChangeModalStatus(false);
+        dispatch({
+          payload: true,
+          type: REST_PHONE_CHANGE,
+        });
+
+        refreshCustomerInfo("Phone");
+      } else {
+        if (props.phoneChangeStatus.status) {
+          setPhoneChangeMessage(props.phoneChangeStatus.message);
+        }
+      }
+    }
+  }, [props.phoneChangeStatus]);
+
+  useEffect(() => {
+    if (props.mailChangeStatus && mailChangeModalStatus) {
+      if (props.mailChangeStatus.status) {
+        setMailChangeModalStatus(false);
+        dispatch({
+          payload: true,
+          type: REST_MAIL_CHANGE,
+        });
+        refreshCustomerInfo("Mail");
+      } else {
+        if (props.mailChangeStatus.status) {
+          setMailChangeModalStatus(props.mailChangeStatus.message);
+        }
+      }
+    }
+  }, [props.mailChangeStatus]);
+
   return (
     <React.Fragment>
       <Card>
@@ -71,7 +96,7 @@ const ProfileLoginDetails = (props) => {
                 <tr>
                   <th scope="row">Since</th>
                   <td colSpan="3">
-                    {esHelperOnlyDate(customer && customer.date)}
+                    {esHelperOnlyDate(customer && customer.since)}
                   </td>
                 </tr>
                 <tr>
@@ -85,13 +110,15 @@ const ProfileLoginDetails = (props) => {
                     <span
                       className="change-action"
                       onClick={() => {
-                        setPhoneChangeStatus(true);
+                        setPhoneChangeModalStatus(true);
                       }}
                     >
                       Change
                     </span>
                   </td>
-                  <td>{getVerifideIcon(customer && customer.phoneVerified)}</td>
+                  <td>
+                    {props.getVerifideIcon(customer && customer.phoneVerified)}
+                  </td>
                 </tr>
                 <tr>
                   <th scope="row">Email ID</th>
@@ -102,13 +129,15 @@ const ProfileLoginDetails = (props) => {
                     <span
                       className="change-action"
                       onClick={() => {
-                        setMailChangeStatus(true);
+                        setMailChangeModalStatus(true);
                       }}
                     >
                       Change
                     </span>
                   </td>
-                  <td>{getVerifideIcon(customer && customer.mailVerified)}</td>
+                  <td>
+                    {props.getVerifideIcon(customer && customer.emailVerified)}
+                  </td>
                 </tr>
                 <tr>
                   <th scope="row">Password</th>
@@ -131,23 +160,23 @@ const ProfileLoginDetails = (props) => {
       </Card>
 
       <ContentModal
-        show={phoneChangeStatus}
+        show={phoneChangeModalStatus}
         actionClose={(isClose) => {
-          setPhoneChangeStatus(isClose);
+          setPhoneChangeModalStatus(isClose);
         }}
         actionCloseStatus={false}
       >
-        <SinglePhoneForm submitAction={changePhoneNoAction} />
+        <SinglePhoneForm submitAction={changePhoneNoAction} message={phoneChangeMessage} />
       </ContentModal>
 
       <ContentModal
-        show={mailChangeStatus}
+        show={mailChangeModalStatus}
         actionClose={(isClose) => {
-          setMailChangeStatus(isClose);
+          setMailChangeModalStatus(isClose);
         }}
         actionCloseStatus={false}
       >
-        <SingleMailForm submitAction={changeMailAction} />
+        <SingleMailForm submitAction={changeMailAction} message={mailChangeMessage} />
       </ContentModal>
 
       <ChangePasswordModal

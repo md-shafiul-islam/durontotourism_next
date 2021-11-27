@@ -6,16 +6,19 @@ import { Modal } from "react-bootstrap";
  * @param {@boolean show, @String loadingText } props 
  * @returns 
  */
-const LoaderSpiner = (props) => {
+const LoaderSpiner = ({loadingText, show, name="loader", ...props}) => {
   return (
     <React.Fragment>
+
       <Modal
         size="sm"
-        show={props.show}
+        show={show}
         // onHide={() => setSmShow(false)}
         aria-labelledby="example-modal-sizes-title-sm"
         centered={true}
-        dialogClassName="req-loader"
+        dialogClassName={`req-loader`}
+        contentClassName="loading-modal"
+        backdropClassName="loding-back-drop"
       >
         <Modal.Body>
           <div className="d-flex justify-content-center">
@@ -23,7 +26,7 @@ const LoaderSpiner = (props) => {
               <span className="visually-hidden">Loading...</span>
             </div>            
           </div>
-          <div className="loading-text">{props.loadingText}</div>
+          <div className="loading-text">{loadingText}</div>
         </Modal.Body>
       </Modal>
     </React.Fragment>

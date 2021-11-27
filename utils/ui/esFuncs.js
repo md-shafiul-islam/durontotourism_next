@@ -14,4 +14,17 @@ export const esHelperOnlyDate = (date) => {
 
     return date.toDateString();
   }
+  return "";
 };
+
+/**
+ * 
+ * @param {*} date 
+ * @returns Date as String Thu, 25 Nov 2021 
+ */
+export const esUtilGetDate = (date=new Date())=>{
+  let strDate =  date.toUTCString().substring(0, 17);
+  console.log("Curent UTC DATE ", strDate);
+  console.log("Curent UTC DATE ", date.toISOString());
+  return strDate;
+}

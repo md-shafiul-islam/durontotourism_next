@@ -1,5 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Fragment } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Nav, Navbar, NavDropdown } from "react-bootstrap";
@@ -22,6 +22,26 @@ const HomePageMenu = (params) => {
   const loginDisplayAction = () => {
     console.log("Login Sign In Action ", loginModaDisplay);
     setLoginModaDisplay(true);
+  };
+
+  const getCountryFlag = () => {
+    return (
+      <React.Fragment>
+        <span className="country-row">
+          <span className="flag">
+            <span
+              className={`flag-icon flag-icon-${
+                data &&
+                data.user &&
+                data.user.country &&
+                data.user.country.toLowerCase()
+              } `}
+            ></span>
+          </span>
+          <span> {data && data.user && data.user.country} </span>
+        </span>
+      </React.Fragment>
+    );
   };
 
   return (
@@ -49,14 +69,17 @@ const HomePageMenu = (params) => {
                   name={`Hi, ${data && data.user && data.user.fullName}`}
                 />
               ) : (
-                <span className="signin-item text_r" onClick={loginDisplayAction}>
+                <span
+                  className="signin-item text_r"
+                  onClick={loginDisplayAction}
+                >
                   LogIn
                 </span>
               )}
             </Nav.Item>
             <Nav.Item className="text_rcnt">
-              {" "}
-              <span className="text_r">BD | ENG | BDT</span> &nbsp;{" "}
+              <span className="text_r">{getCountryFlag()} | ENG | BDT</span>{" "}
+              &nbsp;{" "}
             </Nav.Item>
           </Nav>
         </Navbar.Collapse>
@@ -69,9 +92,11 @@ const HomePageMenu = (params) => {
           setLoginModaDisplay(isClose);
         }}
       >
-        <SignOrLoginContent closeAction={(isClose)=>{
-          setLoginModaDisplay(isClose);
-        }} />
+        <SignOrLoginContent
+          closeAction={(isClose) => {
+            setLoginModaDisplay(isClose);
+          }}
+        />
       </ContentModal>
     </React.Fragment>
   );

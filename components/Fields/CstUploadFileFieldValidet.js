@@ -1,3 +1,4 @@
+import { Field } from "formik";
 import React, { useState } from "react";
 import { Col, Row } from "react-bootstrap";
 import {
@@ -71,7 +72,7 @@ const CstUploadFileFieldValidet = (params) => {
     <React.Fragment>
       <Row>
         <Col md={8} className="cst-uplod-file">
-          <input
+          <Field
             className={`form-control ${getError() && getError().cls} `} //esIsFieldError()
             placeholder={placeholder}
             title={placeholder}
@@ -79,7 +80,8 @@ const CstUploadFileFieldValidet = (params) => {
             accept={accept}
             name={name}
             id={name}
-            onBlur={() => {
+            onBlur={(e) => {
+              e.preventDefault();
               setFieldTouched && setFieldTouched(name, true);
             }}
             onChange={(e) => {
@@ -88,6 +90,7 @@ const CstUploadFileFieldValidet = (params) => {
               uploadFile && uploadFile(e.currentTarget.files[0]);
               setFieldValue && setFieldValue(name, e.currentTarget.files[0]);
             }}
+            value=""
           />
           <label className="form-label file-label" htmlFor={name}>
             <span className="icon">

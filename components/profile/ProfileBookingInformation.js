@@ -16,40 +16,12 @@ import { helperIsEmpty } from "../../utils/helper/helperAction";
 import { getCustomerInformationAction } from "../../redux/actions/customerAction";
 import { getPesonalInformationUpdate } from "../../redux/actions/userAction";
 
-const customerData = {
-  id: "DTC1120218658",
-  publicId: "139c142e6ffa4de8be22ae3360477bac202115101520623",
-  firstName: "Md. Shafiul",
-  lastName: "Islam",
-  gender: "Male",
-  nationality: {
-    id: 18,
-    isoCode: "BD",
-    name: "Bangladesh",
-    iso3Code: "BGD",
-    dialOrPhoneCode: "+88",
-  },
-  dateOfBirth: "1994-01-01T18:00:00.000+0000",
-  passportNo: "CA 49841984984",
-  passportIssuingCountry: {
-    id: 18,
-    isoCode: "BD",
-    name: "Bangladesh",
-    iso3Code: "BGD",
-    dialOrPhoneCode: "+88",
-  },
-  passportExpiry: "2025-01-29T18:00:00.000+0000",
-  phoneNo: "+88 01710793601",
-  email: "rumel.islam@gmail.com",
-  passportAttach: null,
-};
 const ProfileBookingInformation = ({ customer, ...props }) => {
   console.log("ProfileBookingInformation, props, ", customer);
   const dispatch = useDispatch();
 
   const [displayModal, setDisplayModal] = useState(false);
   const [phoneModal, setPhoneModal] = useState(false);
-  const {} = props;
 
   useEffect(() => {
     if (helperIsEmpty(customer)) {
@@ -75,16 +47,20 @@ const ProfileBookingInformation = ({ customer, ...props }) => {
     }
   }, [props.updateStatus]);
 
-  const personalInfoUpdate = (formData)=>{
+  const personalInfoUpdate = (formData) => {
     formData.status = 1;
     const personalInf = formData;
     props.getPesonalInformationUpdate(personalInf);
-  }
+  };
 
   const getDateFormat = (date) => {
-    date = new Date(date);
+    if (date) {
+      date = new Date(date);
 
-    return date.toDateString();
+      return date.toDateString();
+    }
+
+    return "Not Set Yet";
   };
 
   const getCountry = (country) => {
@@ -188,9 +164,9 @@ const ProfileBookingInformation = ({ customer, ...props }) => {
 
                 <tr>
                   <th scope="row">Phone Number</th>
-                  <td colSpan="3">
-                    {customer && customer.phoneCode}
-                    {customer && customer.phone}
+                  <td colSpan="2">{customer && customer.phoneNo}</td>
+                  <td>
+                    {props.getVerifideIcon(customer && customer.phoneVerified)}
                   </td>
                 </tr>
                 <tr>
@@ -200,18 +176,7 @@ const ProfileBookingInformation = ({ customer, ...props }) => {
                   </td>
 
                   <td>
-                    {customer && customer.mailVrified ? (
-                      <span className="sts-icon">
-                        <i className="fas fa-check-square text-success"></i>
-                      </span>
-                    ) : (
-                      <span>
-                        <i className="far fa-times-circle"></i>
-                        {" Not "}
-                      </span>
-                    )}
-
-                    <span>Verified</span>
+                    {props.getVerifideIcon(customer && customer.emailVerified)}
                   </td>
                 </tr>
               </tbody>
@@ -230,9 +195,7 @@ const ProfileBookingInformation = ({ customer, ...props }) => {
             isExtendedField={false}
             isInternational={false}
           /> */}
-          <TravelerInformationForm
-            formSubmitAction={personalInfoUpdate}
-          />
+          <TravelerInformationForm formSubmitAction={personalInfoUpdate} />
         </ContentModal>
 
         <ContentModal
