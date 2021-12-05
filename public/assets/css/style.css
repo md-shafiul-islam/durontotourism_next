@@ -1511,7 +1511,7 @@ body {
 /*** Range List Start */
 
 /**Singel Date Picker Start */
-.cst-date-container .cst-single-dtpk{
+.cst-date-container .cst-single-dtpk {
   z-index: 150;
 }
 
@@ -1524,14 +1524,13 @@ body {
 }
 
 .cst-single-dtpk-parent .content {
-  width: 100%; 
+  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
 }
 
-.cst-single-dtpk-parent .content .label{
-  
+.cst-single-dtpk-parent .content .label {
 }
 
 .cst-single-dtpk {
@@ -1883,6 +1882,70 @@ body {
   font-size: 1.5em;
 }
 
+/*Agent update Start */
+.company-update-container {
+  height: 450px;
+  overflow-y: hidden;
+}
+
+.company-update-container .update-content {
+  height: auto;
+  overflow-x: auto;
+}
+
+.company-info-view .country-row {
+  display: flex;
+  flex-direction: row;
+}
+
+.company-info-view .country-row > span {
+  margin: 0px 5px;
+}
+
+/**Owners Start */
+.owners-area {
+}
+
+.owners-area .strip-left {
+  content: "";
+  width: 6px;
+  height: 60px;
+  position: absolute;
+  top: 15px;
+  left: -1px;
+}
+.owners-area .general-heading-area {
+  display: flex;
+  flex-direction: row;
+  height: 60px;
+}
+
+.owners-area .general-heading-area .title{
+  font-size: 2em;
+}
+.owners-area .general-heading-area .header-right-content {
+  width: 250px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.owners-area .agent-inf-container{
+  margin-bottom: 25px;
+}
+
+.owners-area .agent-inf-container .header-right-content {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.owners-area .agent-inf-container .image-area {
+  width: 150px;
+}
+/**Owners End */
+
+/*Agent update End */
 /************** Air Flight Selected Cards Start *************/
 
 .slc-airs {

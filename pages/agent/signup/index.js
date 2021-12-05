@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { useState, useEffect } from "react";
 import { Form, Formik } from "formik";
 import * as Yup from "yup";
 import { Card, Col, Container, Row } from "react-bootstrap";
@@ -6,19 +6,66 @@ import BasicActionLink from "../../../components/agent/BasicActionLink";
 import CstValidateField from "../../../components/Fields/CstValidateField";
 import CstValidatePhoneNoField from "../../../components/Fields/CstValidatePhoneNoField";
 
-import { getNmsOptions } from "../../../utils/helper/esFnc";
 import SubmitActionButtion from "../../../components/Fields/SubmitActionButtion";
 import { connect } from "react-redux";
 import { PropTypes } from "prop-types";
-import { getAddSignUpAction } from "../../../redux/actions/signUpAction";
+import { getAddAgentSignUpAction } from "../../../redux/actions/signUpAction";
+import { getCountryPhonCodeOptions } from "../../../redux/actions/countriyAction";
+import { signIn } from "next-auth/react";
+import { useRouter } from "next/dist/client/router";
 
-class GetSignUpPage extends Component {
-  submitAction = (signUp) => {
-    console.log("Sign Up Values, ", signUp);
-    this.props.getAddSignUpAction(signUp);
+const GetSignUpPage = (params) => {
+  const [submitStatus, setSubmitStatus] = useState(false);
+  const [signUpDetails, setSignUpDetails] = useState(false);
+  const router = useRouter();
+
+  useEffect(() => {
+    initCountryPhoneCode();
+  }, []);
+
+  useEffect(() => {
+    if (params.agentSignUp) {
+      console.log("Agent SignUp Resp ", params.agentSignUp);
+
+      if (params.agentSignUp.status) {
+        loginAction();
+      }
+    }
+  }, [params.agentSignUp]);
+
+  const loginAction = async () => {
+    console.log("Agent login action ... ");
+    const loginResp = await signIn("credentials", {
+      username: signUpDetails.email,
+      password: signUpDetails.pwd,
+      redirect: false,
+      userStatus: "agent",
+    });
+
+    if (loginResp.ok) {
+      router.push("/agent")
+    }
+
+    console.log("Login Response ", loginResp);
   };
 
-  validateSchema = () => {
+  const initCountryPhoneCode = () => {
+    if (params.countryOptions !== undefined && params.countryOptions !== null) {
+      if (params.countryOptions.length === 0) {
+        params.getCountryPhonCodeOptions();
+      }
+    } else {
+      params.getCountryPhonCodeOptions();
+    }
+  };
+
+  const submitAction = (signUp) => {
+    console.log("Sign Up Values, ", signUp);
+    setSignUpDetails(signUp);
+    params.getAddAgentSignUpAction(signUp);
+  };
+
+  const validateSchema = () => {
     return Yup.object().shape({
       applicantName: Yup.string().required(
         "Required. Please, Enter applicant name."
@@ -47,167 +94,160 @@ class GetSignUpPage extends Component {
         .required("Required. Please Enter Password"),
     });
   };
-  render() {
-    return (
-      <React.Fragment>
-        <Container className="agent-container">
-          <div className="agent-signup">
-            <Col md={12} clas>
-              <Card>
-                <Card.Body className="signup-card">
-                  <div className="signup-title">Agent Registration</div>
+  return (
+    <React.Fragment>
+      <Container className="agent-container">
+        <div className="agent-signup">
+          <Col md={12} clas>
+            <Card>
+              <Card.Body className="signup-card">
+                <div className="signup-title">Agent Registration</div>
 
-                  <Formik
-                    initialValues={{
-                      applicantName: "",
-                      code: "",
-                      phone: "",
-                      email: "",
-                      companyName: "",
-                      ownerName: "",
-                      ownerEmail: "",
-                      ownPhone: "",
-                      ownCode: "",
-                      pwd: "",
-                    }}
-                    validationSchema={this.validateSchema}
-                    onSubmit={(values, action) => {
-                      console.log("Sign Up Action ", action);
+                <Formik
+                  initialValues={{
+                    applicantName: "",
+                    code: "",
+                    phone: "",
+                    email: "",
+                    companyName: "",
+                    ownerName: "",
+                    ownerEmail: "",
+                    ownPhone: "",
+                    ownCode: "",
+                    pwd: "",
+                  }}
+                  validationSchema={validateSchema}
+                  onSubmit={(values, action) => {
+                    console.log("Sign Up Action ", action);
 
-                      action.setSubmitting(true);
-                      this.submitAction(values);
-                    }}
-                  >
-                    {(props) => {
-                      return (
-                        <Form>
-                          <React.Fragment>
-                            <Row className="agentsgn-form-area">
-                              <Col md={12} className="field-area">
-                                <CstValidateField
-                                  name="applicantName"
-                                  placeholder="Applicant Name"
-                                  {...props}
-                                />
-                              </Col>
-                              <Col md={12} className="field-area">
-                                <CstValidatePhoneNoField
-                                  {...props}
-                                  fileldName="phone"
-                                  codeName="code"
-                                  filedPlaceholder="Phone"
-                                  codePlaceholder="Code"
-                                  options={getNmsOptions(20, 1, 0)}
-                                />
-                              </Col>
+                    action.setSubmitting(true);
+                    submitAction(values);
+                  }}
+                >
+                  {(props) => {
+                    return (
+                      <Form>
+                        <React.Fragment>
+                          <Row className="agentsgn-form-area">
+                            <Col md={12} className="field-area">
+                              <CstValidateField
+                                name="applicantName"
+                                placeholder="Applicant Name"
+                                {...props}
+                              />
+                            </Col>
+                            <Col md={12} className="field-area">
+                              <CstValidatePhoneNoField
+                                {...props}
+                                fileldName="phone"
+                                codeName="code"
+                                filedPlaceholder="Phone"
+                                codePlaceholder="Code"
+                                options={params.countryOptions}
+                              />
+                            </Col>
 
-                              <Col md={12} className="field-area">
-                                <CstValidateField
-                                  {...props}
-                                  name="email"
-                                  placeholder="Email"
-                                />
-                              </Col>
+                            <Col md={12} className="field-area">
+                              <CstValidateField
+                                {...props}
+                                name="email"
+                                placeholder="Email"
+                              />
+                            </Col>
 
-                              <Col md={12} className="field-area">
-                                <CstValidateField
-                                  {...props}
-                                  name="companyName"
-                                  placeholder="Company Name"
-                                  checkIsValid={false}
-                                />
-                              </Col>
+                            <Col md={12} className="field-area">
+                              <CstValidateField
+                                {...props}
+                                name="companyName"
+                                placeholder="Company Name"
+                                checkIsValid={false}
+                              />
+                            </Col>
 
-                              <Col md={12} className="field-area">
-                                <CstValidateField
-                                  name="ownerName"
-                                  placeholder="Owner Name"
-                                  {...props}
-                                  checkIsValid={false}
-                                />
-                              </Col>
+                            <Col md={12} className="field-area">
+                              <CstValidateField
+                                name="ownerName"
+                                placeholder="Owner Name"
+                                {...props}
+                                checkIsValid={false}
+                              />
+                            </Col>
 
-                              <Col md={12} className="field-area">
-                                <CstValidateField
-                                  {...props}
-                                  name="ownerEmail"
-                                  placeholder="Email"
-                                  checkIsValid={false}
-                                />
-                              </Col>
+                            <Col md={12} className="field-area">
+                              <CstValidateField
+                                {...props}
+                                name="ownerEmail"
+                                placeholder="Email"
+                                checkIsValid={false}
+                              />
+                            </Col>
 
-                              <Col md={12} className="field-area">
-                                <CstValidatePhoneNoField
-                                  {...props}
-                                  fileldName="ownPhone"
-                                  codeName="ownCode"
-                                  filedPlaceholder="Phone"
-                                  codePlaceholder="Code"
-                                  checkIsValid={false}
-                                />
-                              </Col>
+                            <Col md={12} className="field-area">
+                              <CstValidatePhoneNoField
+                                {...props}
+                                fileldName="ownPhone"
+                                codeName="ownCode"
+                                filedPlaceholder="Phone"
+                                codePlaceholder="Code"
+                                checkIsValid={false}
+                                options={params.countryOptions}
+                              />
+                            </Col>
 
-                              <Col md={12} className="field-area">
-                                <CstValidateField
-                                  name="pwd"
-                                  type="password"
-                                  placeholder="Password"
-                                  {...props}
-                                />
-                              </Col>
+                            <Col md={12} className="field-area">
+                              <CstValidateField
+                                name="pwd"
+                                type="password"
+                                placeholder="Password"
+                                {...props}
+                              />
+                            </Col>
 
-                              <Col md={12} className="d-grid">
-                                <SubmitActionButtion
-                                  variant="success"
-                                  className="signup-btn"
-                                  label="sign up"
-                                  isSubmitting={props.isSubmitting}
-                                />
-                              </Col>
-                            </Row>
-                          </React.Fragment>
-                        </Form>
-                      );
-                    }}
-                  </Formik>
+                            <Col md={12} className="d-grid">
+                              <SubmitActionButtion
+                                variant="success"
+                                className="signup-btn"
+                                label="sign up"
+                                isSubmitting={props.isSubmitting}
+                              />
+                            </Col>
+                          </Row>
+                        </React.Fragment>
+                      </Form>
+                    );
+                  }}
+                </Formik>
 
-                  <Row className="mt-2">
-                    <Col md={6}>
-                      Existing User?{" "}
-                      <BasicActionLink label="Log in" action={`/agent/login`} />{" "}
-                    </Col>
-
-                    <Col md={6}>
-                      <BasicActionLink
-                        action={`/agent/foget`}
-                        label="Foget Password?"
-                      />
-                    </Col>
-                  </Row>
-                </Card.Body>
-              </Card>
-            </Col>
-          </div>
-        </Container>
-      </React.Fragment>
-    );
-  }
-}
+                <Row className="mt-2">
+                  <Col md={6}>
+                    Existing User?{" "}
+                    <BasicActionLink label="Log in" action={`/agent/login`} />{" "}
+                  </Col>
+                </Row>
+              </Card.Body>
+            </Card>
+          </Col>
+        </div>
+      </Container>
+    </React.Fragment>
+  );
+};
 
 GetSignUpPage.prototypes = {
-  getAddSignUpAction: PropTypes.func.isRequired,
-  signUpStatus: PropTypes.object.isRequired,
-  signUpError: PropTypes.object.isRequired,
+  getAddAgentSignUpAction: PropTypes.func.isRequired,
+  getCountryPhonCodeOptions: PropTypes.func.isRequired,
+  agentSignUp: PropTypes.object.isRequired,
+  countryPhoneOptions: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = (state) => {
   return {
-    signUpStatus: state.signup.addSignUp && state.signup.addSignUp.status,
-    signUpError: state.signup.addSignUp && state.signup.addSignUp.msg,
-    signUp: state.signup.addSignUp && state.signup.addSignUp.signUp,
+    agentSignUp: state.agent && state.agent.agentSignUp,
+    countryOptions: state.country.countryPhoneOptions,
   };
 };
 
-
-
-export default connect(mapStateToProps, { getAddSignUpAction })(GetSignUpPage);
+export default connect(mapStateToProps, {
+  getAddAgentSignUpAction,
+  getCountryPhonCodeOptions,
+})(GetSignUpPage);

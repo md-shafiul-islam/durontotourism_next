@@ -1,9 +1,6 @@
 import { Field } from "formik";
 import React from "react";
-import {
-  esIsFieldError,
-  isEmptyString,
-} from "../../utils/helper/helperAction";
+import { esIsFieldError, isEmptyString } from "../../utils/helper/helperAction";
 
 /**
  *
@@ -22,14 +19,18 @@ const CstValidateField = ({
   type = undefined,
   checkIsValid = true,
   values,
+  ...props
 }) => {
   const getIsValided = () => {
     let err = { cls: "", msg: "", status: false };
-    if (checkIsValid) {
-      err = esIsFieldError(errors, touched, name);
-    } else {
-      if (!isEmptyString(values[name])) {
+
+    if (values !== undefined && values !== null) {
+      if (checkIsValid) {
         err = esIsFieldError(errors, touched, name);
+      } else {
+        if (!isEmptyString(values[name])) {
+          err = esIsFieldError(errors, touched, name);
+        }
       }
     }
 
@@ -53,15 +54,20 @@ const CstValidateField = ({
       ) : (
         ""
       )}
-      {console.log("Cst Field Error ", getIsValided())}
+      {console.log("Cst Field Value, ", values)}
       <Field
         placeholder={placeholder}
         type={type ? type : "text"}
         name={name}
         onChange={handleChange}
-        onBlur={handleBlur}
+        onBlur={(e) => {
+          e.preventDefault();
+          props.setFieldTouched(name, true);
+        }}
         id={name}
         className={`form-control ${clazzName} ${getIsValided().cls}`}
+        value={values && values[name]}
+        autoComplete={false}
       />
       <div className="invalid-feedback">
         {getIsValided() && getIsValided().msg}

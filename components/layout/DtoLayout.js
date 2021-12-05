@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
 import { PropTypes } from "prop-types";
 import { connect } from "react-redux";
@@ -7,9 +8,21 @@ import { useRouter } from "next/dist/client/router";
 import { Container } from "react-bootstrap";
 import { setJWTToken, setCurrentUserUsingToken} from "../../redux/actions/jwtTokenAction";
 import { localDataStore } from "../../utils/helper/localDataStore";
+import { useSession } from "next-auth/react";
+import { setAxiosHeaderToken } from "../../redux/esRequestAction";
 
 const DtoLayout = (params) => {
   const route = useRouter();
+  const { status, data } = useSession();
+  
+
+  useEffect(() => {
+    if(status === "authenticated"){
+      setJWTToken(data.accessToken);
+      setAxiosHeaderToken(data);
+    }
+    
+  }, [status])
 
   const [bgClass, setBgClass] = useState("hero-bg"); //
   const [isTopMenuExist, setIsTopMenuExist] = useState(false);
@@ -27,21 +40,6 @@ const DtoLayout = (params) => {
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [route.asPath]);
-
-  useEffect(() => {
-    console.log("DtoLayout Redux data have ? ", params);
-    if(params.login){
-
-      if(params.login.success){
-        setJWTToken(params.login.token);
-        params.setCurrentUserUsingToken(params.login.token, window);
-      }else{
-        params.setCurrentUserUsingToken(localDataStore.getJwtToken());
-      }
-    }
-    
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [params.login])
 
   return (
     <React.Fragment>

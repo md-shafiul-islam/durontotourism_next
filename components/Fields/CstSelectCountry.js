@@ -44,7 +44,7 @@ const CstSelectCountry = ({
   const [selectedItem, setSelectedItem] = useState(null);
 
   useEffect(() => {
-    getDefaultValue();
+    getDefaultValue(defaultStringVal);
   }, [options]);
 
   const getCommponetSets = () => {
@@ -81,12 +81,12 @@ const CstSelectCountry = ({
     );
   };
 
-  const getDefaultValue = () => {
+  const getDefaultValue = (code="BD") => {
     let idx = 0;
     if (options) {
       options.find((item, i) => {
-        console.log("Each Item, ", item);
-        if (item.isoCode === "BD") {
+        // console.log("Country Each Item, ", item);
+        if (item.value === code) {
           setSelectedItem(item);
           onChange(item);
           return true;

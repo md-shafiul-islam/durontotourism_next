@@ -7,25 +7,25 @@ export const GET_CATEGORIES = "GET_CATEGORIES";
 export const GET_CATEGORY = "GET_CATEGORY";
 export const DELET_CATEGORY = "DELET_CATEGORY";
 
-export const AUT_TOKEN =
-  "Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiRGV2ZWxvcGVyIiwiZnVsbE5hbWUiOiJNZCBTaGFmaXVsIElzbGFtIiwiaWQiOiI1ZWI5MjU5ODkyMjg0NzBlYjk0NTIzYmNjMTQ3ZWFiODIwMjEyMTI0MjQ5IiwiZXhwIjoxNjMyMjAzOTY2LCJpYXQiOjE2MzE3NzE5NjYsInVzZXJuYW1lIjoibWQuc2hhZml1bC5pc2xhbTIwMTRiZEBnbWFpbC5jb20ifQ.bzvBNu2lB-YXk0zqacxZAHEGb3SoqfRL0m5r9F2NRWQaDdzDRmKJRzB9Kn-L_acsW8fZwq55A9WTEw4lWY4SCQ";
+export const AUT_TOKEN = "";
 
 export const COMMON_REQUEST_HEADER = {
   "Content-Type": "application/json",
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers": "Origin, Content-Type, Accept",
+  Authorization: "",
 };
 export const REQUEST_HEADER = {
   "Content-Type": "application/json",
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers": "Origin, Content-Type, Accept",
-  "Authorization":""
+  Authorization: "",
 };
 
 export const REQUEST_HEADER_GET = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers": "Origin, Content-Type, Accept",
-  "Authorization":""
+  Authorization: "",
 };
 
 export const SET_CURRENT_USER = "SET_CURRENT_USER";
@@ -35,7 +35,7 @@ export const SET_USER_PHONE_NO_CHANGE = "SET_USER_PHONE_NO_CHANGE";
 export const SET_USER_MAIL_CHANGE = "SET_USER_MAIL_CHANGE";
 export const SET_USER_PROFILE_CHANGE = "SET_USER_PROFILE_CHANGE";
 
-export const REST_PHONE_CHANGE  = "REST_PHONE_CHANGE";
+export const REST_PHONE_CHANGE = "REST_PHONE_CHANGE";
 export const REST_MAIL_CHANGE = "REST_MAIL_CHANGE";
 
 export const USER_IMAGE_UPLOAD_STATUS = "USER_IMAGE_UPLOAD_STATUS";
@@ -53,7 +53,8 @@ console.log(process.env.REACT_APP_API_URL);
 /** URLS */
 //http://localhost:6060/api/enu/v1
 export const GET_BACK_END_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
-export const GET_BACK_END_DOMAIN_NAME = process.env.NEXT_PUBLIC_EXA_BACKEND_DOMAIN_URL;
+export const GET_BACK_END_DOMAIN_NAME =
+  process.env.NEXT_PUBLIC_EXA_BACKEND_DOMAIN_URL;
 
 export const AGENT_LOGIN_END_URL =
   process.env.NEXT_PUBLIC_BACKEND_AGENT_LOGIN_URL;
@@ -173,8 +174,14 @@ export const SET_AGENT_COMPANY_UPDATE = "SET_AGENT_COMPANY_UPDATE";
 export const SET_AGENT_COMPANY_UPDATE_ERROR = "SET_AGENT_COMPANY_UPDATE_ERROR";
 export const SET_LOGIN_AGENT = "SET_LOGIN_AGENT";
 export const SET_LOGIN_AGENT_ERROR = "SET_LOGIN_AGENT_ERROR";
+export const REST_AGENT_OWNER_UPDATE = "REST_AGENT_OWNER_UPDATE";
 export const SET_AGENT_OWNER_UPDATE = "SET_AGENT_OWNER_UPDATE";
 export const SET_AGENT_OWNER_UPDATE_ERROR = "SET_AGENT_OWNER_UPDATE_ERROR";
+export const SET_AGENT_SIGNUP_RESP = "SET_AGENT_SIGNUP_RESP";
+
+export const REST_AGENT_OWNER_ADD = "REST_AGENT_OWNER_ADD";
+export const SET_AGENT_OWNER_ADD = "SET_AGENT_OWNER_ADD";
+export const SET_AGENT_OWNER_ADD_ERROR = "SET_AGENT_OWNER_ADD_ERROR";
 
 //User Or Customer
 export const CUSTOMER_LOGIN = "CUSTOMER_LOGIN";
@@ -190,7 +197,8 @@ export const SET_USER_SIGNUP_ERROR = "SET_USER_SIGNUP_ERROR";
 export const REST_USER_SIGNUP = "REST_USER_SIGNUP";
 
 export const GET_CUSTOMER_INF = "GET_CUSTOMER_INF";
-export const CUSTOMER_ADD_TRAVELER_INFO_SEND = "CUSTOMER_ADD_TRAVELER_INFO_SEND";
+export const CUSTOMER_ADD_TRAVELER_INFO_SEND =
+  "CUSTOMER_ADD_TRAVELER_INFO_SEND";
 export const ADD_CUSTOMER_TRAVEL = "ADD_CUSTOMER_TRAVEL";
 export const GET_TRAVELERS = "GET_TRAVELERS";
 
@@ -198,7 +206,7 @@ export const GET_TRAVELERS = "GET_TRAVELERS";
 export const DEP_RESP_DATA_STATUS = "DEP_RESP_DATA_STATUS";
 export const RET_RESP_DATA_STATUS = "RET_RESP_DATA_STATUS";
 
-//Traveler Information 
+//Traveler Information
 export const CUSTOMER_TRAVEL_UPDATE = "CUSTOMER_TRAVEL_UPDATE";
 export const REST_CUSTOMER_TRAVEL_UPDATE = "REST_CUSTOMER_TRAVEL_UPDATE";
 export const CUSTOMER_UPDATE_INFO_SEND = "CUSTOMER_UPDATE_INFO_SEND";
@@ -231,4 +239,5 @@ export const MAIL_VERIFY_TOKE_ERROR = "MAIL_VERIFY_TOKE_ERROR";
 export const COUNTRIY_OPTIONS = "COUNTRIY_OPTIONS";
 export const COUNTRIY_OPTIONS_ERROR = "COUNTRIY_OPTIONS_ERROR";
 export const COUNTRY_PHONE_CODE_OPTIONS = "COUNTRY_PHONE_CODE_OPTIONS";
-export const COUNTRY_PHONE_CODE_OPTIONS_ERROR = "COUNTRY_PHONE_CODE_OPTIONS_ERROR";
+export const COUNTRY_PHONE_CODE_OPTIONS_ERROR =
+  "COUNTRY_PHONE_CODE_OPTIONS_ERROR";

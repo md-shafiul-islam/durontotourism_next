@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { Button, Card, Col, Row } from "react-bootstrap";
 import ContentModal from "../../Modals/ContentModal";
 import BasicActionLink from "../BasicActionLink";
+import { PropTypes } from "prop-types";
+import { connect } from "react-redux";
 import ProfileHeader from "../profile/ProfileHeader";
 import ChangeEmailOrPhone from "./ChangeEmailOrPhone";
 import ChangePassword from "./ChangePassword";
@@ -10,7 +12,7 @@ const AgentSecurityContent = (params) => {
   const [changePasswordModal, setChangePasswordModal] = useState(false);
   const [emailModal, setEmailModal] = useState(false);
   const [phoneModal, setPhoneModal] = useState(false);
-
+  const { agentInf } = params;
   return (
     <React.Fragment>
       <Card>
@@ -23,16 +25,16 @@ const AgentSecurityContent = (params) => {
                   <tbody>
                     <tr>
                       <th scope="row">Since</th>
-                      <td colSpan="4">12/05/2020</td>
+                      <td colSpan="4">{agentInf&&agentInf.since}</td>
                     </tr>
                     <tr>
                       <th scope="row">Agent ID</th>
-                      <td colSpan="4">AG-498494984</td>
+                      <td colSpan="4">{agentInf&&agentInf.id}</td>
                     </tr>
 
                     <tr>
                       <th scope="row">Email</th>
-                      <td colSpan="3">shafiul2014bd@gmail.com</td>
+                      <td colSpan="3">{agentInf&&agentInf.email}</td>
                       <td>
                         <Button
                           onClick={() => {
@@ -45,7 +47,9 @@ const AgentSecurityContent = (params) => {
                     </tr>
                     <tr>
                       <th scope="row">Phone</th>
-                      <td colSpan="3">+880 1725686029</td>
+                      <td colSpan="3">
+                        {agentInf&&agentInf.phoneCode} {agentInf&&agentInf.phoneNo}
+                      </td>
                       <td>
                         <Button
                           onClick={() => {
@@ -119,4 +123,13 @@ const AgentSecurityContent = (params) => {
   );
 };
 
-export default AgentSecurityContent;
+AgentSecurityContent.prototypes = {
+  agentInf: PropTypes.object.isRequired,
+};
+const mapStateToProps = (state) => {
+  return {
+    agentInf: state.agent.loginAgent && state.agent.loginAgent.agentGenarelInfo,
+  };
+};
+
+export default connect(mapStateToProps, null)(AgentSecurityContent);

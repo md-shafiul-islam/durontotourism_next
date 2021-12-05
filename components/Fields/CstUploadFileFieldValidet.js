@@ -39,6 +39,7 @@ const CstUploadFileFieldValidet = (params) => {
     isValidCheck = true,
     values,
     accept,
+    previewStatus = false
   } = params;
 
   const changeImageAction = (e) => {
@@ -97,12 +98,12 @@ const CstUploadFileFieldValidet = (params) => {
               {" "}
               <i className="fas fa-cloud-upload-alt"></i>
             </span>
-            <span className="text">{label}</span>
+            <span className="text">{label ? label : attachFile ? attachFile.name : ""}</span>
           </label>
           <div className="invalid-feedback">{getError() && getError().msg}</div>
         </Col>
         <Col md={4}>
-          <Thumb file={attachFile} />
+          {previewStatus ? <Thumb file={attachFile} /> : ""}
         </Col>
       </Row>
     </React.Fragment>

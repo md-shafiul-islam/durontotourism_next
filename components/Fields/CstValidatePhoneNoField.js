@@ -19,6 +19,7 @@ const CstValidatePhoneNoField = (props) => {
     checkIsValid,
     errors,
     touched,
+    defaultValue,
   } = props;
 
   const [selectedItem, setSelectedItem] = useState(null);
@@ -87,6 +88,7 @@ const CstValidatePhoneNoField = (props) => {
                 }}
                 options={props.options}
                 placeholder={"Dial Code"}
+                defaultStringVal={defaultValue}
               />
             </Col>
           </Row>

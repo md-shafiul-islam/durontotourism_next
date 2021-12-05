@@ -4,6 +4,7 @@ import { helperIsEmpty } from "../../utils/helper/helperAction";
 import {
   REST_USER_SIGNUP,
   SET_ADD_SIGNUP_ERROR,
+  SET_AGENT_SIGNUP_RESP,
   SET_SIGNUP_RESP,
 } from "../types";
 

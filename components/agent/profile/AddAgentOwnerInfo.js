@@ -1,45 +1,70 @@
-import { Form, Formik } from "formik";
 import React, { useState, useEffect } from "react";
-import { Button, Card, Col, Row } from "react-bootstrap";
+
+import { Form, Formik } from "formik";
+import * as Yup from "yup";
+import { connect, useDispatch } from "react-redux";
+import { PropTypes } from "prop-types";
+import { Card, Col, Row, Button } from "react-bootstrap";
+import CstSelectValidateField from "../../Fields/CstSelectValidateField";
 import CstUploadFileFieldValidet from "../../Fields/CstUploadFileFieldValidet";
 import CstValidateField from "../../Fields/CstValidateField";
 import CstValidatePhoneNoField from "../../Fields/CstValidatePhoneNoField";
-import { connect } from "react-redux";
-import { PropTypes } from "prop-types";
-import * as Yup from "yup";
 import { isEmptyString } from "../../../utils/helper/helperAction";
 import { getMaxFileSizeValidation } from "../../../utils/helper/helperValidateSchema";
-import { getUpdateAgentCompanyAction } from "../../../redux/actions/agentAction";
+import { addAgentOwnerAction, getCurrentAgentAction } from "../../../redux/actions/agentAction";
 import CstSelectCountry from "../../Fields/CstSelectCountry";
+import {
+  REST_AGENT_OWNER_ADD,
+  REST_AGENT_OWNER_UPDATE,
+} from "../../../redux/types";
+import LoaderSpiner from "../../../utils/helper/loaderSpiner";
 
-const UpdateAgentCompanyInfo = (params) => {
-  const { companyInf } = params;
-
+const AddAgentOwnerInfo = (params) => {
   const [initStatus, setInitStatus] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState(false);
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (
+      submitStatus &&
+      params.addAgentOwner !== undefined &&
+      params.addAgentOwner !== null
+    ) {
+      if (params.addAgentOwner.status) {
+        dispatch({
+          type: REST_AGENT_OWNER_ADD,
+          payload: false,
+        });
+        params.getCurrentAgentAction();
+        params.actionClose && params.actionClose(false);
+        setSubmitStatus(false);
+      }
+    }
+  }, [params.addAgentOwner]);
+
   const initValues = {
-    companyName: "Test ",
+    name: "",
     phone: "",
     code: "",
     email: "",
-    houseOrVillage: "",
+    houseNoOrVillage: "",
     roadNameOrNo: "",
     postalCode: "",
     policeStation: "",
-    districtOrCity: "",
-    tradeLiceseno: "",
-    tradeAttach: "",
-    tinCertificateNo: "",
-    tinAttach: "",
-    binCertificateNo: "",
-    binAttach: "",
-    companyLogoAttach: "",
+    district: "",
     country: "",
+    nationalIdNo: "",
+    passportNo: "",
+    passportAttach: "",
+    nationalIdAttach: "",
+    ownerImage: "",
   };
   const [initFormValues, setInitFormValues] = useState(initValues);
   useEffect(() => {
     setInitFormValues(initFormData());
     setInitStatus(true);
-  }, [companyInf]);
+  }, []);
 
   const getExistValue = (val) => {
     if (val !== null && val !== undefined) {
@@ -49,94 +74,88 @@ const UpdateAgentCompanyInfo = (params) => {
   };
 
   const initFormData = () => {
-    if (companyInf !== undefined && companyInf !== null) {
+    if (params.owner !== undefined && params.owner !== null) {
       return {
-        companyName: getExistValue(companyInf.companyName),
-        phone: getExistValue(companyInf.phone),
-        code: getExistValue(companyInf.code),
-        email: getExistValue(companyInf.email),
-        houseOrVillage: getExistValue(companyInf.houseOrVillage),
-        roadNameOrNo: getExistValue(companyInf.roadNameOrNo),
-        postalCode: getExistValue(companyInf.postalCode),
-        policeStation: getExistValue(companyInf.policeStation),
-        districtOrCity: getExistValue(companyInf.districtOrCity),
-        tradeLiceseno: getExistValue(companyInf.tradeLiceseno),
-        tradeAttach: getExistValue(companyInf.tradeAttach),
-        tinCertificateNo: getExistValue(companyInf.tinCertificateNo),
-        tinAttach: getExistValue(companyInf.tinAttach),
-        binCertificateNo: getExistValue(companyInf.binCertificateNo),
-        binAttach: getExistValue(companyInf.binAttach),
-        companyLogoAttach: getExistValue(companyInf.companyLogoAttach),
-        country: getExistValue(companyInf.country),
+        name: getExistValue(params.owner.name),
+        phone: getExistValue(params.owner.phone),
+        code: getExistValue(params.owner.code),
+        email: getExistValue(params.owner.email),
+        houseNoOrVillage: getExistValue(params.owner.houseNoOrVillage),
+        roadNameOrNo: getExistValue(params.owner.roadNameOrNo),
+        postalCode: getExistValue(params.owner.postalCode),
+        policeStation: getExistValue(params.owner.policeStation),
+        district: getExistValue(params.owner.district),
+        country: getExistValue(params.owner.country),
+        nationalIdNo: getExistValue(params.owner.nationalIdNo),
+        passportNo: getExistValue(params.owner.passportNo),
+        passportAttach: getExistValue(params.owner.passportAttach),
+        nationalIdAttach: getExistValue(params.owner.nationalIdAttach),
+        ownerImage: getExistValue(params.owner.ownerImage),
       };
     }
     return initValues;
   };
-  const validateSchema = () => {
+  const validationSchema = () => {
     return Yup.object().shape({
-      companyName: Yup.string().min(0),
-      phone: Yup.string().min(0),
-      phoneCode: Yup.string().min(0),
-      email: Yup.string().email("Please Enter valid Email").min(0),
-      houseOrVillage: Yup.string().min(0),
-      roadNameOrNo: Yup.string().min(0),
-      postalCode: Yup.string().min(0),
-      policeStation: Yup.string().min(0),
-      districtOrCity: Yup.string().min(0),
-      tradeLiceseno: Yup.string().min(0),
-      tradeAttach: Yup.mixed().when("tradeLiceseno", (v) => {
-        if (!isEmptyString(v)) {
-          return Yup.mixed().required("Required, Please choose a file");
-        }
-      }),
-      tinCertificateNo: Yup.string().min(0),
-
-      tinAttach: Yup.mixed().when("tinCertificateNo", (v) => {
-        if (!isEmptyString(v)) {
-          return Yup.mixed().required("Required, Please choose a file");
-        }
-      }),
-      binCertificateNo: Yup.string().min(0),
-      binAttach: Yup.mixed().when("binCertificateNo", (v) => {
-        if (!isEmptyString(v)) {
-          return Yup.mixed().required("Required, Please choose a file");
-        }
-      }),
-
-      companyLogoAttach: Yup.mixed().required(
-        "Required, Please choose your company Logo"
+      name: Yup.string().required("Please, Enter Owner name"),
+      phone: Yup.string().required("Please, Enter Phone No."),
+      code: Yup.string().required(
+        "Please, Select one dail code or Phone code."
       ),
+      email: Yup.string()
+        .email("Please, Enter valid Email address Or ID.")
+        .required("Please, Enter Owner Email."),
+      houseNoOrVillage: Yup.string()
+        .min(0)
+        .typeError("Value Must be text or number"),
+      roadNameOrNo: Yup.string()
+        .min(0)
+        .typeError("Value Must be text or number"),
+      postalCode: Yup.string().min(0).typeError("Value Must be text or number"),
+      policeStation: Yup.string()
+        .min(0)
+        .typeError("Value Must be text or number"),
+      district: Yup.string().min(0).typeError("Value Must be text or number"),
+      country: Yup.string().min(0).typeError("Value Must be text or number"),
+      nationalIdNo: Yup.string()
+        .min(0)
+        .typeError("Value Must be text or number"),
+
+      nationalIdAttach: Yup.mixed().when("nationalIdNo", (v) => {
+        if (!isEmptyString(v)) {
+          return getMaxFileSizeValidation(375, "National ID");
+        }
+      }),
+      passportNo: Yup.string().min(0).typeError("Value Must be text or number"),
+
+      passportAttach: Yup.mixed().when("passportNo", (v) => {
+        if (!isEmptyString(v)) {
+          return getMaxFileSizeValidation(450, "Passport");
+        }
+      }),
+      ownerImage: getMaxFileSizeValidation(500, "Owner Image"),
     });
   };
 
-  const submitAction = (upCompany) => {
-    if (upCompany) {
-      // upCompany = JSON.stringify(upCompany, null, 2);
-      params.getUpdateAgentCompanyAction(upCompany);
-      console.log("Update Company Submited...");
-    }
+  const addAgentSubmitAction = (values) => {
+    params.addAgentOwnerAction(values);
+    setSubmitStatus(true);
   };
+
   return (
     <React.Fragment>
-      {console.log("Initials Values, ", initStatus)}
+      <LoaderSpiner show={submitStatus} loadingText="Agent Owner adding ..." />
       <Row>
         <Col md={12}>
-          {initStatus === true ? (
-            <Card className="company-update-container">
-              {console.log(
-                "Initials Values, Form ",
-                initStatus,
-                " Values, ",
-                initFormValues
-              )}
-              <Card.Body className="update-content">
+          <Card>
+            {initStatus ? (
+              <Card.Body>
                 <Formik
                   initialValues={initFormValues}
-                  enableReinitialize={true}
-                  validationSchema={validateSchema}
+                  validationSchema={validationSchema}
                   onSubmit={(values, action) => {
-                    action.setSubmitting(true);
-                    submitAction(values);
+                    console.log("Add Agent Info", values);
+                    addAgentSubmitAction(values);
                   }}
                 >
                   {(props) => {
@@ -145,9 +164,8 @@ const UpdateAgentCompanyInfo = (params) => {
                         <Row className="input-area-row">
                           <Col md={6}>
                             <CstValidateField
-                              placeholder="Company Name"
-                              name="companyName"
-                              checkIsValid={false}
+                              placeholder="Name"
+                              name="name"
                               {...props}
                             />
                           </Col>
@@ -159,8 +177,6 @@ const UpdateAgentCompanyInfo = (params) => {
                               filedPlaceholder="Phone"
                               codePlaceholder="Code"
                               options={params.countryPhoneOptions}
-                              clazzName="country-w-phone"
-                              defaultValue="BH"
                             />
                           </Col>
                         </Row>
@@ -169,14 +185,13 @@ const UpdateAgentCompanyInfo = (params) => {
                             <CstValidateField
                               placeholder="Email"
                               name="email"
-                              checkIsValid={false}
                               {...props}
                             />
                           </Col>
                           <Col md={6}>
                             <CstValidateField
                               placeholder="House No/Village"
-                              name="houseOrVillage"
+                              name="houseNoOrVillage"
                               checkIsValid={false}
                               {...props}
                             />
@@ -212,7 +227,7 @@ const UpdateAgentCompanyInfo = (params) => {
                           <Col md={6}>
                             <CstValidateField
                               placeholder="District Or City"
-                              name="districtOrCity"
+                              name="district"
                               checkIsValid={false}
                               {...props}
                             />
@@ -231,36 +246,14 @@ const UpdateAgentCompanyInfo = (params) => {
                               }}
                               options={params.countryOptions}
                               placeholder={"Select Country"}
-                              defaultStringVal="AU"
+                              defaultStringVal="BD"
                             />
                           </Col>
                           <Col md={6}>
                             <CstUploadFileFieldValidet
                               {...props}
-                              name="companyLogoAttach"
-                              placeholder="Attach Company Logo"
-                              uploadFile={(file) => {
-                                console.log("Upload File Runn ");
-                              }}
-                              isValidCheck={false}
-                              previewStatus={false}
-                            />
-                          </Col>
-                        </Row>
-                        <Row className="input-area-row">
-                          <Col md={6}>
-                            <CstValidateField
-                              placeholder="Trade License No."
-                              name="tradeLiceseno"
-                              checkIsValid={false}
-                              {...props}
-                            />
-                          </Col>
-                          <Col md={6}>
-                            <CstUploadFileFieldValidet
-                              {...props}
-                              name="tradeAttach"
-                              placeholder="Attach Trade License image Or Scan copy"
+                              name="ownerImage"
+                              placeholder="Attach Owner image"
                               uploadFile={(file) => {
                                 console.log("Upload File Runn ");
                               }}
@@ -271,20 +264,27 @@ const UpdateAgentCompanyInfo = (params) => {
                         <Row className="input-area-row">
                           <Col md={6}>
                             <CstValidateField
-                              placeholder="TIN Certificate No."
-                              name="tinCertificateNo"
+                              placeholder="National ID No."
+                              name="nationalIdNo"
                               checkIsValid={false}
                               {...props}
+                              isFieldHaveValue={(value) => {
+                                if (!isEmptyString(value)) {
+                                  setNationalAttach(true);
+                                } else {
+                                  setNationalAttach(false);
+                                }
+                              }}
                             />
                           </Col>
                           <Col md={6}>
                             <CstUploadFileFieldValidet
                               {...props}
-                              name="tinAttach"
-                              placeholder="Attach TIN  Certificate image Or Scan copy"
+                              name="nationalIdAttach"
+                              placeholder="Attach National ID image Or Scan copy"
                               uploadFile={(file) => {
                                 console.log(
-                                  "tradeAttach Upload File Change, ",
+                                  "nationalIdAttach Upload File Change, ",
                                   file
                                 );
                               }}
@@ -295,8 +295,8 @@ const UpdateAgentCompanyInfo = (params) => {
                         <Row className="input-area-row">
                           <Col md={6}>
                             <CstValidateField
-                              placeholder="BIN Certificate No."
-                              name="binCertificateNo"
+                              placeholder="Passport No."
+                              name="passportNo"
                               checkIsValid={false}
                               {...props}
                             />
@@ -304,13 +304,10 @@ const UpdateAgentCompanyInfo = (params) => {
                           <Col md={6}>
                             <CstUploadFileFieldValidet
                               {...props}
-                              name="binAttach"
-                              placeholder="Attach BIN  Certificate image Or Scan copy"
+                              name="passportAttach"
+                              placeholder="Attach Passport image Or Scan copy"
                               uploadFile={(file) => {
-                                console.log(
-                                  "tradeAttach Upload File Change, ",
-                                  file
-                                );
+                                console.log("Upload File Runn ");
                               }}
                               isValidCheck={false}
                             />
@@ -323,39 +320,37 @@ const UpdateAgentCompanyInfo = (params) => {
                             </Button>
                           </Col>
                         </Row>
+                        Error:
+                        <pre>{JSON.stringify(props.errors, null, 2)}</pre>
                       </Form>
                     );
                   }}
                 </Formik>
               </Card.Body>
-            </Card>
-          ) : (
-            ""
-          )}
+            ) : (
+              "Geting data..."
+            )}
+          </Card>
         </Col>
       </Row>
     </React.Fragment>
   );
 };
 
-UpdateAgentCompanyInfo.prototypes = {
-  getUpdateAgentAction: PropTypes.func.isRequired,
-  agent: PropTypes.object.isRequired,
-  agentUpStatus: PropTypes.object.isRequired,
-  agentError: PropTypes.object.isRequired,
+AddAgentOwnerInfo.prototype = {
+  addAgentOwnerAction: PropTypes.func.isRequired,
+  agentOwners: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = (state) => {
   return {
-    agent: state.agent.upAgentCompany.agent,
-    agentUpStatus: state.agent.upAgentCompany.upStatus,
-    agentError: state.upCompanyError,
-    companyInf: state.agent.loginAgent && state.agent.loginAgent.agentCompany,
+    agentOwners: state.agent.agentOwners,
     countryPhoneOptions: state.country.countryPhoneOptions,
     countryOptions: state.country.countryOptions,
+    addAgentOwner: state.agent.addAgentOwner,
   };
 };
 
-export default connect(mapStateToProps, { getUpdateAgentCompanyAction })(
-  UpdateAgentCompanyInfo
+export default connect(mapStateToProps, { addAgentOwnerAction, getCurrentAgentAction})(
+  AddAgentOwnerInfo
 );

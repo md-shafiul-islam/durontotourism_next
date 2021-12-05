@@ -12,7 +12,7 @@ export const getCountryPhonCodeOptions = () => async (dispatch) => {
     headers: REQUEST_HEADER_GET,
   });
 
-  console.log("Countries Phone Code Options Response, ", resp);
+  // console.log("Countries Phone Code Options Response, ", resp);
 
   try {
     dispatch({

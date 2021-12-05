@@ -13,7 +13,8 @@ const CstSelectValidateField = ({
   errorMsg,
   isSmall = false,
   defaultStringVal,
-  defaultOption
+  defaultOption,
+  ...props
 }) => {
   const getCommponetSets = () => {
     if (!arrowStatus) {
@@ -41,8 +42,9 @@ const CstSelectValidateField = ({
         id={name}
         placeholder={placeholder}
         options={options}
-        onBlur={() => {
-          blurHandler();
+        onBlur={(e) => {
+          e.preventDefault();
+          props.setFieldTouched(true);
         }}
         onChange={(item) => {
           onChange(item);
@@ -53,7 +55,6 @@ const CstSelectValidateField = ({
         components={getCommponetSets()}
         defaultInputValue={defaultStringVal ? defaultStringVal : ""}
         defaultValue={defaultOption ? defaultOption : null}
-        
       />
 
       <div className="invalid-feedback">{errorMsg}</div>

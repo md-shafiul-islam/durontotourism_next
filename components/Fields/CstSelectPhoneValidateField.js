@@ -46,31 +46,8 @@ const CstSelectPhoneValidateField = ({
   const [selectedItem, setSelectedItem] = useState(null);
 
   useEffect(() => {
-    getDefaultValue();
+    getDefaultValue(defaultStringVal);
   }, [options]);
-
-  const cstFilterOption = (option, inputData) => {
-    let { dialCode, isoCode, isoCode3, label } = option.data;
-
-    const regEx = new RegExp(`${inputData}`, "i");
-
-    if (regEx.test(isoCode)) {
-      return true;
-    }
-
-    if (regEx.test(label)) {
-      return true;
-    }
-
-    if (regEx.test(dialCode)) {
-      return true;
-    }
-
-    if (regEx.test(isoCode3)) {
-      return true;
-    }
-    return false;
-  };
 
   const getCommponetSets = () => {
     // IndicatorSeparator: () => null,
@@ -102,13 +79,13 @@ const CstSelectPhoneValidateField = ({
     );
   };
 
-  const getDefaultValue = () => {
+  const getDefaultValue = (code="BD") => {
     let idx = 0;
     if (!helperIsEmpty(options)) {
       if (Array.isArray(options)) {
         options.forEach((item, i) => {
           console.log("Each Item, ", item);
-          if (item.isoCode === "BD") {
+          if (item.isoCode === code) {
             setSelectedItem(item);
             onChange(item);
             return true;

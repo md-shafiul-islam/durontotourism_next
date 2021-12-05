@@ -24,10 +24,11 @@ const ProfileHeader = ({
               {imageUrl !== undefined ? (
                 <div className="image-area">
                   <CstImageView
-                    src={imageUrl}
+                    thumb={imageUrl}
                     altTag={imgAlt}
                     width={500}
                     height={500}
+                    defaultSrc="/assets/images/logo/dto.svg"
                   />
                 </div>
               ) : (

@@ -30,7 +30,7 @@ export default NextAuth({
           actionUrl = `${process.env.NEXT_PUBLIC_BACKEND_AGENT_LOGIN_URL}`;
         }
 
-        console.log("Action Url ", actionUrl, " Login ..., ");
+        console.log("Action Status ",credentials.userStatus, " URL ", actionUrl, " Login ..., ");
 
         const loginData = {
           username: credentials.username,
