@@ -2,6 +2,8 @@
 
 import { helperIsEmpty } from "../../utils/helper/helperAction";
 import {
+  ADD_SUB_AGENT,
+  REST_ADD_SUB_AGENT,
   REST_AGENT_OWNER_ADD,
   REST_AGENT_OWNER_UPDATE,
   SET_AGENT_COMPANY_UPDATE,
@@ -13,6 +15,13 @@ import {
   SET_AGENT_SIGNUP_RESP,
   SET_LOGIN_AGENT,
   SET_LOGIN_AGENT_ERROR,
+  SET_SUB_AGENTS,
+  CHANGE_AGENT_PHONE,
+  CHANGE_AGENT_EMAIL,
+  REST_CHANGE_AGENT_EMAIL,
+  CHANGE_AGENT_PASS,
+  REST_CHANGE_AGENT_PASS,
+  REST_CHANGE_AGENT_PHONE,
 } from "../types";
 
 const initialState = {
@@ -25,6 +34,11 @@ const initialState = {
   agentSignUp: {},
   upAgentOwner: undefined,
   addAgentOwner: undefined,
+  addSubAgent: undefined,
+  subAgents: undefined,
+  changePhone: undefined,
+  changeEmail: undefined,
+  restPassword: undefined,
 };
 
 const getUpAgentResp = (payload) => {
@@ -53,6 +67,29 @@ const getAgentAddRest = (status, state) => {
     return {
       ...state,
       addAgentOwner: undefined,
+    };
+  }
+  return state;
+};
+
+const setSubagents = (state, subAgents) => {
+  if (subAgents) {
+    if (subAgents.status) {
+      return {
+        ...state,
+        subAgents: subAgents.data,
+      };
+    }
+  }
+
+  return state;
+};
+
+const getRestChangePhone = (state, status) => {
+  if (status) {
+    return {
+      ...state,
+      changePhone: undefined,
     };
   }
   return state;
@@ -114,6 +151,49 @@ export default function (state = initialState, action) {
 
     case REST_AGENT_OWNER_UPDATE:
       return getRestAgentUpdate(action.payload, state);
+
+    case ADD_SUB_AGENT:
+      return {
+        ...state,
+        addSubAgent: action.payload,
+      };
+    case REST_ADD_SUB_AGENT:
+      return {
+        ...state,
+        addSubAgent: action.payload ? undefined : state.addSubAgent,
+      };
+    case SET_SUB_AGENTS:
+      return setSubagents(state, action.payload);
+
+    case CHANGE_AGENT_PHONE:
+      return {
+        ...state,
+        changePhone: action.payload,
+      };
+    case REST_CHANGE_AGENT_PHONE:
+      return getRestChangePhone(state, action.payload);
+
+    case CHANGE_AGENT_EMAIL:
+      return {
+        ...state,
+        changeEmail: action.payload,
+      };
+    case REST_CHANGE_AGENT_EMAIL:
+      return {
+        ...state,
+        changeEmail: action.payload ? undefined : state.changeEmail,
+      };
+
+    case CHANGE_AGENT_PASS:
+      return {
+        ...state,
+        restPassword: action.payload,
+      };
+    case REST_CHANGE_AGENT_PASS:
+      return {
+        ...state,
+        restPassword: action.payload ? undefined : state.restPassword,
+      };
     default:
       return state;
   }

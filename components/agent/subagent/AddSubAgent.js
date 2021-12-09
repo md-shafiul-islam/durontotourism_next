@@ -1,14 +1,45 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import "react-notifications/lib/notifications.css";
+
 import { Form, Formik } from "formik";
 import * as Yup from "yup";
 import { Button, Card, Col, Row } from "react-bootstrap";
 import CstValidateField from "../../Fields/CstValidateField";
 import CstValidatePhoneNoField from "../../Fields/CstValidatePhoneNoField";
-import UpdateAgentCompanyInfo from "../profile/UpdateAgentCompanyInfo";
-import UpdateAgentOwnerInfo from "../profile/UpdateAgentOwnerInfo";
-import { esIsPhoneFieldError } from "../../../utils/helper/helperAction";
+import { PropTypes } from "prop-types";
+import { connect, useDispatch } from "react-redux";
+import {
+  getAddSubAgentAction,
+  getCurrentAgentAction,
+} from "../../../redux/actions/agentAction";
+import { helperIsEmpty } from "../../../utils/helper/helperAction";
+import LoaderSpiner from "../../../utils/helper/loaderSpiner";
+import { REST_ADD_SUB_AGENT } from "../../../redux/types";
+import {
+  NotificationContainer,
+  NotificationManager,
+} from "react-notifications";
 
 const AddSubAgent = (params) => {
+  const dispatch = useDispatch();
+
+  const [submitingStatus, setSubmitingStatus] = useState(false);
+
+  useEffect(() => {
+    if (submitingStatus && !helperIsEmpty(params.addSubAgent)) {
+      if (params.addSubAgent.status) {
+        dispatch({
+          type: REST_ADD_SUB_AGENT,
+          payload: true,
+        });
+        setSubmitingStatus(false);
+        NotificationManager.success(params.addSubAgent.message, "Success");
+      } else {
+        NotificationManager.error(params.addSubAgent.message, "Error");
+      }
+    }
+  }, [params.addSubAgent]);
+
   const validateSchema = () => {
     return Yup.object().shape({
       agentId: Yup.string().required("Required. Enter Agent Id "),
@@ -26,15 +57,25 @@ const AddSubAgent = (params) => {
     });
   };
 
+  const submitAction = (values) => {
+    if (values) {
+      params.getAddSubAgentAction(values);
+      setSubmitingStatus(true);
+    }
+  };
+
+  const { agent } = params;
   return (
     <React.Fragment>
+      <LoaderSpiner show={submitingStatus} loadingText="Creating Sub Agent" />
       <Card>
         <Card.Body>
           <Row>
             <Col md={12}>
               <Formik
+                enableReinitialize={true}
                 initialValues={{
-                  agentId: "",
+                  agentId: agent.agentGenarelInfo && agent.agentGenarelInfo.id,
                   name: "",
                   email: "",
                   phone: "",
@@ -44,6 +85,7 @@ const AddSubAgent = (params) => {
                 validationSchema={validateSchema()}
                 onSubmit={(values, action) => {
                   console.log("Agent Add action fire!! ");
+                  submitAction(values);
                 }}
               >
                 {(props) => {
@@ -54,20 +96,15 @@ const AddSubAgent = (params) => {
                           <CstValidateField
                             placeholder="Agent ID"
                             name="agentId"
-                            errors={props.errors}
-                            touched={props.touched}
-                            handleChange={props.handleChange}
-                            handleBlur={props.handleBlur}
+                            {...props}
+                            readOnly={true}
                           />
                         </Col>
                         <Col md={6}>
                           <CstValidateField
                             placeholder="Name"
                             name="name"
-                            errors={props.errors}
-                            touched={props.touched}
-                            handleChange={props.handleChange}
-                            handleBlur={props.handleBlur}
+                            {...props}
                           />
                         </Col>
                       </Row>
@@ -79,8 +116,7 @@ const AddSubAgent = (params) => {
                             name="email"
                             errors={props.errors}
                             touched={props.touched}
-                            handleChange={props.handleChange}
-                            handleBlur={props.handleBlur}
+                            {...props}
                           />
                         </Col>
                         <Col md={6}>
@@ -90,22 +126,9 @@ const AddSubAgent = (params) => {
                             codeName="code"
                             filedPlaceholder="Phone"
                             codePlaceholder="Code"
-                            clazzName={
-                              esIsPhoneFieldError(
-                                props.errors,
-                                props.touched,
-                                `phone`,
-                                `code`
-                              ).cls
-                            }
-                            errorMsg={
-                              esIsPhoneFieldError(
-                                props.errors,
-                                props.touched,
-                                `phone`,
-                                `code`
-                              ).msg
-                            }
+                            options={params.countryPhoneOptions}
+                            clazzName="country-w-phone"
+                            // defaultValue="BD"
                           />
                         </Col>
                       </Row>
@@ -137,8 +160,25 @@ const AddSubAgent = (params) => {
       {/**
       <UpdateAgentCompanyInfo />
       <UpdateAgentOwnerInfo /> */}
+      <NotificationContainer />
     </React.Fragment>
   );
 };
 
-export default AddSubAgent;
+AddSubAgent.prototype = {
+  getAddSubAgentAction: PropTypes.func.isRequired,
+  agent: PropTypes.object.isRequired,
+  countryPhoneOptions: PropTypes.object.isRequired,
+};
+const mapStateToProps = (state) => {
+  return {
+    countryPhoneOptions: state.country.countryPhoneOptions,
+    agent: state.agent && state.agent.loginAgent,
+    addSubAgent: state.agent && state.agent.addSubAgent,
+  };
+};
+
+export default connect(mapStateToProps, {
+  getAddSubAgentAction,
+  getCurrentAgentAction,
+})(AddSubAgent);

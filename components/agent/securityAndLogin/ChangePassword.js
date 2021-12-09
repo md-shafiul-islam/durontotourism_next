@@ -1,19 +1,22 @@
-import { Field, Formik } from "formik";
+import { Field, Formik, Form } from "formik";
 import React from "react";
 import { Button, Col, Row } from "react-bootstrap";
 
-const ChangePassword = (props)=> {
+const ChangePassword = (props) => {
   return (
     <React.Fragment>
       <Formik
         initialValues={{
-          prePassword: "",
-          nPassword: "",
+          prevPassword: "",
+          pwd: "",
+        }}
+        onSubmit={(values, action) => {          
+          props.submitAction(values);
         }}
       >
         {(props) => {
           return (
-            <React.Fragment>
+            <Form>
               <Row className="input-area-row">
                 <Col md={12}>
                   <Field
@@ -21,6 +24,7 @@ const ChangePassword = (props)=> {
                     placeholder="Old password"
                     className="form-control"
                     id="prevPassword"
+                    type="password"
                   />
                 </Col>
               </Row>
@@ -28,23 +32,26 @@ const ChangePassword = (props)=> {
                 <Col md={12}>
                   <Field
                     placeholder="New Password"
-                    name="nPassword"
-                    id="nPassword"
+                    name="pwd"
+                    id="pwd"
                     className="form-control"
+                    type="password"
                   />
                 </Col>
               </Row>
               <Row className="input-area-row">
                 <Col md={12}>
-                  <Button type="submit" className="form-control">Submit</Button>
+                  <Button type="submit" className="form-control">
+                    Submit
+                  </Button>
                 </Col>
               </Row>
-            </React.Fragment>
+            </Form>
           );
         }}
       </Formik>
     </React.Fragment>
   );
-}
+};
 
 export default ChangePassword;

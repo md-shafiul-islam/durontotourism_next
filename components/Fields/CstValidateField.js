@@ -19,6 +19,7 @@ const CstValidateField = ({
   type = undefined,
   checkIsValid = true,
   values,
+  readOnly,
   ...props
 }) => {
   const getIsValided = () => {
@@ -62,12 +63,13 @@ const CstValidateField = ({
         onChange={handleChange}
         onBlur={(e) => {
           e.preventDefault();
-          props.setFieldTouched(name, true);
+          props.setFieldTouched && props.setFieldTouched(name, true);
         }}
         id={name}
         className={`form-control ${clazzName} ${getIsValided().cls}`}
         value={values && values[name]}
         autoComplete={false}
+        readOnly={readOnly}
       />
       <div className="invalid-feedback">
         {getIsValided() && getIsValided().msg}

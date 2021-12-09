@@ -1920,7 +1920,7 @@ body {
   height: 60px;
 }
 
-.owners-area .general-heading-area .title{
+.owners-area .general-heading-area .title {
   font-size: 2em;
 }
 .owners-area .general-heading-area .header-right-content {
@@ -1930,7 +1930,7 @@ body {
   align-items: flex-end;
 }
 
-.owners-area .agent-inf-container{
+.owners-area .agent-inf-container {
   margin-bottom: 25px;
 }
 
@@ -1946,6 +1946,19 @@ body {
 /**Owners End */
 
 /*Agent update End */
+
+/*Sub agents Start */
+
+.sub-agent-hrader {
+  height: 80px;
+  padding-top: 10px;
+}
+
+.sub-agent-hrader .title {
+  font-size: 2em;
+}
+/*Sub agents End */
+
 /************** Air Flight Selected Cards Start *************/
 
 .slc-airs {
@@ -5133,9 +5146,11 @@ body {
   text-align: center;
 }
 
+
 .agent-area .agent-content,
 .agent-area .agent-sidebar {
   background-color: #fff;
+  padding-top: 20px;
 }
 
 .agentsgn-form-area .field-area {

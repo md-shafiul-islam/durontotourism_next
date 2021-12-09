@@ -12,7 +12,10 @@ const ChangeEmailOrPhone = ({
   code = "",
   submitAction,
   type = 0,
+  options = [],
 }) => {
+
+
   const initValues = () => {
     if (type === 0) {
       return { email: email };
@@ -43,9 +46,8 @@ const ChangeEmailOrPhone = ({
         initialValues={initValues}
         validationSchema={validationSchema}
         onSubmit={(values, action) => {
-          console.log("Submit ACtion ", values);
           action.setSubmitting(true);
-          submitAction(values);
+          submitAction(values);          
         }}
       >
         {(props) => {
@@ -71,6 +73,7 @@ const ChangeEmailOrPhone = ({
                         codeName="code"
                         filedPlaceholder="Phone"
                         codePlaceholder="Code"
+                        options={options}
                       />
                     </Col>
                   </Row>
@@ -85,7 +88,6 @@ const ChangeEmailOrPhone = ({
                     />
                   </Col>
                 </Row>
-                <pre>{JSON.stringify(props.errors, null, 2)}</pre>
               </React.Fragment>
             </Form>
           );

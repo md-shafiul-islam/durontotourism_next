@@ -46,7 +46,8 @@ const CstSelectPhoneValidateField = ({
   const [selectedItem, setSelectedItem] = useState(null);
 
   useEffect(() => {
-    getDefaultValue(defaultStringVal);
+    getDefaultValue(defaultStringVal);   
+    props.setFieldValue&&props.setFieldValue(defaultStringVal) 
   }, [options]);
 
   const getCommponetSets = () => {
@@ -87,7 +88,7 @@ const CstSelectPhoneValidateField = ({
           console.log("Each Item, ", item);
           if (item.isoCode === code) {
             setSelectedItem(item);
-            onChange(item);
+            onChange&&onChange(item);
             return true;
           }
           return false;

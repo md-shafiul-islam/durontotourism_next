@@ -12,6 +12,11 @@ import {
   SET_LOGIN_AGENT_ERROR,
   SET_AGENT_OWNER_ADD,
   SET_AGENT_OWNER_ADD_ERROR,
+  ADD_SUB_AGENT,
+  SET_SUB_AGENTS,
+  CHANGE_AGENT_PHONE,
+  CHANGE_AGENT_EMAIL,
+  CHANGE_AGENT_PASS,
 } from "../types";
 
 const getAgentData = (resp) => {
@@ -210,5 +215,104 @@ export const getAgentFileUpload = async (file, dirPath = "") => {
     }
   } catch (error) {
     return null;
+  }
+};
+
+export const getAddSubAgentAction = (subAgent) => async (dispatch) => {
+  const actionUrl = `${GET_BACK_END_URL}/agents/sub-agents`;
+  console.log("Sub Agent Add Action, URL ", actionUrl, " Subagent, ", subAgent);
+  if (subAgent) {
+    try {
+      const resp = await axios.post(actionUrl, subAgent, {
+        headers: REQUEST_HEADER,
+      });
+      dispatch({
+        type: ADD_SUB_AGENT,
+        payload: { ...resp.data, errStatus: false },
+      });
+    } catch (error) {
+      dispatch({
+        payload: ADD_SUB_AGENT,
+        payload: { status: false, message: error.message, errStatus: true },
+      });
+    }
+  }
+};
+
+export const getSubAgentAction = () => async (dispatch) => {
+  try {
+    console.log("Current Sub agent actions ...");
+
+    const resp = await axios.get(`${GET_BACK_END_URL}/agents/sub-agents`, {
+      headers: REQUEST_HEADER_GET,
+    });
+    console.log("Sub agent response ", resp);
+
+    dispatch({
+      type: SET_SUB_AGENTS,
+      payload: { ...resp.data, errStatus: false },
+    });
+  } catch (error) {
+    dispatch({
+      type: SET_SUB_AGENTS,
+      payload: { status: false, message: error.message, errStatus: true },
+    });
+  }
+};
+
+export const getChangeAgentPassword = (change) => async (dispatch) => {
+  const actionUrl = `${GET_BACK_END_URL}/agents/rest-pass`;
+
+  try {
+    const resp = await axios.put(actionUrl, change, {
+      headers: REQUEST_HEADER,
+    });
+    dispatch({
+      type: CHANGE_AGENT_PASS,
+      payload: resp.data,
+    });
+  } catch (error) {
+    dispatch({
+      type: CHANGE_AGENT_PASS,
+      payload: { status: false, message: error.message, errStatus: true },
+    });
+  }
+};
+
+export const getChangeAgentEmail = (email) => async (dispatch) => {
+  const actionUrl = `${GET_BACK_END_URL}/agents/change-mail`;
+
+  try {
+    const resp = await axios.put(actionUrl, email, {
+      headers: REQUEST_HEADER,
+    });
+    dispatch({
+      type: CHANGE_AGENT_EMAIL,
+      payload: resp.data,
+    });
+  } catch (error) {
+    dispatch({
+      type: CHANGE_AGENT_EMAIL,
+      payload: { status: false, message: error.message, errStatus: true },
+    });
+  }
+};
+
+export const getChangeAgentPhone = (phone) => async (dispatch) => {
+  const actionUrl = `${GET_BACK_END_URL}/agents/change-phone`;
+
+  try {
+    const resp = await axios.put(actionUrl, phone, {
+      headers: REQUEST_HEADER,
+    });
+    dispatch({
+      type: CHANGE_AGENT_PHONE,
+      payload: resp.data,
+    });
+  } catch (error) {
+    dispatch({
+      type: CHANGE_AGENT_PHONE,
+      payload: { status: false, message: error.message, errStatus: true },
+    });
   }
 };

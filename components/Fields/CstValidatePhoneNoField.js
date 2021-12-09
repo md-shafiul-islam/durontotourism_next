@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useState, useEffect } from "react";
 import { Field } from "formik";
 import { Col, Row } from "react-bootstrap";
 import {
@@ -8,21 +9,20 @@ import {
 } from "../../utils/helper/helperAction";
 import CstSelectPhoneValidateField from "./CstSelectPhoneValidateField";
 
-const CstValidatePhoneNoField = (props) => {
-  const {
-    codeName,
-    clazzName,
-    fileldName,
-    filedPlaceholder,
-    handleChange,
-    values,
-    checkIsValid,
-    errors,
-    touched,
-    defaultValue,
-  } = props;
-
-  const [selectedItem, setSelectedItem] = useState(null);
+const CstValidatePhoneNoField = ({
+  codeName,
+  clazzName,
+  fileldName,
+  filedPlaceholder,
+  handleChange,
+  values,
+  checkIsValid,
+  errors,
+  touched,
+  defaultValue,
+  ...props
+}) => {
+  const [selectedItem, setSelectedItem] = useState();
 
   const getIsValided = (name) => {
     let valid = { status: false, msg: "", cls: "" };
@@ -61,13 +61,24 @@ const CstValidatePhoneNoField = (props) => {
   };
 
   const getPlaceholder = () => {
-    if (selectedItem !== null) {
+    if (selectedItem !== null && selectedItem !== undefined) {
       if (selectedItem.isoCode === "BD") {
         return "e.g. 01700000000, 018xxxxxxx";
       }
     }
 
     return filedPlaceholder;
+  };
+  const changeAction = (item) => {
+    console.log("CstSelectPhoneValidateField, ", codeName, " ", item);
+    if (item !== undefined && item !== null) {
+      if (item.dialCode !== undefined && item.dialCode !== null) {
+        props.setFieldValue &&
+          props.setFieldValue(codeName, item ? item.dialCode : null);
+      }
+    }
+
+    setSelectedItem(item);
   };
 
   return (
@@ -80,8 +91,7 @@ const CstValidatePhoneNoField = (props) => {
 
               <CstSelectPhoneValidateField
                 onChange={(item) => {
-                  props.setFieldValue(codeName, item ? item.dialCode : null);
-                  setSelectedItem(item);
+                  changeAction(item);
                 }}
                 blurHandler={() => {
                   props.setFieldTouched(codeName, true);

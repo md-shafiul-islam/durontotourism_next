@@ -8,7 +8,10 @@ import AgentGeneralInfo from "../../components/agent/profile/AgentGeneralInfo";
 import AgentOwnerInfo from "../../components/agent/profile/AgentOwnerInfo";
 import AgentSecurityContent from "../../components/agent/securityAndLogin/AgentSecurityContent";
 import SubAgentTab from "../../components/agent/subagent/SubAgentTab";
-import { getCurrentAgentAction } from "../../redux/actions/agentAction";
+import {
+  getCurrentAgentAction,
+  getSubAgentAction,
+} from "../../redux/actions/agentAction";
 import { getSession, useSession } from "next-auth/react";
 import {
   getCountryOptions,
@@ -22,6 +25,7 @@ const GetAgentIndexPage = (params) => {
   useEffect(() => {
     if (status === "authenticated") {
       params.getCurrentAgentAction(data.accessToken);
+      params.getSubAgentAction(data && data.accessToken);
     }
   }, [status]);
 
@@ -41,7 +45,22 @@ const GetAgentIndexPage = (params) => {
         params.getCountryOptions();
       }
     }
+    initSubAgents();
   }, []);
+
+  const initSubAgents = () => {
+    if (params.subAgents) {
+      if (!helperIsEmpty(params.subAgents)) {
+        if (params.subAgents.length === 0) {
+          params.getSubAgentAction(data && data.accessToken);
+        }
+      } else {
+        params.getSubAgentAction(data && data.accessToken);
+      }
+    } else {
+      params.getSubAgentAction(data && data.accessToken);
+    }
+  };
 
   return (
     <React.Fragment>
@@ -190,4 +209,5 @@ export default connect(mapStateToProps, {
   getCurrentAgentAction,
   getCountryOptions,
   getCountryPhonCodeOptions,
+  getSubAgentAction,
 })(GetAgentIndexPage);

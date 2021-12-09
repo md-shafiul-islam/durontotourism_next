@@ -1,25 +1,29 @@
 import React from "react";
 import { Col, Nav, Row, Tab } from "react-bootstrap";
-import RequestWithDarwList from "../../wallet/withDraw/RequestWithDarwList";
-import WithDrawRequest from "../../wallet/withDraw/WithDrawRequest";
+import ProfileHeader from "../profile/ProfileHeader";
 import AddSubAgent from "./AddSubAgent";
 import SubAgentList from "./SubAgentList";
 
 const SubAgentTab = (props) => {
   return (
     <React.Fragment>
+      <Col md={12} className="sub-agent-hrader">
+        <span className="strip-left bg-primary"></span>
+        <span className="title">Sub Agents</span>
+      </Col>
       <Tab.Container id="witdDrawContent" defaultActiveKey="addSubAgentList">
-        <Row>
+        <Row className="mb-2">
           <Col sm={12}>
-            <Nav variant="pills" className="flex-row">
-              <Nav.Item>
-                <Nav.Link eventKey="addSubAgent">
-                  Add Sub Agent / Empolyee
-                </Nav.Link>
-              </Nav.Item>
+            <Nav variant="pills" className="flex-row mp-0">
               <Nav.Item>
                 <Nav.Link eventKey="addSubAgentList">
                   Sub Agent / Empolyee List
+                </Nav.Link>
+              </Nav.Item>
+
+              <Nav.Item>
+                <Nav.Link eventKey="addSubAgent">
+                  Add Sub Agent / Empolyee
                 </Nav.Link>
               </Nav.Item>
             </Nav>

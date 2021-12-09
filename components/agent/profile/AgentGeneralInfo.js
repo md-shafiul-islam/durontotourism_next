@@ -3,6 +3,7 @@ import { Card, Col, Row } from "react-bootstrap";
 import { PropTypes } from "prop-types";
 import { connect } from "react-redux";
 import ProfileHeader from "./ProfileHeader";
+import { esGetDateFormat } from "../../../utils/helper/esDateFunc";
 
 const AgentGeneralInfo = (params) => {
   const { agentInf } = params;
@@ -16,7 +17,9 @@ const AgentGeneralInfo = (params) => {
               <tbody>
                 <tr>
                   <th scope="row">Since</th>
-                  <td colSpan="3">{agentInf && agentInf.since}</td>
+                  <td colSpan="3">
+                    {esGetDateFormat(agentInf && agentInf.since)}
+                  </td>
                 </tr>
                 <tr>
                   <th scope="row">Agent ID</th>
@@ -32,7 +35,10 @@ const AgentGeneralInfo = (params) => {
                 </tr>
                 <tr>
                   <th scope="row">Phone</th>
-                  <td colSpan="3">{agentInf && agentInf.phoneCode} {agentInf && agentInf.phoneNo}</td>
+                  <td colSpan="3">
+                    {agentInf && agentInf.phoneCode}{" "}
+                    {agentInf && agentInf.phoneNo}
+                  </td>
                 </tr>
               </tbody>
             </table>

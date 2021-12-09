@@ -13,7 +13,7 @@ const ProfileHeader = ({
   return (
     <React.Fragment>
       <div className="pfl-header">
-        <span className="strip-left bg-secondary"></span>
+        <span className="strip-left bg-primary"></span>
         <Row>
           <Col md={12} className="general-heading-area">
             <div className="heading-area">
