@@ -1,4 +1,5 @@
 /* eslint-disable import/no-anonymous-default-export */
+import { helperIsEmpty } from "../../utils/helper/helperAction";
 import {
   SET_BANK_ACCOUNTS,
   SET_BANK_ACCOUNT_OPTIONS,
@@ -6,6 +7,9 @@ import {
   SET_MOBILE_BANK_ACCOUNTS,
   SET_RECHARGE,
   SET_SELCTED_BANK_ACCOUNT,
+  BANK_NAME_OPTIONS,
+  SET_ACCOUNT_BY_BANK_NAME,
+  SET_ACCOUNT_BY_BANK_NAME_BRANCH,
 } from "../types";
 
 const initialState = {
@@ -14,8 +18,44 @@ const initialState = {
   bankAccount: {},
   rechargeStatus: false,
   rechargeAdd: {},
-  bankAccounts:[],
-  mobileBanks:[],
+  bankAccounts: [],
+  mobileBanks: [],
+  bankOptions: [],
+  banksAccountBranchOpt: [],
+  banksAccountNoOpt: [],
+  banksAccountNameOpt: [],
+};
+
+const getBankAccoutnUsingName = (state, payload) => {
+  console.log("Action Bank Account ", payload);
+  if (!helperIsEmpty(payload)) {
+    if (payload.data.status) {
+      return {
+        ...state,
+        banksAccountBranchOpt: payload.data && payload.data.banksAccountBranch,
+        banksAccountNoOpt: payload.data && payload.data.banksAccountNo,
+        banksAccountNameOpt: payload.data && payload.data.banksAccountName,
+      };
+    }
+  }
+  return state;
+};
+
+const getBankAccountOPtions = (state, payload) => {
+
+  // console.log("Bank Account Option Using Name, Options ", payload);
+  if (!helperIsEmpty(payload.data)) {
+    let {banksAccountName, banksAccountNo} = payload.data;
+    if (!payload.errStatus) {
+      return {
+        ...state,
+        banksAccountNoOpt: banksAccountNo,
+        banksAccountNameOpt: banksAccountName,
+      };
+    }
+  }
+
+  return state;
 };
 
 export default function (state = initialState, action) {
@@ -47,13 +87,26 @@ export default function (state = initialState, action) {
     case SET_BANK_ACCOUNTS:
       return {
         ...state,
-        bankAccounts:action.payload,
-      }
+        bankAccounts: action.payload,
+      };
     case SET_MOBILE_BANK_ACCOUNTS:
       return {
         ...state,
-        mobileBanks:action.payload,
-      }  
+        mobileBanks: action.payload,
+      };
+
+    case BANK_NAME_OPTIONS:
+      return {
+        ...state,
+        bankOptions: action.payload,
+      };
+
+    case SET_ACCOUNT_BY_BANK_NAME:
+      return getBankAccoutnUsingName(state, action.payload);
+
+    case SET_ACCOUNT_BY_BANK_NAME_BRANCH:
+      // console.log("Bank Account Option Using Name, Branch Swith ", action.payload);
+      return getBankAccountOPtions(state, action.payload);
     default:
       return state;
   }

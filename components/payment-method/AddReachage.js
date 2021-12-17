@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from "react";
 import { Field, Form, Formik } from "formik";
 import Select from "react-select";
@@ -7,29 +8,78 @@ import {
   getBankAccountsByName,
   getBankAccountsNames,
   getBankAccountsByAcNo,
+  getAllBankOptions,
+  getBankAccountsByBankName,
+  getBankAccountsByBankNameAndBranchName,
 } from "../../redux/actions/rechargeAction";
 import { connect } from "react-redux";
 import Thumb from "../layout/Thumb";
+import CstSingleDatePicker from "../Fields/CstSingleDatePicker";
+import { helperIsEmpty } from "../../utils/helper/helperAction";
+import { useSession } from "next-auth/react";
+import CstSelectCountry from "../Fields/CstSelectCountry";
+import { getCountryOptions } from "../../redux/actions/countriyAction";
+import CstSelectValidateField from "../Fields/CstSelectValidateField";
+import CstUploadFileFieldValidet from "../Fields/CstUploadFileFieldValidet";
 
-const OnlineTransferReachage = (params) => {
+const AddReachage = (params) => {
   let { title, isError, submitAction, validationScema, bankAccount } = params;
   const [selectedAccount, setSelectedAccount] = useState({});
   const [attachFile, setAttachFile] = useState(undefined);
-  console.log("OnlineTransferReachage params, ", params);
+  const [tokenStatus, setTokenSttaus] = useState(false);
+  // console.log("OnlineTransferReachage params, ", params);
+  const { status, data } = useSession();
+
+  const initBankOptions = () => {
+    console.log("Run Bank Options ", data);
+    if (data) {
+      setTokenSttaus(true);
+    }
+    if (!helperIsEmpty(params.bankOptions)) {
+      if (params.bankOptions.length === 0) {
+        params.getAllBankOptions();
+      }
+    } else {
+      params.getAllBankOptions();
+    }
+  };
+
+  const initCountryOptions = () => {
+    if (!helperIsEmpty(params.countryOptions)) {
+      if (params.countryOptions.length === 0) {
+        params.getCountryOptions();
+      }
+    } else {
+      params.getCountryOptions();
+    }
+  };
+
+  useEffect(() => {
+    initBankOptions();
+  }, [tokenStatus]);
+
+  useEffect(() => {
+    console.log("Authentication status, ", status);
+    if (status === "authenticated") {
+      initBankOptions();
+    }
+
+    initCountryOptions();
+  }, [status]);
 
   useEffect(() => {
     params.getBankAccountsNames();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
     setSelectedAccount(bankAccount);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [params.bankAccount]);
 
-  const bankNameChangeAction = (bankName) => {
-    console.log("bankNameChangeAction, ", bankName);
-    params.getBankAccountsByName(bankName);
+  const bankNameChangeAction = (bank) => {
+    console.log("bankNameChangeAction, ", bank);
+    if (bank !== undefined && bank !== null) {
+      params.getBankAccountsByBankName(bank.label, data && data.accessToken);
+    }
   };
 
   const bankAccountNoChangeAction = (acNo) => {
@@ -44,6 +94,19 @@ const OnlineTransferReachage = (params) => {
     if (e.currentTarget.files !== undefined) {
       setAttachFile(e.currentTarget.files[0]);
     }
+  };
+
+  const changeBranchAction = (branchName, bankName) => {
+    console.log("Change Branch Name, ", bankName, branchName);
+    const query = {
+      bankname: bankName,
+      branchName: branchName,
+    };
+    params.getBankAccountsByBankNameAndBranchName(query);
+  };
+
+  const changeAccountNameAction = (accountName, branchName, bankName) => {
+    console.log("Change Account Name, ", bankName, branchName, accountName);
   };
 
   return (
@@ -63,37 +126,41 @@ const OnlineTransferReachage = (params) => {
           country: "",
           slipeAttachment: "",
           transectionId: "",
-          referenceNumber: "",
-          transectionDate:""
+          refferenceNote: "",
+          transectionDate: "",
+          type: "",
+          accountId: "",
         }}
         validationSchema={validationScema}
         onSubmit={(values, actions) => {
-          console.log("Selected Account ", selectedAccount);
-          submitAction(values, selectedAccount.id);
-          
+          console.log("Submiting ... ", values);
+          submitAction(values);
         }}
       >
         {(props) => (
-          <form onSubmit={props.handleSubmit}>
+          <Form>
             <Row className="card-pay-row">
-              <Col md={{span:6, offset:6}}>
+              <Col md={{ span: 6, offset: 6 }}>
                 <label className="form-label" htmlFor="country">
                   Country.{" "}
                 </label>
-                <Field
-                  type="text"
-                  name={`country`}
-                  readOnly
-                  value={
-                    selectedAccount
-                      ? selectedAccount.country && selectedAccount.country.name
-                      : ""
-                  }
-                  id={`country`}
+                <CstSelectCountry
+                  name="country"
+                  onChange={(item) => {
+                    console.log("Issu Cuntry ", item);
+                    let code = item ? item.value : "";
+                    props.setFieldValue(`country`, code);
+                  }}
+                  blurHandler={() => {
+                    props.setFieldTouched("country", true);
+                  }}
+                  options={params.countryOptions}
+                  placeholder={"Select Country"}
                   className={`form-control ${
                     isError(props.errors, props.touched, "country").cls
                   }`}
                 />
+
                 <div className="invalid-feedback">
                   {isError(props.errors, props.touched, "country").msg}
                 </div>
@@ -108,22 +175,22 @@ const OnlineTransferReachage = (params) => {
                   placeholder="Bank Name"
                   name={`bankName`}
                   onChange={(item) => {
-                    props.setFieldValue(`bankName`, item ? item.value : "");
-                    bankNameChangeAction(item.value);
+                    props.setFieldValue(`bankName`, item.label);
+                    bankNameChangeAction(item);
+                    props.setFieldValue(`branchName`, "");
+                    props.setFieldValue(`accountName`, "");
+                    props.setFieldValue(`accountNumber`, "");
                   }}
                   onBlur={() => {
                     props.setFieldTouched(`bankName`, true);
                   }}
                   id={`bankName`}
-                  options={params.bankNames}
+                  options={params.bankOptions}
                   className={`vselect-item ${
                     isError(props.errors, props.touched, "bankName").cls
                   }`}
                 />
-                {console.log(
-                  "Current Error, BankName ",
-                  isError(props.errors, props.touched, "bankName")
-                )}
+
                 <div className="invalid-feedback">
                   {isError(props.errors, props.touched, "bankName").msg}
                 </div>
@@ -132,83 +199,69 @@ const OnlineTransferReachage = (params) => {
                 <label className="form-label" htmlFor="branchName">
                   Branch Name
                 </label>
-                <Field
-                  type="text"
-                  name={`branchName`}
-                  readOnly
-                  value={
-                    selectedAccount ? selectedAccount.branchName : "Not Set yet"
-                  }
-                  id={`branchName`}
-                  className={`form-control ${
-                    isError(props.errors, props.touched, "branchName").cls
-                  }`}
+                <CstSelectValidateField
+                  {...props}
+                  name="branchName"
+                  placeholder="Branch Name"
+                  options={params.branchOptions}
+                  onChange={(item) => {
+                    console.log(
+                      "Agent Branch Action ",
+                      item,
+                      " Bank Name ",
+                      props.values.bankName
+                    );
+                    props.setFieldValue(`branchName`, item.label);
+                    props.setFieldValue(`accountName`, "");
+                    props.setFieldValue(`accountNumber`, "");
+                    changeBranchAction(item.label, props.values.bankName);
+                  }}
+                  value={props.values.bankName}
                 />
-
-                <div className="invalid-feedback">
-                  {isError(props.errors, props.touched, "branchName").msg}
-                </div>
               </Col>
             </Row>
-
             <Row className="card-pay-row">
               <Col md={12}>
                 <label className="form-label" htmlFor="accountName">
                   Account Name
                 </label>
-                <Field
-                  type="text"
-                  name={`accountName`}
-                  readOnly
-                  value={
-                    selectedAccount
-                      ? selectedAccount.accountName
-                      : "Not yet set"
-                  }
-                  id={`accountName`}
-                  className={`form-control ${
-                    isError(props.errors, props.touched, "accountName").cls
-                  }`}
+                <CstSelectValidateField
+                  {...props}
+                  name="accountName"
+                  placeholder="Account Name"
+                  options={params.accountNameOpts}
+                  onChange={(item) => {
+                    props.setFieldValue(`accountName`, item.value);
+                    props.setFieldValue(`accountNumber`, "");
+                    changeAccountNameAction(
+                      item.value,
+                      props.values.branchName,
+                      props.values.bankName
+                    );
+                  }}
+                  defaultValue={props.values.accountNumber}
+                  value={props.values.accountName}
                 />
-                <div className="invalid-feedback">
-                  {isError(props.errors, props.touched, "accountName").msg}
-                </div>
               </Col>
             </Row>
-
             <Row className="card-pay-row">
               <Col md={12}>
                 <label className="form-label" htmlFor="accountNumber">
                   Account Number
                 </label>
-                <Select
+                <CstSelectValidateField
+                  {...props}
+                  name="accountNumber"
                   placeholder="Account Number"
-                  name={`accountNumber`}
+                  options={params.accountNoOptions}
                   onChange={(item) => {
-                    props.setFieldValue(
-                      `accountNumber`,
-                      item ? item.value : ""
-                    );
-                    bankAccountNoChangeAction(item.value);
+                    props.setFieldValue(`accountNumber`, item.value);
+                    props.setFieldValue(`accountId`, item.label);
                   }}
-                  onBlur={() => {
-                    props.setFieldTouched(`accountNumber`, true);
-                  }}
-                  id={`accountNumber`}
-                  options={
-                    params.bankOptions && params.bankOptions.bankAccountNo
-                  }
-                  className={`vselect-item ${
-                    isError(props.errors, props.touched, "accountNumber").cls
-                  }`}
+                  value={props.values.accountNumber}
                 />
-                
-                <div className="invalid-feedback">
-                  {isError(props.errors, props.touched, "accountNumber").msg}
-                </div>
               </Col>
             </Row>
-
             <Row className="card-pay-row">
               <Col md={6}>
                 <label className="form-label" htmlFor="amount">
@@ -232,16 +285,13 @@ const OnlineTransferReachage = (params) => {
                 <label className="form-label" htmlFor="transectionDate">
                   Transection Date{" "}
                 </label>
-                <Field
-                  type="date"
-                  placeholder="Transection Id if have?"
-                  name={`transectionDate`}
-                  onChange={props.handleChange}
-                  onBlur={props.handleBlur}
-                  id={`transectionDate`}
-                  className={`form-control ${
-                    isError(props.errors, props.touched, "transectionDate").cls
-                  }`}
+
+                <CstSingleDatePicker
+                  name="transectionDate"
+                  placeholder="Transection Date"
+                  getSelectedDate={(date) => {
+                    props.setFieldValue(`transectionDate`, date);
+                  }}
                 />
 
                 <div className="invalid-feedback">
@@ -249,24 +299,23 @@ const OnlineTransferReachage = (params) => {
                 </div>
               </Col>
             </Row>
-
             <Row className="card-pay-row">
               <Col md={12}>
-                <label className="form-label" htmlFor="referenceNumber">
+                <label className="form-label" htmlFor="refferenceNote">
                   Reference Note.{" "}
                 </label>
                 <textarea
                   placeholder="Refrence Note"
-                  name="referenceNumber"
+                  name="refferenceNote"
                   onChange={props.handleChange}
                   onBlur={props.handleBlur}
-                  id={`referenceNumber`}
+                  id={`refferenceNote`}
                   className={`form-control ${
-                    isError(props.errors, props.touched, "referenceNumber").cls
+                    isError(props.errors, props.touched, "refferenceNote").cls
                   }`}
                 ></textarea>
                 <div className="invalid-feedback">
-                  {isError(props.errors, props.touched, "referenceNumber").msg}
+                  {isError(props.errors, props.touched, "refferenceNote").msg}
                 </div>
               </Col>
             </Row>
@@ -276,7 +325,7 @@ const OnlineTransferReachage = (params) => {
                   Transection Id.{" "}
                 </label>
                 <Field
-                  placeholder="Transection Id if have?"
+                  placeholder="Transection Id Or Receipt Number?"
                   name={`transectionId`}
                   onChange={props.handleChange}
                   onBlur={props.handleBlur}
@@ -291,44 +340,13 @@ const OnlineTransferReachage = (params) => {
                 </div>
               </Col>
               <Col md={6}>
-                <Row className="card-pay-row">
-                  <Col md={8}>
-                    <label className="form-label" htmlFor="slipeAttachment">
-                      Screnshort of fund Transfer Successful
-                    </label>
-                    <input
-                      className={`form-control ${
-                        isError(props.errors, props.touched, "slipeAttachment")
-                          .cls
-                      }`}
-                      type="file"
-                      name="slipeAttachment"
-                      id="slipeAttachment"
-                      onChange={(e) => {
-                        changeImageAction(e);
-                        props.setFieldValue(
-                          `slipeAttachment`,
-                          e.currentTarget.files[0]
-                        );
-                      }}
-                    />
-                    <div className="invalid-feedback">
-                      {
-                        isError(props.errors, props.touched, "slipeAttachment")
-                          .msg
-                      }
-                    </div>
-                  </Col>
-                  <Col md={4}>
-                    <Thumb file={attachFile} />
-                  </Col>
-                </Row>
+                <label className="form-label" htmlFor="slipeAttachment">
+                  Screnshort of fund Transfer Successful
+                </label>
+                <CstUploadFileFieldValidet name="slipeAttachment" {...props} />
               </Col>
             </Row>
 
-            {props.errors.accountNumber && (
-              <div id="feedback">{props.errors.accountNumber}</div>
-            )}
             <Row className="card-pay-row">
               <Col md={8}>
                 <p className="pay-text"></p>
@@ -339,28 +357,39 @@ const OnlineTransferReachage = (params) => {
                 </Button>
               </Col>
             </Row>
-          </form>
+            {/* Error
+            <pre>{JSON.stringify(props.errors, null, 2)}</pre> */}
+          </Form>
         )}
       </Formik>
     </React.Fragment>
   );
 };
 
-OnlineTransferReachage.prototypes = {
+AddReachage.prototypes = {
   getBankAccountsNames: PropTypes.func.isRequired,
-  getBankAccountsByName: PropTypes.func.isRequired,
+  getAllBankOptions: PropTypes.func.isRequired,
+  getCountryOptions: PropTypes.func.isRequired,
   errors: PropTypes.object.isRequired,
   bankNames: PropTypes.object.isRequired,
-  bankOptions: PropTypes.object.isRequired,
+  bankAccountOptions: PropTypes.object.isRequired,
   bankAccount: PropTypes.object.isRequired,
+  bankOptions: PropTypes.object.isRequired,
+  countryOptions: PropTypes.object.isRequired,
+  accountNameOpts: PropTypes.object.isRequired,
+  branchOptions: PropTypes.object.isRequired,
+  accountNoOptions: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = (state) => {
   console.log("Transections Redux State, ", state);
   return {
     bankNames: state.recharge.bankNames,
-    bankOptions: state.recharge.bankAccountsOptions,
-    bankAccount: state.recharge.bankAccount,
+    bankOptions: state.recharge.bankOptions,
+    countryOptions: state.country.countryOptions,
+    accountNameOpts: state.recharge.banksAccountNameOpt,
+    branchOptions: state.recharge.banksAccountBranchOpt,
+    accountNoOptions: state.recharge.banksAccountNoOpt,
   };
 };
 
@@ -368,4 +397,8 @@ export default connect(mapStateToProps, {
   getBankAccountsNames,
   getBankAccountsByName,
   getBankAccountsByAcNo,
-})(OnlineTransferReachage);
+  getAllBankOptions,
+  getCountryOptions,
+  getBankAccountsByBankName,
+  getBankAccountsByBankNameAndBranchName,
+})(AddReachage);

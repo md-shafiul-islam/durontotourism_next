@@ -1,12 +1,13 @@
 import React, { Component } from "react";
 import { Col, Nav, Row, Tab } from "react-bootstrap";
-import OnlineTransferReachage from "./OnlineTransferReachage";
+import AddReachage from "./AddReachage";
 import * as Yup from "yup";
 import { helperIsEmpty } from "../../utils/helper/helperAction";
 import { addRechargeAction } from "../../redux/actions/rechargeAction";
 import { PropTypes } from "prop-types";
 import { connect } from "react-redux";
 import LoaderSpiner from "../../utils/helper/loaderSpiner";
+import RechargeRequestList from "./RechargeRequestList";
 
 const rechargeTypes = [
   { label: "Cash", value: "cash" },
@@ -63,16 +64,17 @@ class RechargeWallet extends Component {
     rechargeType: "cash",
   };
 
+
   validationScema = () => {
     return Yup.object().shape({
-      accountName: Yup.string().max(1),
+      accountName: Yup.string().min(1),
       accountNumber: Yup.string().required(
         "Required. Please, Select any bank name from option list"
       ),
       bankName: Yup.string().required(
         "Required. Please, Select any bank name from option list"
       ),
-      branchName: Yup.string().max(1),
+      branchName: Yup.string().min(1),
       amount: Yup.number()
         .required("Required, Please input amount")
         .typeError("Input Type must be number"),
@@ -81,6 +83,7 @@ class RechargeWallet extends Component {
       transectionDate: Yup.date().required(
         "Select Bank Or Mobile Transection Date"
       ),
+
     });
   };
 
@@ -108,6 +111,7 @@ class RechargeWallet extends Component {
     }
     return { cls: "", msg: msg, status: false };
   };
+
 
   rechargeAction = (values) => {
     if (values) {
@@ -159,7 +163,7 @@ class RechargeWallet extends Component {
                     </Nav.Item>
 
                     <Nav.Item>
-                      <Nav.Link eventKey="mobileBank">
+                      <Nav.Link eventKey="requestTopUpList">
                         TopUp my wallet request list
                       </Nav.Link>
                     </Nav.Item>
@@ -170,14 +174,11 @@ class RechargeWallet extends Component {
                 <Col sm={12}>
                   <Tab.Content>
                     <Tab.Pane eventKey="onlineTransfer">
-                      <OnlineTransferReachage
+                      <AddReachage
                         rechargeType={rechargeType}
                         submitAction={(values, accountId) => {
-                          this.rechargeAction({
-                            type: "online_bank",
-                            values,
-                            accountId,
-                          });
+                          values.type="online_bank";
+                          this.rechargeAction(values);
                         }}
                         isError={this.isError}
                         validationScema={this.validationScema}
@@ -185,7 +186,7 @@ class RechargeWallet extends Component {
                       />
                     </Tab.Pane>
                     <Tab.Pane eventKey="mobileBank">
-                      <OnlineTransferReachage
+                      <AddReachage
                         rechargeType={rechargeType}
                         submitAction={(values, accountId) => {
                           this.rechargeAction({
@@ -200,7 +201,7 @@ class RechargeWallet extends Component {
                       />
                     </Tab.Pane>
                     <Tab.Pane eventKey="cash">
-                      <OnlineTransferReachage
+                      <AddReachage
                         rechargeType={rechargeType}
                         submitAction={(values, accountId) => {
                           this.rechargeAction({
@@ -215,7 +216,7 @@ class RechargeWallet extends Component {
                       />
                     </Tab.Pane>
                     <Tab.Pane eventKey="cheque">
-                      <OnlineTransferReachage
+                      <AddReachage
                         rechargeType={rechargeType}
                         submitAction={(values, accountId) => {
                           this.rechargeAction({
@@ -228,6 +229,9 @@ class RechargeWallet extends Component {
                         validationScema={this.validationScema}
                         title="Recharge via Bank cheque deposit"
                       />
+                    </Tab.Pane>
+                    <Tab.Pane eventKey="cheque">
+                      <RechargeRequestList />
                     </Tab.Pane>
                   </Tab.Content>
                 </Col>
@@ -243,13 +247,14 @@ class RechargeWallet extends Component {
 RechargeWallet.prototypes = {
   addRechargeAction: PropTypes.func.isRequired,
   rechargeStatus: PropTypes.object.isRequired,
+  bankOptions: PropTypes.object.isRequired,
   errors: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = (state) => {
   return {
-    rechargeStatus: state.recharge.rechargeStatus,
+    rechargeStatus: state.recharge.rechargeStatus,    
   };
 };
 
-export default connect(mapStateToProps, { addRechargeAction })(RechargeWallet);
+export default connect(mapStateToProps, { addRechargeAction})(RechargeWallet);
