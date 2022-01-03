@@ -3,7 +3,6 @@ import Image from "next/image";
 
 class CstImageView extends Component {
   
-
   render() {
     let {
       altTag = "Image Not found",

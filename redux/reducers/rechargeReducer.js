@@ -10,6 +10,9 @@ import {
   BANK_NAME_OPTIONS,
   SET_ACCOUNT_BY_BANK_NAME,
   SET_ACCOUNT_BY_BANK_NAME_BRANCH,
+  SET_RECHARGING_STATUS,
+  SET_RECHARGES_LIST,
+  RECHARGE_REQUESTS_LIST,
 } from "../types";
 
 const initialState = {
@@ -42,10 +45,9 @@ const getBankAccoutnUsingName = (state, payload) => {
 };
 
 const getBankAccountOPtions = (state, payload) => {
-
   // console.log("Bank Account Option Using Name, Options ", payload);
   if (!helperIsEmpty(payload.data)) {
-    let {banksAccountName, banksAccountNo} = payload.data;
+    let { banksAccountName, banksAccountNo } = payload.data;
     if (!payload.errStatus) {
       return {
         ...state,
@@ -56,6 +58,22 @@ const getBankAccountOPtions = (state, payload) => {
   }
 
   return state;
+};
+
+const getRechargesList = (response, state) => {
+  if (response) {
+    if (!response.errorStatus && response.status) {
+      return {
+        ...state,
+        recharges: response.data,
+      };
+    }
+    console.log("List of Recharge Reponse, ", response);
+  }
+  return {
+    ...state,
+    recharges: [],
+  };
 };
 
 export default function (state = initialState, action) {
@@ -77,11 +95,14 @@ export default function (state = initialState, action) {
         ...state,
         bankAccount: action.payload,
       };
-
+    case SET_RECHARGING_STATUS:
+      return {
+        ...state,
+        rechargeStatus: action.payload,
+      };
     case SET_RECHARGE:
       return {
         ...state,
-        rechargeStatus: action.payload.status,
         rechargeAdd: action.payload.recharge,
       };
     case SET_BANK_ACCOUNTS:
@@ -107,6 +128,9 @@ export default function (state = initialState, action) {
     case SET_ACCOUNT_BY_BANK_NAME_BRANCH:
       // console.log("Bank Account Option Using Name, Branch Swith ", action.payload);
       return getBankAccountOPtions(state, action.payload);
+
+    case RECHARGE_REQUESTS_LIST:
+      return getRechargesList(action.payload, state);
     default:
       return state;
   }

@@ -6,6 +6,7 @@ import { helperIsEmpty } from "../../utils/helper/helperAction";
 import { addRechargeAction } from "../../redux/actions/rechargeAction";
 import { PropTypes } from "prop-types";
 import { connect } from "react-redux";
+import { getWalletRechargeRequest } from "../../redux/actions/rechargeAction";
 import LoaderSpiner from "../../utils/helper/loaderSpiner";
 import RechargeRequestList from "./RechargeRequestList";
 
@@ -64,6 +65,9 @@ class RechargeWallet extends Component {
     rechargeType: "cash",
   };
 
+  componentDidMount() {
+    this.props.getWalletRechargeRequest();
+  }
 
   validationScema = () => {
     return Yup.object().shape({
@@ -83,7 +87,6 @@ class RechargeWallet extends Component {
       transectionDate: Yup.date().required(
         "Select Bank Or Mobile Transection Date"
       ),
-
     });
   };
 
@@ -111,7 +114,6 @@ class RechargeWallet extends Component {
     }
     return { cls: "", msg: msg, status: false };
   };
-
 
   rechargeAction = (values) => {
     if (values) {
@@ -177,7 +179,7 @@ class RechargeWallet extends Component {
                       <AddReachage
                         rechargeType={rechargeType}
                         submitAction={(values, accountId) => {
-                          values.type="online_bank";
+                          values.type = "online_bank";
                           this.rechargeAction(values);
                         }}
                         isError={this.isError}
@@ -189,11 +191,8 @@ class RechargeWallet extends Component {
                       <AddReachage
                         rechargeType={rechargeType}
                         submitAction={(values, accountId) => {
-                          this.rechargeAction({
-                            type: "mobile_bank",
-                            values,
-                            accountId,
-                          });
+                          values.type = "mobile_bank";
+                          this.rechargeAction(values);
                         }}
                         isError={this.isError}
                         validationScema={this.validationScema}
@@ -204,11 +203,8 @@ class RechargeWallet extends Component {
                       <AddReachage
                         rechargeType={rechargeType}
                         submitAction={(values, accountId) => {
-                          this.rechargeAction({
-                            type: "cash",
-                            values,
-                            accountId,
-                          });
+                          values.type = "cash";
+                          this.rechargeAction(values);
                         }}
                         isError={this.isError}
                         validationScema={this.validationScema}
@@ -219,19 +215,17 @@ class RechargeWallet extends Component {
                       <AddReachage
                         rechargeType={rechargeType}
                         submitAction={(values, accountId) => {
-                          this.rechargeAction({
-                            type: "cheque",
-                            values,
-                            accountId,
-                          });
+                          values.type = "cheque";
+                          this.rechargeAction(values);
                         }}
                         isError={this.isError}
                         validationScema={this.validationScema}
                         title="Recharge via Bank cheque deposit"
+                        chequeStatus={true}
                       />
                     </Tab.Pane>
-                    <Tab.Pane eventKey="cheque">
-                      <RechargeRequestList />
+                    <Tab.Pane eventKey="requestTopUpList">
+                      <RechargeRequestList recharges={this.props.recharges} />
                     </Tab.Pane>
                   </Tab.Content>
                 </Col>
@@ -246,15 +240,21 @@ class RechargeWallet extends Component {
 
 RechargeWallet.prototypes = {
   addRechargeAction: PropTypes.func.isRequired,
+  getWalletRechargeRequest: PropTypes.func.isRequired,
   rechargeStatus: PropTypes.object.isRequired,
   bankOptions: PropTypes.object.isRequired,
   errors: PropTypes.object.isRequired,
+  recharges: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = (state) => {
   return {
-    rechargeStatus: state.recharge.rechargeStatus,    
+    rechargeStatus: state.recharge.rechargeStatus,
+    recharges: state.recharge.recharges,
   };
 };
 
-export default connect(mapStateToProps, { addRechargeAction})(RechargeWallet);
+export default connect(mapStateToProps, {
+  addRechargeAction,
+  getWalletRechargeRequest,
+})(RechargeWallet);

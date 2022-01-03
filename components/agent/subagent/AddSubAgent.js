@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from "react";
-import "react-notifications/lib/notifications.css";
+import React, { useState, useEffect, useRef} from "react";
 
 import { Form, Formik } from "formik";
 import * as Yup from "yup";
@@ -15,14 +14,12 @@ import {
 import { helperIsEmpty } from "../../../utils/helper/helperAction";
 import LoaderSpiner from "../../../utils/helper/loaderSpiner";
 import { REST_ADD_SUB_AGENT } from "../../../redux/types";
-import {
-  NotificationContainer,
-  NotificationManager,
-} from "react-notifications";
+import { toast } from "react-toastify";
+import { esNotifyAction, esNotifyUpdateAction } from "../../../utils/helper/esNotify";
 
 const AddSubAgent = (params) => {
   const dispatch = useDispatch();
-
+  const refNotify = useRef(undefined);
   const [submitingStatus, setSubmitingStatus] = useState(false);
 
   useEffect(() => {
@@ -33,9 +30,9 @@ const AddSubAgent = (params) => {
           payload: true,
         });
         setSubmitingStatus(false);
-        NotificationManager.success(params.addSubAgent.message, "Success");
+        esNotifyUpdateAction(refNotify, "Add Subagent", toast.TYPE.SUCCESS);
       } else {
-        NotificationManager.error(params.addSubAgent.message, "Error");
+        esNotifyAction(refNotify, "Error Add Subagent", toast.TYPE.ERROR);
       }
     }
   }, [params.addSubAgent]);
@@ -60,6 +57,7 @@ const AddSubAgent = (params) => {
   const submitAction = (values) => {
     if (values) {
       params.getAddSubAgentAction(values);
+      esNotifyAction(refNotify, "Add Subagent");
       setSubmitingStatus(true);
     }
   };
@@ -160,7 +158,6 @@ const AddSubAgent = (params) => {
       {/**
       <UpdateAgentCompanyInfo />
       <UpdateAgentOwnerInfo /> */}
-      <NotificationContainer />
     </React.Fragment>
   );
 };

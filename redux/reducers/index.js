@@ -16,6 +16,7 @@ import customerReducer from "./customerReducer";
 import esSearchReducer from "./esSearchReducer";
 import veryfiReducer from "./verifyReducer";
 import countryReducer from "./countryReducer";
+import walletReducer from "./walletReducer";
 
 export default combineReducers({
   airSearch: airSearchReducer,
@@ -35,4 +36,5 @@ export default combineReducers({
   airPort:esSearchReducer,
   verify:veryfiReducer,
   country:countryReducer,
+  wallet:walletReducer,
 });

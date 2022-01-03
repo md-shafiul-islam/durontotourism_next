@@ -1,11 +1,15 @@
 import React, { Component } from "react";
 import Link from "next/link";
 import { Breadcrumb, Card, Col, Nav, Row, Tab, Tabs } from "react-bootstrap";
-import EmptyCont from "../../utils/helper/emptyCont";
 import RechargeWallet from "../../components/payment-method/RechargeWallet";
+import { connect } from "react-redux";
+import { PropTypes } from "prop-types";
 import HowTopUpWallet from "../../components/wallet/HowTopUpWallet";
 import WithDrawContent from "../../components/wallet/WithDrawContent";
 import { getSession } from "next-auth/react";
+import WalletTransactionList from "../../components/payment-method/WalletTransactionList";
+import { getWalletAction } from "../../redux/actions/WalletAction";
+import WalletSidebar from "../../components/payment-method/WalletSidebar";
 
 class WalletPage extends Component {
 
@@ -29,67 +33,7 @@ class WalletPage extends Component {
         </Row>
         <Row>
           <Col md={4}>
-            <Card className="wallet-card">
-              <Card.Body className="wallet-sidebar">
-                <div className="title-area">
-                  <div className="amount">498489489</div>
-                  <div className="sub-text">Wallet Balance</div>
-                </div>
-
-                <div className="cash-area">
-                  <div className="my-cash">
-                    <div className="icon-content">
-                      <div className="icon">
-                        {currency ? (
-                          <span className="currency">{currency.code}</span>
-                        ) : (
-                          <span className="currency">&#2547;</span>
-                        )}
-                      </div>
-                      <div className="badge-area">
-                        <div className="title">My Wallet</div>
-                        <div className="badge">use unrestrictions</div>
-                      </div>
-                    </div>
-                    <div className="amount-area">
-                      <span className="amount">$8418</span>
-                      {/**<span className="aks-text">How to earn?</span> */}
-                    </div>
-                  </div>
-                  <div className="reward-bonus">
-                    <div className="icon-content">
-                      <div className="icon">
-                        {currency ? (
-                          <span className="currency">{currency.code}</span>
-                        ) : (
-                          <span className="currency">&#2547;</span>
-                        )}
-                      </div>
-                      <div className="badge-area">
-                        <div className="title">Reward Bonus</div>
-                        <div className="badge">use with restrictions</div>
-                      </div>
-                    </div>
-                    <div className="amount-area">
-                      {currency ? (
-                        <span className="amount">
-                          {currency.code} {amount}
-                        </span>
-                      ) : (
-                        <span className="amount">&#2547; 0.00</span>
-                      )}
-                      {/**
-                        <span className="aks-text">
-                        <Link href="/exm-earn">
-                          <a>How to earn?</a>
-                        </Link>
-                      </span>
-                      */}
-                    </div>
-                  </div>
-                </div>
-              </Card.Body>
-            </Card>
+            <WalletSidebar wallet={this.props.wallet} currency = {currency} />
           </Col>
 
           <Col md={8}>
@@ -124,6 +68,10 @@ class WalletPage extends Component {
                   <Row>
                     <Col sm={12}>
                       <Tab.Content>
+
+                        <Tab.Pane eventKey="transection" >
+                          <WalletTransactionList />
+                        </Tab.Pane>
                         <Tab.Pane eventKey="myCash">
                           <RechargeWallet />
                         </Tab.Pane>
@@ -162,6 +110,16 @@ export async function getServerSideProps(context) {
   };
 }
 
+WalletPage.prototypes = {
+  getWalletAction: PropTypes.func.isRequired,
+  errors: PropTypes.object.isRequired,
+  wallet: PropTypes.object.isRequired,
+};
 
+const mapStateToProps = (state)=>{
+  return{
+    wallet:state.wallet.wallet
+  }
+}
 
-export default WalletPage;
+export default connect(mapStateToProps, {getWalletAction})(WalletPage);

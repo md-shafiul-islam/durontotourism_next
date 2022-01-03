@@ -4,7 +4,9 @@ import { helperIsEmpty } from "../../utils/helper/helperAction";
 import {
   AUT_TOKEN,
   BANK_NAME_OPTIONS,
+  GET_BACK_END_DOMAIN_NAME,
   GET_BACK_END_URL,
+  RECHARGE_REQUESTS_LIST,
   REQUEST_HEADER,
   REQUEST_HEADER_GET,
   SET_ACCOUNT_BY_BANK_NAME,
@@ -15,6 +17,7 @@ import {
   SET_BANK_NAMES,
   SET_MOBILE_BANK_ACCOUNTS,
   SET_RECHARGE,
+  SET_RECHARGING_STATUS,
   SET_SELCTED_BANK_ACCOUNT,
 } from "../types";
 import { esRechargeFileUpload } from "./esAction";
@@ -201,8 +204,14 @@ export const getBankAccountsByAcNo =
 
 const createRecharge = (recharge, filePath) => {
   if (recharge && filePath !== undefined) {
-    let { amount, refferenceNote, transectionId, transectionDate, type, accountId} =
-      recharge;
+    let {
+      amount,
+      refferenceNote,
+      transectionId,
+      transectionDate,
+      type,
+      accountId,
+    } = recharge;
     return {
       accountId: accountId,
       amount: amount,
@@ -221,29 +230,42 @@ const getRechargeOptions = (rechargeRes) => {
   console.log("Recharge Response ", rechargeRes);
   if (!helperIsEmpty(rechargeRes)) {
     return {
-      status: false,
-      recharge: rechargeRes.data,
+      errorStatus: false,
+      ...rechargeRes.data,
     };
   }
   return {
-    status: true,
-    recharge: null,
+    errorStatus: true,
+    status: false,
+    message: "Recharge Add failed, Please try again later",
+    data: null,
   };
 };
+
 
 export const addRechargeAction = (recharge, token) => async (dispatch) => {
   if (!helperIsEmpty(token)) {
     REQUEST_HEADER.Authorization = token;
   }
 
+  dispatch({
+    type: SET_RECHARGING_STATUS,
+    payload: true,
+  });
   console.log("Recharge Request Data, ", recharge);
 
-  const attachUrl = await esRechargeFileUpload(recharge.slipeAttachment, recharge.type);
+  const attachUrl = await esRechargeFileUpload(
+    recharge.slipeAttachment,
+    recharge.type
+  );
   console.log("Customer ", attachUrl);
   recharge = createRecharge(recharge, attachUrl);
   const actionUrl = `${GET_BACK_END_URL}/recharges`;
 
-  console.log("Create Recharge Request Data, ", JSON.stringify(recharge, null, 2));
+  console.log(
+    "Create Recharge Request Data, ",
+    JSON.stringify(recharge, null, 2)
+  );
 
   if (recharge !== undefined && recharge !== null) {
     try {
@@ -255,11 +277,25 @@ export const addRechargeAction = (recharge, token) => async (dispatch) => {
         type: SET_RECHARGE,
         payload: getRechargeOptions(resp),
       });
+      dispatch({
+        type: SET_RECHARGING_STATUS,
+        payload: false,
+      });
     } catch (error) {
       console.log("Recharge Action Error, ", error.message);
+      dispatch({
+        type: SET_RECHARGING_STATUS,
+        payload: false,
+      });
+      dispatch({
+        type: SET_RECHARGE,
+        payload: {
+          errorStatus: true,
+          message: `Recharge added failed.  ${error.message}`,
+        },
+      });
     }
   }
-
 };
 
 export const getBnakAccounts = (token) => async (dispatch) => {
@@ -306,6 +342,50 @@ export const getMobillBnakAccounts = (token) => async (dispatch) => {
     dispatch({
       type: SET_BANK_ERROR,
       payload: err,
+    });
+  }
+};
+
+export const getWalletRechargeRequest = () => async (dispatch) => {
+  const actionUrl = `${GET_BACK_END_URL}/recharges`;
+  console.log("Recharge URL, ", actionUrl);
+  try {
+    const response = await axios.get(actionUrl, { headers: REQUEST_HEADER });
+    dispatch({
+      type: RECHARGE_REQUESTS_LIST,
+      payload: { errorStatus: false, ...response.data },
+    });
+  } catch (err) {
+    dispatch({
+      type: RECHARGE_REQUESTS_LIST,
+      payload: {
+        errorStatus: true,
+        data: null,
+        status: false,
+        message: err.message,
+      },
+    });
+  }
+};
+
+export const getWalletTransactions = () => async (dispatch) => {
+  const actionUrl = `${GET_BACK_END_URL}/`;
+
+  try {
+    const response = await axios.get(actionUrl, { headers: REQUEST_HEADER });
+    dispatch({
+      type: WALLET_TRANSACTION,
+      payload: { errorStatus: false, ...response.data },
+    });
+  } catch (err) {
+    dispatch({
+      type: WALLET_TRANSACTION,
+      payload: {
+        errorStatus: true,
+        data: null,
+        status: false,
+        message: err.message,
+      },
     });
   }
 };

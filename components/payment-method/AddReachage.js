@@ -23,7 +23,14 @@ import CstSelectValidateField from "../Fields/CstSelectValidateField";
 import CstUploadFileFieldValidet from "../Fields/CstUploadFileFieldValidet";
 
 const AddReachage = (params) => {
-  let { title, isError, submitAction, validationScema, bankAccount } = params;
+  let {
+    title,
+    isError,
+    submitAction,
+    validationScema,
+    bankAccount,
+    chequeStatus,
+  } = params;
   const [selectedAccount, setSelectedAccount] = useState({});
   const [attachFile, setAttachFile] = useState(undefined);
   const [tokenStatus, setTokenSttaus] = useState(false);
@@ -256,7 +263,7 @@ const AddReachage = (params) => {
                   options={params.accountNoOptions}
                   onChange={(item) => {
                     props.setFieldValue(`accountNumber`, item.value);
-                    props.setFieldValue(`accountId`, item.label);
+                    props.setFieldValue(`accountId`, item.value);
                   }}
                   value={props.values.accountNumber}
                 />
@@ -322,10 +329,14 @@ const AddReachage = (params) => {
             <Row className="card-pay-row">
               <Col md={6}>
                 <label className="form-label" htmlFor="transectionId">
-                  Transection Id.{" "}
+                  {chequeStatus ? "Transection Id/Cheque Number." : "Transection Id."}
                 </label>
                 <Field
-                  placeholder="Transection Id Or Receipt Number?"
+                  placeholder={
+                    chequeStatus
+                      ? `Transection Id / Cheque Number`
+                      : `Transaction Id Or Receipt Number?`
+                  }
                   name={`transectionId`}
                   onChange={props.handleChange}
                   onBlur={props.handleBlur}
